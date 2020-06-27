@@ -96,7 +96,7 @@
         if ( card.hasClass('card-type-explorer') ) {
             let y = last_row - 2;
             for ( let x = 0; x <= last_col - 2; x++ ) {
-               if ( mat[y+1][x] == 0 ) {
+               if ( mat[y+1][x] == 0 && mat[y+1][x+1] != 0 ) {
                     playable_squares.push([y,x]);
                }
             }
