@@ -88,7 +88,7 @@
         let playable_squares = [];
         for ( let y = 0; y <= last_row - 2; y++ ) {
             for ( let x = 0; x <= last_col - 2; x++ ) {
-               if ( mat[last_row-1][x] != 0 ) {
+               if ( mat[last_row-1][x] != 0  && mat[y][x] == 0) {
                     playable_squares.push([y,x]);
                }
             }
@@ -96,7 +96,7 @@
         if ( card.hasClass('card-type-explorer') ) {
             let y = last_row - 2;
             for ( let x = 0; x <= last_col - 2; x++ ) {
-               if ( mat[y+1][x] == 0 && mat[y+1][x+1] != 0 ) {
+               if ( mat[y+1][x] == 0 && mat[y+1][x+1] != 0 && mat[y][x] == 0 ) {
                     playable_squares.push([y,x]);
                }
             }
@@ -291,6 +291,7 @@
                 if ( card_def.subtype1 == 'explorer' ) {
                     if ( player.playmat[y+1][x] == 0 ) {
                         play_card(player,player.land_pile[0],y+1,x);
+                        current_move--;
                     }
                 }
             } else {
