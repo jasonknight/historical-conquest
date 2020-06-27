@@ -38,18 +38,26 @@
             [0,0,0,0,0],
         ];
     }
-    function get_grid_column_width() {
-        return (panels.main.width() / get_base_table()[0].length);
+    function get_grid_column_width(player) {
+        let grid = get_base_table();
+        if ( player ) {
+           grid = player.playmat; 
+        }
+        return (panels.main.width() / grid[0].length);
     }
-    function get_card_column_width() {
-        return panels.data.grid_width * panels.data.card_width;
+    function get_card_column_width(player) {
+        return get_grid_column_width(player) * panels.data.card_width;
     }
-    function get_grid_column_height() {
+    function get_grid_column_height(player) {
+        let grid = get_base_table();
+        if ( player ) {
+           grid = player.playmat; 
+        }
         let h = $(window).height() * 0.85;
-        return (h/get_base_table().length);
+        return (h/grid.length);
     }
-    function get_card_column_height() {
-        return panels.data.grid_height * panels.data.card_height;
+    function get_card_column_height(player) {
+        return get_grid_column_height(player) * panels.data.card_height;
     }
     function get_land_pile() {
         let d = _div(null,null);
@@ -171,32 +179,30 @@
     function render_card(table,card,row,col) {
         table[row][col] = card;
     }
-    function render_hand(player,rows_cols) {
-        let rl = rows_cols.length;
-        let cl = rows_cols[0].length;
-        let last_row = rows_cols.length - 1;
-        let row = cl - 1;
-        let col = last_row;
+    function setup_hand(player,rows_cols) {
+        let rl = player.playmat.length;
+        let cl = player.playmat[0].length;
+        let last_row =  rl - 1;
+        let last_col = cl - 1;
+        let row = last_row;
+        let col = last_col;
         for ( let i = 0; i < 5; i++) {
             if ( !player.hand[i] ) {
                 rows_cols[row][col] = 0;
                 continue;
             }
-           let card = get_card(player.hand[i]);  
-            render_card(rows_cols,card,row,col);
+            rows_cols[row][col] = player.hand[i];
             col--;
         }
     }
     function render_play_mat(player,target) {
         let rows_cols = player.playmat;
-        let land_pile = _div(player.id + '_land_pile','pile land-draw-pile');
-        let draw_pile = _div(player.id + '_draw_pile','pile draw-pile');
-        let discard_pile = _div(player.id + '_discard_pile','pile discard-pile');
         let rl = rows_cols.length;
         let cl = rows_cols[0].length;
-        rows_cols[rl-2][cl-1] = land_pile;
-        rows_cols[rl-2][cl-2] = draw_pile;
-        rows_cols[rl-3][cl-1] = discard_pile;
+        rows_cols[rl-2][cl-1] = 'LAND_PILE';
+        rows_cols[rl-2][cl-2] = 'DRAW_PILE';
+        rows_cols[rl-3][cl-1] = 'DISCARD_PILE';
+        player.playmat = rows_cols;
         let table = $('<table></table>');
             table.addClass('grid');
         let last_row = rows_cols.length - 1;
@@ -211,7 +217,7 @@
             play_card(player,player.land_pile[0],last_row - 1,last_col - 2);
             rows_cols = player.playmat;
         }
-        render_hand(player,rows_cols);
+        setup_hand(player,rows_cols);
         for ( let row = 0; row < rows_cols.length; row++) {
             let tr = $('<tr />');
             tr.attr('y',row);
@@ -222,12 +228,23 @@
                 td.attr('x',col);
                 td.attr('yx',row + ',' + col);
                 td.css({
-                    "width": panels.data.grid_width + 'px',
-                    "height": panels.data.grid_height + 'px',
+                    "width": get_grid_column_width(player) + 'px',
+                    "height": get_grid_column_height(player) + 'px',
                 });
                 td.addClass('playmat-column');
                 if ( rows_cols[row][col] !== 0 ) {
-                    td.append(rows_cols[row][col]);
+                    let id = rows_cols[row][col];
+                    if ( id == 'LAND_PILE' ) {
+                        td.addClass('land-pile');
+                    } else if ( id == 'DRAW_PILE' ) {
+                        td.addClass('draw-pile');
+                    } else if ( id == 'DISCARD_PILE' ) {
+                        td.addClass('discard-pile');
+                    } else if ( window.carddb[id] ) {
+                       td.append(get_card(id)); 
+                    } else {
+                        console.log("Don't know ",id);
+                    }
                 } 
             }
             table.append(tr);
@@ -246,7 +263,7 @@
                 played_def.y = y;
                 played_def.x = x;
                 player.played.push(played_def);
-                player.playmat[y][x] = get_card(id);
+                player.playmat[y][x] = id;
             } else {
                 new_hand.push(player.hand[i]);
             }
@@ -260,12 +277,23 @@
                 played_def.y = y;
                 played_def.x = x;
                 player.played.push(played_def);
-                player.playmat[y][x] = get_card(id);
+                player.playmat[y][x] = id;
             } else {
                 new_land_pile.push(player.land_pile[i]);
             }
         }
         player.land_pile = new_land_pile;
+        if ( y == 0 ) {
+            let nr = [];
+            for ( let i = 0; i < player.playmat[0].length; i++ ) {
+                nr[i] = 0;
+            }
+            let new_mat = [nr];
+            for ( let i = 0; i < player.playmat.length; i++) {
+                new_mat.push(player.playmat[i]);
+            }
+            player.playmat = new_mat;
+        }
         current_move++;
     }
     function render_players(players) {
@@ -305,17 +333,20 @@
         console.log("hand",player.hand);
         return player;
     }
+    function debug_playmat(player) {
+        console.log("Playmat", player.playmat.map(function (r) { return r.join('|'); }).join("\n"));
+    }
     $(function () {
         panels.main = $('div.main');
         panels.tab_panel = $('div.tab-panel');
         panels.tab_panel.css('height',$(window).height() * 0.05);
-        panels.data.grid_width = get_grid_column_width();
-        panels.data.grid_height = get_grid_column_height();
         $.each(window.board.players, function () {
             this.playmat = get_base_table();
             process_player(this);
         });
         $('body').on('refresh_board',function () {
+            panels.data.grid_width = get_grid_column_width();
+            panels.data.grid_height = get_grid_column_height();
             console.log(window.board.players);
             render_players(window.board.players);
         });
