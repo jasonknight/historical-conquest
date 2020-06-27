@@ -3,6 +3,10 @@
         panels.data = {};
         panels.data.card_width = 0.90;
         panels.data.card_height = 0.85
+    let current_move = 0;
+    function get_current_player() {
+        return window.board.players[0];
+    }
     function _div(id,kls) {
         let d = null;
         if ( id ) {
@@ -52,6 +56,39 @@
         d.addClass('land-pile');
         return d;
     }
+    function can_play(card_element) {
+        let td = card_element.parent();
+        let p = get_current_player();
+        let last_row = p.playmat.length - 1;
+        if ( td.attr('y') == last_row ) {
+            return true;
+        }
+    }
+    function unhighlight_playable_squares() { 
+        $('table.grid td.highlight-square').unbind('click');
+        $('table.grid td.highlight-square').removeClass('highlight-square');
+    }
+    function highlight_playable_squares_for(card) {
+        let p = get_current_player();    
+        let mat = p.playmat;
+        let last_row = mat.length - 1;
+        let last_col = mat[0].length - 1;
+        // For regular cards
+        let playable_squares = [];
+        for ( let y = 0; y <= last_row - 2; y++ ) {
+            for ( let x = 0; x <= last_col - 2; x++ ) {
+               if ( mat[last_row-1][x] != 0 ) {
+                    playable_squares.push([y,x]);
+               }
+            }
+        }
+        console.log('playable_squares',playable_squares);
+        for ( let i = 0; i < playable_squares.length; i++ ) {
+            let pos = playable_squares[i];
+            $('table.grid td[yx="' + pos.join(',') + '"]').addClass('highlight-square');
+        }
+    }
+
     function get_card_zoom_holder(src) {
         let d = _div(null,'card-zoom-holder');
         let clone = src.clone();
@@ -94,6 +131,20 @@
         });
         clone.on('click',function() {
             d.remove();
+            unhighlight_playable_squares();
+        });
+        if ( can_play(src) ) {
+            highlight_playable_squares_for(src);
+        }
+        $('table.grid td.highlight-square').on('click',function() {
+            let id = src.attr('card-id');
+            let p = get_current_player();
+            let y = $(this).attr('y');
+            let x = $(this).attr('x');
+            play_card(p,id,y,x);
+            $('body').trigger($.Event('refresh_board'));
+            d.remove();
+            unhighlight_playable_squares();
         });
         d.append(clone);
         return d;
@@ -105,6 +156,7 @@
             card.find('.name-plate').html(card_def.name);
             card.addClass('card-type-' + card_def.type);
         }
+        card.attr('card-id',id);
         card.css({
             "width": get_card_column_width() + 'px',
             "height": get_card_column_height() + 'px',
@@ -117,25 +169,23 @@
         return card;
     }
     function render_card(table,card,row,col) {
-        if (table[row][col].append) {
-            table[row][col].append(card);
-        }
-        if (table[row][col] == 0) {
-            table[row][col] = card;
-        }
-        
+        table[row][col] = card;
     }
     function render_hand(player,rows_cols) {
         let rl = rows_cols.length;
         let cl = rows_cols[0].length;
         let last_row = rows_cols.length - 1;
-        let i = cl - 1;
-        let j = last_row;
-        $.each(player.hand,function () {
-           let card = get_card(this);  
-            render_card(rows_cols,card,i,j);
-            j--;
-        });
+        let row = cl - 1;
+        let col = last_row;
+        for ( let i = 0; i < 5; i++) {
+            if ( !player.hand[i] ) {
+                rows_cols[row][col] = 0;
+                continue;
+            }
+           let card = get_card(player.hand[i]);  
+            render_card(rows_cols,card,row,col);
+            col--;
+        }
     }
     function render_play_mat(player,target) {
         let rows_cols = player.playmat;
@@ -158,15 +208,19 @@
            }
         }
         if ( ! land_card_present ) {
-            play_card(player,player.land_pile.pop(),last_row - 1,last_col - 2);
+            play_card(player,player.land_pile[0],last_row - 1,last_col - 2);
             rows_cols = player.playmat;
         }
         render_hand(player,rows_cols);
         for ( let row = 0; row < rows_cols.length; row++) {
             let tr = $('<tr />');
+            tr.attr('y',row);
             for ( let col = 0; col < rows_cols[0].length; col++ ) {
                 let td = $('<td />');
                 tr.append(td); 
+                td.attr('y',row);
+                td.attr('x',col);
+                td.attr('yx',row + ',' + col);
                 td.css({
                     "width": panels.data.grid_width + 'px',
                     "height": panels.data.grid_height + 'px',
@@ -183,13 +237,41 @@
     }
     function play_card(player,id,y,x) {
         let card_def = get_card(id);
-        console.log("playing",card_def,y,x);
-        if ( card_def ) {
-            player.played.push(id);
-            player.playmat[y][x] = get_card(id);
+        let new_hand = [];
+        
+        for ( let i = 0; i < player.hand.length; i++ ) {
+            if ( card_def && player.hand[i] == id ) {
+                let played_def = {};
+                played_def.id = id;
+                played_def.y = y;
+                played_def.x = x;
+                player.played.push(played_def);
+                player.playmat[y][x] = get_card(id);
+            } else {
+                new_hand.push(player.hand[i]);
+            }
         }
+        player.hand = new_hand;
+        let new_land_pile = [];
+        for ( let i = 0; i < player.land_pile.length; i++ ) {
+            if ( card_def && player.land_pile[i] == id ) {
+                let played_def = {};
+                played_def.id = id;
+                played_def.y = y;
+                played_def.x = x;
+                player.played.push(played_def);
+                player.playmat[y][x] = get_card(id);
+            } else {
+                new_land_pile.push(player.land_pile[i]);
+            }
+        }
+        player.land_pile = new_land_pile;
+        current_move++;
     }
     function render_players(players) {
+        panels.main.html('');
+        panels.tab_panel.html('');
+        console.log("Rendering", "Round", window.board.round, "Move", current_move);
         $.each(players, function () {
             let id = 'player_' + this.id;
             let d = _div( id, 'player tab');
@@ -199,6 +281,7 @@
             panels.tab_panel.append(btn);
             d.hide();
         });
+        $('#player_1_tab_button').trigger($.Event('click'));
     }
     function process_player(player) {
         let draw_pile = [];
@@ -214,9 +297,12 @@
         }
         player.draw_pile = draw_pile;
         player.land_pile = land_pile;
-        while (player.hand.length < 5) {
-            player.hand.push(player.draw_pile.pop());
+        if ( window.board.round == 0 && current_move == 0 ) {
+            while (player.hand.length < 5) {
+                player.hand.push(player.draw_pile.pop());
+            }
         }
+        console.log("hand",player.hand);
         return player;
     }
     $(function () {
@@ -228,9 +314,12 @@
         $.each(window.board.players, function () {
             this.playmat = get_base_table();
             process_player(this);
-            console.log('player',this);
         });
-        render_players(window.board.players);
+        $('body').on('refresh_board',function () {
+            console.log(window.board.players);
+            render_players(window.board.players);
+        });
+        $('body').trigger($.Event('refresh_board'));
         $('#player_1_tab_button').trigger($.Event('click'));
     });
 })(jQuery);

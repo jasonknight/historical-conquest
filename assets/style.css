@@ -78,10 +78,10 @@ div.card table {
 }
 div.card td.illustration {
     border: 2px solid black;
-    width: 40%;
+    width: 25%;
 }
 div.card td.right-column {
-    width: 60%;
+    width: 75%;
 }
 div.card td.name-plate {
     border: 2px solid black;
@@ -116,6 +116,9 @@ div.card-zoom-holder {
 }
 td.playmat-column {
     background-color: lightgoldenrodyellow;
+}
+td.playmat-column.highlight-square {
+    background-color: darkgoldenrod;
 }
 div.tab {
     display: none;
