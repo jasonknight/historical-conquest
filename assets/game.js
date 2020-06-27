@@ -147,16 +147,19 @@
         rows_cols[rl-2][cl-1] = land_pile;
         rows_cols[rl-2][cl-2] = draw_pile;
         rows_cols[rl-3][cl-1] = discard_pile;
-        let tcard = get_card("AR4304");
-        render_card(rows_cols,tcard,1,1);
         let table = $('<table></table>');
             table.addClass('grid');
         let last_row = rows_cols.length - 1;
-        for ( let col = rows_cols[0].length - 1; col >= 0; col-- ) {
-           if ( rows_cols[last_row-1][col] == 0 ) {
-                let _lp = get_land_pile();
-                rows_cols[last_row-1][col] = _lp;
+        let last_col = rows_cols[0].length - 1;
+        let land_card_present = false;
+        for ( let col = last_col - 2; col >= 0; col-- ) {
+           if ( rows_cols[last_row-1][col] != 0 ) {
+                land_card_present = true;
            }
+        }
+        if ( ! land_card_present ) {
+            play_card(player,player.land_pile.pop(),last_row - 1,last_col - 2);
+            rows_cols = player.playmat;
         }
         render_hand(player,rows_cols);
         for ( let row = 0; row < rows_cols.length; row++) {
@@ -177,6 +180,14 @@
         }
         target.html('')
         target.append(table);
+    }
+    function play_card(player,id,y,x) {
+        let card_def = get_card(id);
+        console.log("playing",card_def,y,x);
+        if ( card_def ) {
+            player.played.push(id);
+            player.playmat[y][x] = get_card(id);
+        }
     }
     function render_players(players) {
         $.each(players, function () {
