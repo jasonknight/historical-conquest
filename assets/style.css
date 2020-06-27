@@ -49,6 +49,10 @@ div.card {
     padding: 1%;
     margin-left: auto;
     margin-right: auto;
+    cursor: pointer;
+}
+div.card td {
+    overflow: hidden;
 }
 div.card-type-land {
     background-color: lawngreen;
@@ -81,11 +85,11 @@ div.card td.right-column {
 }
 div.card td.name-plate {
     border: 2px solid black;
-    width: 60%;
+    width: 80%;
     height: 3vh;
 }
 div.card td.date-category {
-    width: 40%;
+    width: 20%;
     border: 2px solid black;
 }
 div.card td.history-plate {
