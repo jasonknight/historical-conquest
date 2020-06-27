@@ -58,6 +58,9 @@ div.card-type-land {
 div.card-type-character {
     background-color: orange;
 }
+div.card-type-character.card-type-explorer {
+    border-color: cyan;
+}
 div.card-type-explorer {
     background-color: lightcyan;
 }

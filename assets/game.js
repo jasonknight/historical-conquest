@@ -93,6 +93,14 @@
                }
             }
         }
+        if ( card.hasClass('card-type-explorer') ) {
+            let y = last_row - 2;
+            for ( let x = 0; x <= last_col - 2; x++ ) {
+               if ( mat[y+1][x] == 0 ) {
+                    playable_squares.push([y,x]);
+               }
+            }
+        }
         console.log('playable_squares',playable_squares);
         for ( let i = 0; i < playable_squares.length; i++ ) {
             let pos = playable_squares[i];
@@ -166,6 +174,9 @@
         if ( card_def ) {
             card.find('.name-plate').html(card_def.name);
             card.addClass('card-type-' + card_def.type);
+            if ( card_def.subtype1 ) {
+                card.addClass('card-type-' + card_def.subtype1);
+            }
         }
         card.attr('card-id',id);
         card.css({
