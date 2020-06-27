@@ -65,12 +65,15 @@
         return d;
     }
     function can_play(card_element) {
+        if ( current_move > 2 )
+            return false;
         let td = card_element.parent();
         let p = get_current_player();
         let last_row = p.playmat.length - 1;
         if ( td.attr('y') == last_row ) {
             return true;
         }
+        return false;
     }
     function unhighlight_playable_squares() { 
         $('table.grid td.highlight-square').unbind('click');
@@ -215,6 +218,7 @@
         }
         if ( ! land_card_present ) {
             play_card(player,player.land_pile[0],last_row - 1,last_col - 2);
+            current_move--;
             rows_cols = player.playmat;
         }
         setup_hand(player,rows_cols);
@@ -253,6 +257,8 @@
         target.append(table);
     }
     function play_card(player,id,y,x) {
+        if ( current_move > 2 )
+            return;
         let card_def = get_card(id);
         let new_hand = [];
         
