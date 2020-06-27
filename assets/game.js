@@ -267,20 +267,32 @@
         target.html('')
         target.append(table);
     }
+    function get_card_def(id) {
+        return window.carddb[id];
+    }
     function play_card(player,id,y,x) {
+        y = parseInt(y);
+        x = parseInt(x);
         if ( current_move > 2 )
             return;
-        let card_def = get_card(id);
+        let card = get_card(id);
+        let card_def = get_card_def(id);
         let new_hand = [];
         
         for ( let i = 0; i < player.hand.length; i++ ) {
-            if ( card_def && player.hand[i] == id ) {
+            if ( card && player.hand[i] == id ) {
                 let played_def = {};
                 played_def.id = id;
                 played_def.y = y;
                 played_def.x = x;
                 player.played.push(played_def);
                 player.playmat[y][x] = id;
+                console.log("card_def",card_def);
+                if ( card_def.subtype1 == 'explorer' ) {
+                    if ( player.playmat[y+1][x] == 0 ) {
+                        play_card(player,player.land_pile[0],y+1,x);
+                    }
+                }
             } else {
                 new_hand.push(player.hand[i]);
             }
@@ -288,7 +300,7 @@
         player.hand = new_hand;
         let new_land_pile = [];
         for ( let i = 0; i < player.land_pile.length; i++ ) {
-            if ( card_def && player.land_pile[i] == id ) {
+            if ( card && player.land_pile[i] == id ) {
                 let played_def = {};
                 played_def.id = id;
                 played_def.y = y;
