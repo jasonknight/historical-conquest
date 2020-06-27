@@ -1,526 +1,526 @@
-id	deck	name	year	type	subtype1	subtype2	attack_strength	defense_strength	morale_add	morale_lose	strength_add	strength_lose	defense_add	defense_lose	ability_type	usage_type	frequency	when_to_play	abilities
-AU4091	9	Miguel de Cervantes	1547-1616	character	author		100	200	300								1	I	Cervantes inspires your citizens to dream and tilt at their own windmills, you gain 300 Morale points.
-CO4091	9	Suleiman the Magnificent	1494-1566	character	conqueror		1200	800									1	I	All Christian Spiritual Leaders lose their Land 300 strength points and 100 Morale when combatting Suleiman.
-DO4091	9	Morte d'Arthur	1485	document					300								1	I	The romanticism of Chivalry fourishes in your civilization, gain 300 Morale points.
-EN4091	9	Dissolution of the Monasteries	1536-1541	event													1	I	At Henry's demand, all Spritual Leaders in play must be discarded and each discaded card causes its owner to 200 Morale.
-EN4092	9	Sack of Rome (1527)	1527	event						300					INTERRUPT		1	I	INTERRUPT: One opponent is forced to discard one knowledge or technology card and they lose 300 Morale.
-EN4093	9	Protestant Reformation	1517-1648	event											INTERRUPT		1	I	INTERRUPT: Nullify the effects of any Catholic Character card.
-EN4094	9	Spanish Inquisition	1478-1834	event							500		500		CHOICE		OO	C	CHOOSE: ONCE: Either gain 500 strength when facing a land with a Muslim character or gain 500 defense when defending Spain.
-EN4095	9	Battle of Lepanto	October 7, 1571	event											INTERRUPT		1	I	INTERRUPT:  Send all Islamic cards to the discard pile prior to a declared battle; the battle must be fought with out them.
-LE4091	9	Mary I of England	1516-1558	character	leader		500	500									OO	C	Mary gains an additional 500 strength points if she resides in the UK.
-LO4091	9	The Globe Theater		location													1	I	ONCE: You may enjoy duplicate positive effects of all opponents' Events and Entertainer cards for one turn.
-RE4901	9	Gutenberg Bible	1440-1453	relic													OO	C	Double the effect of any Christian Character card.
-SC4091	9	Paracelsus	1493-1541	character	scientist		40	20		200					CHOICE		1	I	CHOOSE: INTERRUPT: Discard all Scientists; each player lose 200 Morale for each discarded card OR double all scientists' effects.
-SC4092	9	Johannes Kepler	1571-1630	character	scientist		20	20	300	300					CHOICE		1	I	CHOOSE: Gain 300 Morale for inspiring your people OR force one opponent to lose 300 Morale because you disproved them.
-SC4093	9	Francis Bacon	1561-1626	character	scientist		20	20	300		500				CHOICE		1	I	CHOOSE: Gain 500 strength for technological advancements OR gain 300 Morale for improving people's quality of life.
-SC4094	9	Nicolaus Copernicus	1473-1543	character	scientist		40	20							CHOICE		1	I	CHOOSE: INTERRUPT: Cancel the effects of any opponent's Scientist OR double the effects of any one of your scientists.
-SP4091	9	Ignatius Loyola	1491-1556	character	spiritual_leader		100	200					500		CHOICE		OO	C	CHOOSE: ONCE: Gain an additional 500 strength if Ignatius is in Israel OR gain 500 defense if in the same land as a Pope.
-SP4092	9	Thomas More	1478-1535	character	spiritual_leader		80	60							CHOICE		1	I	CHOOSE: Thomas More gains 200 Morale points for every Catholic character he resided with OR just 200 Morale.
-TE4091	9	Invention of the Microscope		technology													OO	C	ONCE: Magnify the effects of any scientist by 2 times.
-TE4092	9	Invention of the Arquebus		technology													OO	C	The arquebus increases your strength by 400 points
-TE4093	9	Invention of the Mariner's Astrolabe		technology													OO	C	The mariner's astrolabe enables you to double the effect of any of your sea explorers.
-BU4081	8	Cornelius Vanderbilt	1794-1877	character	businessman		60	60							CHOICE		OO	C	CHOOSE: Once per turn, transport one card to another country connected by land or offer service to opponent in exchange for 300 Morale.
-BU4082	8	Samuel Spencer	1847-1906	character	businessman		40	60	300						CHOICE		1	I	CHOOSE: Gain 300 Morale or double the effect of any businessman in your battlefield.
-BU4083	8	Leland Stanford	1824-1893	character	businessman		60	60									1	I	Search through your deck and find one document you can play immediately.
-BU4084	8	Tom Scott	1823-1881	character	businessman		200	300									OO	C	Tom Scott increases the strength of any Army residing in the same land as Scott by 500 points.
-BU4085	8	Erastus Corning	1847-1906	character	businessman		60	40							CHOICE		1	I	CHOOSE: Increase Morale by 300 points or double the effects of one Politician.
-BU4086	8	Collis Potter Huntington	1821-1900	character	businessman		40	40								CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Move one card between North America and South America each turn.
-BU4087	8	James J. Hill	1838-1916	character	businessman		40	40	500						CHOICE		OO	C	CHOOSE: Gain 500 morale or move one card (once per turn) from Canada to any US land card as long as Hill is in play.
-BU4088	8	Charles M. Schwab	1847-1906	character	businessman		40	60	300						CHOICE		1	I	CHOOSE: Gain 300 Morale or INTERRUPT: cancel out the effects of Schwab's rival Andrew Carneige.
-EN4081	8	Golden Spike	May 10, 1869	event			40	60									1	I	The Golden Spike allows the player to move one card anywhere in the continential US once per turn for 5 turns.
-IN4081	8	Sir Henry Bessemer	1823-1891	character	inventor		80	60							CHOICE		1	I	CHOOSE: Increase your morale by 500 points or double the effect of any Businessman currently in play.
-IN4082	8	Henry Ford	1863-1947	character	inventor		100	60									OO	C	The moving assembly line increases you productivity, you may play 4 cards per turn while Ford is in play.
-IN4083	8	William Kelly	1811-1888	character	inventor		100	60									OO	C	Kelly's steel production methods strengthen your people, increase your civilization's defense by 700 points.
-IN4084	8	Nikolaus Otto	1832-1891	character	inventor		80	100									1	I	Play Otto at the same time as an Explorer and that Explorer discovers two new lands instead of one.
-IN4085	8	Cyrus McCormick	1863-1947	character	inventor		100	80									OO	C	The increase of food production by McCormick's reaper results in your Army's increased strength by 500 points.
-IN4086	8	Robert H. Goddard	1882-1945	character	inventor		60	80									OO	C	Goddard's invention takes your ability to wage war to a new level, increase any one Army's strength by 500 points.
-IN4087	8	 Francis E. & Freelan O. Stanley	1849-1940	character	inventor		80	80							INTERRUPT		1	H	INTERRUPT: Any one card targeted for the discard pile uses the Stanley Steamer to escape to a new land.
-TE4081	8	Internal Combustion Engine		technology													2	I	The Internal Combustion Engine increases your mobility, you may attack three times per turn for the next three turns.
-TE4082	8	Pneumatic Tire		technology					500						CHOICE		1	I	CHOOSE: Gain 500 morale or double the effects of either Henry Ford or the Internal Combustion Engine.
-TE4083	8	Moving Assembly Line		technology													2	I	The moving assembly line increases you productivity, you may play 4 cards per turn for the next 5 turns.
-TE4084	8	The Wright Flyer		technology											CHOICE		OO	C	CHOOSE: Increase strength by 500 points or double the effect of any Character card which is a pilot.
-LOCR401	7	Jerusalem	1000 BC-2020	location													OO	C	This card doubles the effect of any Christian, Jewish, or Islamic Spiritual Leader.
-LOCR402	7	Principality of Antioch	1098	location													OO	C	The Principality of Antioch was an epicenter of trade in antiquity. Double the effects of any Businessman you currently have in play.
-LOCR403	7	Umayyad Caliphate	661–1031	location													2	H	One of your Lands in Europe, Asia, or Africa gains the reach of the Umayyad Caliphate. You can attack on those continents for two turns.
-LOCR404	7	Constantinople	330-1453	location													OO	C	Because Constantinople lies on both sides of the Strait of Bosporus, any European Land can also attack in Asia and vice versa.
-LOCR405	7	Holy Roman Empire	5th c.-1806	location												CONSTANT	OO	C	With Charlemagne in your Civilization—ONCE: Increase your Morale by 300. CONSTANT: Increase your Strength by 500. You may attack from Europe to Asia and vice versa.
-LOCR406	7	The Holy Lance of Longinus	1098	relic												CONSTANT	2	H	ONCE: Increase your Morale by 400. CONSTANT: Due to their zeal in battle, the defender wins the second battle against the attacker.
-710000	7	Peter the Hermit	1050-1115	character	spiritual_leader		100	100									1	I	Peter the Hermit inspires your people. Increase your Morale by 300.
-710001	7	Pope Urban II	1035-1099	character	spiritual_leader										CHOICE		2	H	CHOOSE: Pope Urban II can either gain the help of another one of your Armies for two turns or negotiate a truce for two turns.
-ASW1401	6	Gavrilo Princip		character	assassin		60	80							INTERRUPT		1	I	INTERRUPT:  One of your opponent's Leaders or Conquerors is assassinated and discarded. Discard after use.
-DOW1401	6	Triple Alliance		document											INTERRUPT		1	I	INTERRUPT: This card enables you to combine the Strength of up to three of your Lands into one fighting force for two rounds.
-EVW1401	6	Assassination of Archduke Ferdinand		event											INTERRUPT		1	I	INTERRUPT:  When an opponent attacks, choose one Leader or Conqueror card that opponent must discard.
-EVW1402	6	Sarajevo July Crisis, 1914		event													1	I	Decrease all your opponents' Morale by 300.
-EVW1403	6	Sinking of the RMS Lusitania		event											INTERRUPT		1	I	INTERRUPT:  Discard one of your opponent's Vessels or Explorer-Sea cards.
-EVW1404	6	Battle of Verdun		event											INTERRUPT		1	H	INTERRUPT: After any opponent declares an attack, cut that Attack in half for one turn.
-EVW1405	6	German Strategic Bombing Campaign		event						200	1000						1	I	For one turn, gain 1000 Strength, but lose 200 Morale.
-TEW1401	6	Zeppelin		aircraft													OO	C	The Zeppelin gives you an additional 500 Strength against any Land that does not have an aircraft or pilot. This vessel may move between Lands, carrying two Characters per turn.
-TEW1402	6	Vickers FB5		aircraft													OO	C	The Vickers FB5 gives you an additional 500 Strength against any Land that does not have an aircraft or pilot. It may also move between Lands, once per turn. 
-TEW1403	6	Fokker E 1		aircraft												CONSTANT	OO	C	ONCE: For one turn, increase your     Strength by 800. CONSTANT: Afterwards, increase your Strength by 400.
-LEW1401	6	Kaiser Wilhelm II		character	leader		400	300									OO	C	Kaiser Wilhelm II gains an additional 700 Defense if he fights in defense of Germany.
-LEW1402	6	John J. Pershing		character	leader		500	400									OO	C	John J. Pershing's military genius allows you to have an additional Character in one Land.  It can be a second Army.
-LEW1403	6	Mustafa Kemal Atatürk		character	leader		400	400									OO	C	Increase your Strength by 400 if in defense of Turkey, or in defending against another WWI Character.
-LEW1404	6	Gen. William Mitchell		character	leader		600	600									OO	C	Anytime Billy Mitchell faces an Army, increase your Strength by 500.
-WAW1401	6	Eddie Rickenbacker		character	warrior		600	400								CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Increase your Strength by 400.
-WAW1402	6	Manfred von Richthofen		character	warrior		800	600									OO	C	The Red Baron takes your military ability to an elite level. Increase your Strength by 500. ONCE: Increase your Morale by 100.
-WAW1403	6	Billy Bishop		character	warrior		800	600									OO	C	Billy Bishop's aggressive flying style and amazing marksmanship increase your Land's Strength by 400 points. ONCE: Increase your Morale by 100.
-WAW1404	6	Frederick Libby		character	warrior		700	400									OO	C	Frederick Libby's brilliant flying ability increases your Land's Strength by 400 if he has an Aircraft in the same Land. 
-WAW1405	6	Douglas Campbell		character	warrior		400	300									OO	C	Douglas Campbell's brilliant flying ability increases your Land's Strength by 500 if he has an Aircraft in the same Land.
-LOW1401	6	Ottoman Empire		location													1	I	A land of yours in Europe, Asia, or Africa gains the reach of the Ottoman Empire. You can attack on those continents for four turns.
-ARWW401	5	The Cowboys		army			2000	1000									1	H	You automatically win the first attack against a Land being defended by a Law Enforcer.
-ARWW402	5	US Marshalls	September 24, 1789	army			2000	2000									1	I	All outlaws in play must be discarded.
-EVWW401	5	Earps Vendetta Ride	1882	event													1	I	If an opponent caused you to discard a Character within the last two rounds, you may choose one of that opponent’s Characters to discard.
-EVWW402	5	Gunfight at the O.K. Corral	October 26, 1881	event													1	I	An opponent must discard up to two Characters in a Land you choose. One Character must remain in that Land.
-EVWW403	5	Murder of Frank Stilwell	March 20, 1882	event													1	I	An opponent must discard a Character of your choice from any Land you attacked during the last three turns.
-LAWW401	5	Doc Holliday	(1851-1887 ) 	character	law_enforcement		300	400									OO	C	When he occupies the same Land as an Earp brother, increase his Strength by 500.
-LAWW402	5	Wyatt Earp 	(1848-1929)	character	law_enforcement		400	300									OO	C	When he occupies the same Land as Doc Holliday, increase his Strength by 500.
-LAWW403	5	Bat Masterson 	(1853 - 1921)	character	law_enforcement		300	200									OO	C	When he occupies the same Land as Wyatt Earp, increase his Strength by 300.
-LAWW404	5	Virgil Earp	(1843 – 1905) 	character	law_enforcement		300	400									1	I	Choose one of your opponent's Outlaws to send to the discard pile.
-LOWW401	5	Tombstone, AZ		location													1	H	Move an opponent's Character card to another of his or her Lands of your choosing.
-LOWW402	5	Dodge City, Kansas		location													OO	C	This card allows you to place a 5th Character on any one Land of your choice. 
-LEWW401	5	Captain Joseph H. Hurst	(1836 - 1896)	character	leader		400	400									1	I	Decrease your opponent’s Morale by 100 for every Outlaw in his or her Civilization.
-ORWW401	5	Pony Express	1859	organization													OO	C	Transport one Character or Army to any Land.
-OUWW401	5	Mary Katherine Horony Cummings	(1850 - 1940)	character	outlaw		-100	-100									1	I	Increase your Morale by 300. You must keep her for at least two rounds.
-OUWW402	5	Johnny Ringo 	(1850 - 1882)	character	outlaw		300	100									OO	C	While he is in play, decrease Wyatt Earp's Attack by 300.
-OUWW403	5	William Brocius	(1845 - 1882)	character	outlaw		200	100									1	H	Discard an opponent's Character of your choice. Afterwards, this card must also be discarded.
-OUWW404	5	Ike Clanton	(1847 - 1887)	character	outlaw		50	100									1	I	While defending any Land, if he loses, he may escape to another Land of your choice without harm.
-OUWW405	5	Frank and Tom McLaury	1848 - 1881	character	outlaw		300	300									1	H	Discard two of your opponent's Characters of your choice. Afterwards, this card must also be discarded.
-ENWW19	5	Colt Peacemaker of 1873	1873	technology													OO	C	Place this under a Character (keep it visible) and increase his or her Strength by 600 points.
-ENWW20	5	Silver Mining	1858	technology													1	I	Increase your Morale by 300
-ARCW401	4	Army of the Confederate States	1861–1865	army			3000	2000									OO	C	If serving in the same Land as a Confederate officer, increase its  Strength by 1000.
-ARCW402	4	Union Army	1861–1865	army			3000	3000									OO	C	If serving in the same Land as a Union or other non-Confederate US military officer, increase its Strength by 1000.
-EVCW401	4	Baltimore Riots (Lincoln's Martial Law)	April 19, 1861	event											INTERRUPT		1	I	INTERRUPT: Decrease your opponent's Strength by 500 for two turns and Morale by 200 permanently. 
-EVCW402	4	Battle of Fort Sumter (Map)	April 12–14, 1861	event											INTERRUPT		1	I	INTERRUPT: After an opponent declares war, you may escape and transport all Characters to another Land.
-EVCW403	4	Fugitive Slave Act	February 12, 1793	event													1	I	Any Character taken from you in the last two rounds must be returned to you.
-EVCW404	4	Missouri's Confederate Overthrow	1861	event													1	I	Play this card and the Union Army during the same round and take back any Land taken from you during the game. 
-EVCW405	4	Naval blockade	April 19, 1861	event											INTERRUPT		1	I	INTERRUPT: No water-based Explorer or Technology cards may be played for the next two rounds.
-EVCW406	4	Ordinance of Secession	December 20, 1860	event													1	I	An opponent's Land of your choice must discard half of its Characters (round down).
-EVCW407	4	Crittenden Compromise	February 4, 1861	event											INTERRUPT		1	I	INTERRUPT: Call a truce between you and an opponent for the next two turns. 
-EVCW408	4	South Abandons Congress	March 11, 1861	event													1	I	When played, an opponent with negative Morale must discard a Land of your choice and all occupying Characters.
-EVCW409	4	Revenue Act of 1861	August 5, 1861	event													1	I	Decrease all opponents' Morale by 200.
-LECW401	4	Brig. Gen. P. G. T. Beauregard	1818-1893	character	leader		400	500									1	I	He blocks the ability of any opponent trying to transport Characters after war is declared.
-LECW402	4	David E. Twiggs	1790-1862	character	leader		200	200									1	I	His first turn only: Increase his Strength by 1000. After that, give him to the opponent you choose, at normal Strength.
-LECW403	4	Jefferson Davis	1808-1889	character	leader		400	300									OO	C	When in play, all Confederate Armies’ in play decrease their Strength by 500. ONCE: Increase your Morale by 200.
-LECW404	4	Maj. Robert Anderson	1805-1871	character	leader		300	300							INTERRUPT		1	I	INTERRUPT: After an opponent declares war, you may escape and transport all Characters to another Land.
-LECW405	4	President James Buchanan 	1791-1868	character	leader		200	200									OO	C	When in play, increase your Confederate Army's Strength by 500. ONCE: Decrease your Morale by 200.
-LOCW401	4	 Confederate States of America "South"	1861–1865	location													1	I	With Jefferson Davis in play anywhere in the game, increase your Morale by 300.
-LOCW402	4	Neutral States	1861–1865	location													1	I	For three turns: Though your opponent may attack, he or she may not take one Land, of your choice, from you.
-LOCW403	4	Union States "North"	1861–1865	location													1	I	With Abraham Lincoln in play anywhere in the game, increase your Morale by 500.
-TECW401	4	 Star of the West	June 17, 1852	vessel											INTERRUPT		OO	C	INTERRUPT: Transport any one Character from another Land to any Land under attack. This card may move between Lands, once per turn.
-ARW2401	3	442nd Regimental Combat Team	1944 - 1969	army			4000	3000							INTERRUPT		1	I	INTERRUPT: When played, reverse the effects of any Event card.
-ARW2402	3	Armia Krajowa or Home Army	1942 - 1945	army			1000	1500									1	H	ONCE: If this is the last card protecting a Land, your opponent immediately stops attacking until the next turn.
-ARW2403	3	German-Italian Troop Offensive (Pact of Steel)	14387	army			3500	2000							INTERRUPT		1	I	INTERRUPT: When played, if an opponent attacks you with an Army card, the army turns on its owner for one attack.
-ARW2404	3	British SAS	13696	army			3500	3000									1	I	The SAS disables your opponent's Army for one turn. That Army may not attack for one turn.
-DOW2401	3	Armistice of Cassibile	15952	document											INTERRUPT		1	I	INTERRUPT: Call a cease fire with your opponent after your opponent wins his or her first attack.
-EVW2401	3	D-Day Normandy	16229	event											INTERRUPT		1	I	INTERRUPT: Take back any Land that any opponent conquered in the past two turns. Occupiers must be discarded.
-EVW2402	3	Operation Shingle	16093	event													1	I	Combine the Strengths of two Lands to attack an opponent's Land for one turn.
-EVW2403	3	Bombing of Hamburg	1939 - 1945	event											INTERRUPT		1	I	INTERRUPT: On your opponent's turn, declare war and attack his or her Land once. This ends your opponent’s turn until the next round. 
-EVW2404	3	Operation Pastorius	15493	event											INTERRUPT		1	I	INTERRUPT: Immediately stop any Event card’s effects when played against you.
-EVW2405	3	Lower Dnieper Offensives	1943	event													1	I	You may attack any Land, even if separated by water.
-EVW2406	3	Battle of Stalingrad	1942 - 1943	event											INTERRUPT		1	I	INTERRUPT: If your opponent wins the first attack and you play this card, the battle ends until the next turn.
-EVW2407	3	Tehran Conference (Allies Meet)	November 28, 1943	event													2	H	Call a truce with any one opponent for two turns, even if that opponent doesn't want it.
-LEW2401	3	Dwight Eisenhower	1890 - 1969	Leaders			700	700							INTERRUPT		OO	C	INTERRUPT: For one entire round, no player may attack.
-LEW2402	3	General George S. Patton	1885 - 1945	Leaders			800	800									1	I	Due to his strategic genius, Patton outmaneuvers any Axis country. That Land loses one turn.
-LEW2403	3	Major General John P. Lucas 	1890-1949	Leaders			700	500									2	H	Transport one Army to any Land, even if separated by water. 
-LEW2404	3	William Knudsen	1879 - 1948	Leaders			500	300							INTERRUPT		2	H	INTERRUPT: For one entire round, you are the only player who may attack.
-MUW2401	3	Billy Millin, "crazy" wartime bagpiper - 1st Special Service Brigade; Simon Fraser, 15th Lord Lovat	1922-2010	character	musician		200	200									1	I	Increase your Morale by 200. With his encouragement, double your Army's Strength for one turn only.
-MAW2401	3	Poland's Enigma codebreakers	1939 - 1945	Mathmaticians			20	80							INTERRUPT		OO	C	INTERRUPT: While this card is in play, no player may look in your Land pile, deck, or hand.
-TEW2401	3	Red Ball Express	16309	technology			1000	1000									2	H	Transport one Army to any Land, unless separated by water. 
-WAW2401	3	Sniper Vasily Zaytsev	1915 - 1991	character	warrior		800	400							INTERRUPT		2	H	INTERRUPT: Once attacked, Zaytsev sends one Character from the attacking Land to the discard pile.
-ARRW401	2	Patriot Militia	1774-1776	army			1500	2000									OO	C	When any European Character is used in an attack against the Militia’s Land, increase that Land’s  Defense by 500.
-ARRW402	2	British Regulars	18th and 19th Century	army			2000	3000									OO	C	When commanded by a British Leader, increase their Strength by 500.
-ARRW403	2	Minute Men	1774-1775	army			2000	2000							INTERRUPT		OO	C	INTERRUPT: If played in a North American Land, increase your Defense by 500 and Attack by 300.
-DORW401	2	Join or Die	1754	document											INTERRUPT		1	I	INTERRUPT: Choose a Character card from your discard pile to rejoin the fight for a Land that is under attack. 
-EVRW401	2	Battle on Concord	April 19, 1775	event											INTERRUPT		1	I	INTERRUPT – You win the second attack by an opponent.
-EVRW402	2	Battle on Lexington Green	April 19, 1775	event											INTERRUPT		1	I	INTERRUPT: If you lose the first attack, before the second attack starts, your remaining Characters in that Land may retreat to another Land.
-EVRW403	2	Revolutionary War First Day	April 19, 1775	event											INTERRUPT		1	I	INTERRUPT: If there is one defender left in a Land and it is under attack, your opponent must stop attacking until the next turn.
-LERW401	2	Captain Parker	1729-1775	character	leader		400	300									1	H	If a Land Parker’s occupies loses the first attack, he automatically wins the second attack.  
-LERW402	2	Dr. Joseph Warren	1741-1775	character	leader		400	300									1	H	Warren will turn any of your opponent’s Spies or Assassins into double agents and you may use their Abilities against their owner.
-LERW403	2	Lieutenant Colonel Francis Smith	1723-1791	character	leader		500	400							CHOICE		1	H	CHOICE: You may double the Attack of any Army he commands but after two turns the Army retreats to the discard pile.
-LERW404	2	Brigadier General Hugh Percy.	1742-1817	character	leader		400	500							INTERRUPT		1	H	INTERRUPT: If another Land in the same continent is under attack, Percy and an Army from his Land will help defend them for one turn.
-LERW405	2	James Barrett	1710-1779	character	leader		500	400									1	I	If the Land he is occupying is attacked, Barrett wins the first battle. 
-LERW406	2	King George	1895-1952	character	leader		600	400							CHOICE		2	H	CHOICE: You may join two Armies to fight in your Land, for two turns, but you must decrease your Morale by 300.
-LERW407	2	Major John Pitcairn 	1722-1775	character	leader		400	500									1	I	ONCE: Increase your Morale by 400 until he is used for battle. Then take away 200 of those points.
-LERW408	2	Lieutenant General Thomas Gage - British	1718-1787	character	leader		400	400							CHOICE		1	I	CHOICE: You may double the Attack of any other Leader in the Land he occupies, but decrease your Morale by 200.
-LORW401	2	Old North Church - Two lantern	1723-1775	location											INTERRUPT		1	I	INTERRUPT – Warn your Civilization of an impending attack. Increase your Defense by 2000 for one turn.
-LORW402	2	Port of Boston	1630-2020	location													1	H	Increase your Morale by 300 if you have a Businessman in your Civilization.
-LORW403	2	North Bridge of Concord	April 19, 1775	location												CONSTANT	OO	C	The battle turns in your favor—ONCE: Increase your Morale by 200. CONSTANT: Increase one Land's Attack by 400.
-SYRW401	2	Margaret Kemble Gage	1734–1824	character	spy		40	40									2	H	Turn one of your opponent’s Characters into a spy and steal 1000 of your opponent’s Attack points and add that to your Defense.
-WARW401	2	Robert Newman and Captain John Pulling	1754-1804	character	warrior		300	300							INTERRUPT		1	H	INTERRUPT: They risk their safety to warn your citizens. Increase your Defense by 1000 for one turn.
-ARRR401	1	Celtic Tribes	58-51 BC	army			2000	3000									1	H	For one turn only, if you win an attack on your opponent, you may steal 400 Morale. 
-CORR401	1	Caesar Augustus	63 BC-14 AD	character	conqueror		1000	1000									2	H	Augustus breaks any one treaty or peace agreement in any Land.
-CORR402	1	Marcus Lepiduss	89-13 BC	character	conqueror		800	800									1	H	If Lepidus and two Roman Leaders or Conquerors are in your Civilization at one time, you may take one of your opponent’s Lands for your own.
-EVRR401	1	Cimbrian War	113–101 BC	event											INTERRUPT		1	I	INTERRUPT: When an opponent wins his or her first attack against one of your Lands, a peace treaty ensues in which they may not attack your Civilization for the rest of that turn.
-EVRR402	1	Roman Civil War	49–45 BC	event													1	I	Decrease your opponent’s Morale by 400. 
-EVRR403	1	Cleopatra and Marc Anthony	83-30 BC	event											INTERRUPT		1	I	INTERRUPT: After your last Character in one of your Lands dies and it is taken, disaster strikes. That opponent then loses 300 Morale. 
-EVRR404	1	Gladiator Wars	73–71 BC	event													1	I	Rebellion grows in your opponent’s Land. All Characters with fewer than 100 Attack are sent off to the discard pile. 
-EVRR405	1	Hannibal Wars (2nd Punic War)	218 – 201 BC	event													1	I	Choose one of your opponent’s Lands to be blocked from adding any new Characters for the next two rounds. 
-EVRR406	1	Latin Wars	340–338 BC	event													1	I	Any of your Lands taken within the last two turns are now returned. Your opponent’s Characters in that Land are exiled to the discard pile.
-EVRR407	1	Roman Republic Expansion	146-31 BC	event													1	I	You confiscate two Lands from an opponent’s Land pile when you give one active Land to that player. All cards from that Land must be discarded. That Land is now theirs to play on their next turn.
-EVRR408	1	The Jugurthine War 	112–106 BC	event													1	I	Retrieve any Land that was taken from you within the last two turns. Your opponent’s Characters in that Land are exiled to the discard pile.
-MLRR401	1	Fabius Maximus	280–203 BC	character	leader		500	600									2	H	Patience is your virtue. Your opponent may win the first attack against your Land, but you automatically win the second.
-ORRR401	1	The Executive Magistrate	510-44 BC	organization													1	H	Choose a Character as magistrate.  All Characters in that Land are given the same Strength as the magistrate for one turn only.
-ORRR402	1	The Legislative Assembly	509–27 BC	organization													1	I	Your Morale will not decrease for the next two turns. Increase your Morale an additional 200 for each of those two turns.
-ORRR403	1	The Senate	753 BC-476 AD	organization													1	I	You gain control of any opponent's Organization in play. Move it to your Civilization or discard it.
-PIRR401	1	Cilician Pirates	2nd c. - 66 BC	character	outlaw		400	200									OO	C	Double the pirates’ Attack unless you face another Roman Leader or Conqueror.
-POE001	1	Gnaeus Pompeius Magnus	106-48 BC	character	politician		500	400									1	H	Double the Strength of any Army under Magnus's command. After the end of the round, he is assassinated and must be discarded.
-TEE001	1	Roman Ballista	400 BC	technology											INTERRUPT		1	I	INTERRUPT: Eliminate one of your opponent’s Character cards.
-WAE002	1	Roman Centurion	107 BC	character	warrior		800	800								CONSTANT	OO	C	For showing valor—ONCE: Increase your Morale by 200. CONSTANT: Increase Strength by 500 when fighting a Land with an Army.
-WAE003	1	Sparticus	111-71 BC	character	warrior		700	300									1	H	Spartacus inspires your people. For each Character with less than 100 Attack points, multiply their Strength by 10 for two rounds.
-AC4701	G	Irish Volunteers	1913-?	character	activist		400	500		200					CHOICE		1	I	CHOICE: Increase your Morale by 400 due to the Volunteers’ passion for freedom OR each of  your opponents lose 200 Morale for each European Land. 
-AR4701	G	Cossack Warriors	ca 1200s-?	army			3000	2000									OO	C	When the Cossack Warriors win their first attack, increase their Attack by 500 against that opponent.
-AR4702	G	Kamakura Shogun Army	1185-1333	army			4000	3000									2	H	After an initial attack on the Asian Land this Army is defending, you can utilize that opponent's second attack to counterattack. 
-AR4703	G	Māori Warriors	1320-2020	army			3000	2000									OO	H	When attacking from the South Pacific, the Maori gain 1000 Attack for their first attack each turn.
-AR4704	G	Soviet Red Army	1917-1991	army			4000	4000		100							OO	C	If in Russia with Lenin or Dzerzhinsky, gain 1000 Attack.  US lands defeated by the Red Army lose 100 Morale per lost battle.
-AI4701	G	Sandro Botticelli	ca. 1445-1510	character	artist		20	20		200					CHOICE		1	I	CHOICE: Increase your Morale by 300 from his brilliance OR your opponents lose 200 Morale due to nightmares from Dante's Inferno.
-AS4701	G	Nathuram Godse	1910-1949	character	assassin		0	0							INTERRUPT		1	I	INTERRUPT: Assassinate one of your opponent's Characters. Decrease opponent's Morale by 200. Discard this card after use.
-AT4701	G	Jim Thorpe	1887-1953	character	athlete		40	40									1	I	Jim Thorpe inspires your people. Increase your Morale by 300.
-AU4701	G	Bram Stoker	1847-1912	character	author		40	20	300								1	I	Dracula entertains your Civilization and frightens your opponents.  You gain 300 Morale; they lose 200.
-AU4702	G	Robert Burns	1759-1796	character	author		20	40									1	I	Robert Burns’s poetry inspires your people. Increase your Morale by 200. If he resides in the United Kingdom, increase your Morale by 400.
-BU4701	G	Mayer Rothschild	1744-1812	character	businessman		200	200									OO	C	Rothschild's financial brilliance and ability to acquire military resources increases one Army's Strength by 50%.
-CO4701	G	Hannibal	247-181 BC	character	conqueror		1000	800									OO	C	Increase your Strength by 1000 when attacking a Land with no Leader.
-CO4702	G	Qin Shi Huang	260-210 BC	character	conqueror		600	1000									OO	C	If Huang is fighting in an Asian Land, increase your Strength by 1000.
-CO4703	G	Xerxes	518-465 BC	character	conqueror		800	600									OO	C	Increase his Strength by 1000 if occupying an Asian Land.
-CO4704	G	Caesar Augustus Germanicus	13849	character	conqueror		800	600									1	I	Select one opponent's Character card to go insane... that player loses your opponent 200 Morale each turn, until discarded.
-RE4701	G	Code of Hammurabi	18th c. BC	relic													1	I	For the next 3 turns, all cards decreasing your Morale are transferred to an opponent of your choice.
-DO4701	G	Malleus Maleficarum	1486	document													1	I	Accuse one opponent of witchcraft.  He or she is forced to discard one Spiritual Leader and loses 500 Morale points.
-EN4701	G	Bela Lugosi	1882-1956	character	entertainer		20	40							CHOICE		1	I	CHOICE: Increase your Morale by 300 for entertaining your Civilization OR one of your opponents loses 300 Morale out of fear.
-EV4701	G	Vesuvius Eruption	79 AD	event						500					INTERRUPT		1	I	INTERRUPT: Vesuvius destroys an opponent's Land. He or she must discard the Land and lose 500 Morale. 
-EV4705	G	Galveston Hurricane of 1900	1900	event						400							1	I	Select one opponent's Land to face the hurricane. He or she must discard half that Land's Characters (round up) and lose 400 Morale.
-EV4704	G	The Lost Colony of Roanoke	1587	event											INTERRUPT		1	I	INTERRUPT: Select one opponent's Land. All that Land's cards are discarded and that player loses 100 Morale for every card discarded.
-EV4702	G	Bloody Sunday	1972	event											INTERRUPT		1	I	INTERRUPT: Choose one player. For each English Character in play, that player loses 100 Morale. 
-EV4703	G	Japanese-Americans Internment	1942-1946	event						200							1	I	All opponents must discard their Characters of Japanese heritage. Players forced to discard lose 200 Morale. 
-EX4702	G	Bessie Coleman	1892-1926	character	explorer	flight	100	80									1	I	Bessie gives Strength to African Americans. For every black Character in your Civilization, increase your Morale by 100.
-EX4704	G	Xuanzang	ca. 602–664	character	explorer	land	20	20									1	I	If Xuanzang discovers an Asian Land, increase your Morale by 300.
-EX4703	G	Sacagawea	1788-1812	character	explorer	land	60	60									1	I	Increase your Morale by 300 if she discovers a North American Land.
-EX4701	G	Alan B. Shepard	1923-1998	character	explorer	space	80	60									1	I	Your citizens rejoice at Shepard's accomplishment. Increase your Morale by 300.
-IN4701	G	William B. Kouwenhoven	1886-1975	character	inventor		20	80							INTERRUPT		1	I	INTERRUPT:  The cardiac defibrillator saves the life of one Character destined for the discard pile. Place card back in hand.
-IN4702	G	Louis Braille	1809-1852	character	inventor		30	30									1	I	Louis Braille empowers many of your Citizens. Increase your Morale by 300.
-KN4701	G	Algebra	3rd c. AD	knowledge												CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Increase Strength for your Civilization by 300 while this card is in play.
-CT4701	G	Madagascar		land													1	I	With the beauty of the islands           increase your Morale by 300 points. 
-CT4702	G	Peru		land													OO	C	The Andes give Peru a tactical advantage. Their Defense is increased by 500 points.
-CT4703	G	State of Hawaii		land													OO	C	The attacking Land must have an Explorer, Pirate, or Shipbuilding Technology card to attack. Increase Defense by 500.
-CT4704	G	Republic of Turkey		land													OO	C	Due to the Strait of Bosphorus, Turkey can battle any Land in Europe or Asia.
-CT4705	G	Republic of Vanuatu		land													OO	C	Because Vanuatu is a series of islands, increase this Land's Defense by 1000.
-CT4706	G	Vatican City State		land													OO	C	If Charlemagne, the Knights Templar, or any Catholic figure reside in this Land, increase your Defense by 800.
-LE4701	G	Felix Dzerzhinsky	1877-1926	character	leader		600	400									1	I	You gain the effects of all Knowledge and Document cards in play for 5 turns, and then this card is discarded.
-LE4702	G	Oliver Cromwell	1599-1658	character	leader		400	300									OO	C	When Cromwell occupies a Land in the UK, increase his Strength by 500. If he defeats a Monarch card, your opponent loses 300 Morale.
-LE4703	G	Joseph Stalin	1878-1953	character	leader											CONSTANT	OO	C	ONCE: Decrease your Morale by 200 and an opponent's by 400. CONSTANT: If he occupies an Asian Land, increase Attack by 1,000.
-LE4704	G	Peter the Great	1877-1926	character	leader		700	600								CONSTANT	OO	C	ONCE: Increase Morale by 300 if Peter resides in Russia. CONSTANT: If Peter occupies a Land with a coast, increase Defense by 500. 
-LO4701	G	Library of Alexandria	285–246 BC	location													1	I	You gain the effects of all Knowledge and Document cards in play for 5 turns, and then this card is discarded.
-MU4701	G	Pyotr Ilyich Tchaikovsky	1840-1893	character	musician		40	40									1	I	Tchaikovsky gains 400 Morale if he resides in Russia. Otherwise he gains 200 Morale.
-OR4701	G	Culper Spy Ring	1778-1783	organization											INTERRUPT		1	I	INTERRUPT: All effects from an opponents' Spy are reversed. That player loses 300 Morale for an exposed spy.
-OU4701	G	Guy Fawkes	1570-1606	character	outlaw		-300	-300		300							1	I	When you play Guy Fawkes in an opponent's Land, they lose 300 Morale. He cannot be discarded until the Land changes hands.
-PH4701	G	Niccolò Machiavelli	1469-1527	character	philosopher		100	60								CONSTANT	OO	C	ONCE: For every opposing politician, decrease your Morale by 200. CONSTANT: Increase Strength by 300 for every politician he battles.
-PO4701	G	Maximilien Robespierre	1758-1794	character	politician		80	40							CHOICE		1	I	CHOICE: Force one opponent to discard all Kings, Queens, and Catholic Characters.  Discard Robespierre after 3 turns.
-SC4701	G	Guglielmo Marconi	1874-1937	character	scientist		40	20									1	I	Marconi's advancements in the science of radio broadcasting inspire your people. Increase your Morale by 300.
-MA4701	G	Emmy Noether	1882-1935	character	mathematician		20	20							INTERRUPT		1	I	INTERRUPT - CHOICE: Reverse the effects of any card's ability played against you OR increase your Morale by 200 for every female in play.
-SP4701	G	Maimonides	1135 or 1138-1204	character	spiritual_leader		20	20							INTERRUPT		1	I	INTERRUPT - CHOICE: Reverse the effects of any card's ability played against you OR increase your Morale by 200 for every female in play.
-TE4701	G	RADAR	1934–1939	technology						100							OO	C	Each of your Lands currently in play gains 500 Defense.  All opponents lose 100 Morale for each plane, astronaut, or pilot in play.
-WA4701	G	Simo Häyhä	1905-2002	character	warrior		300	200							INTERRUPT		OO	C	INTERRUPT: Häyhä can kill up to a total of 3 Characters while in play, one per turn. After the 3rd target, Häyhä is discarded.
-AC4601	F	Harriet Tubman	1822-1913	character	activist		40	40							INTERRUPT		1	I	INTERRUPT: There is peace in your Civilization and no opponent may play any card against you or attack your Land for one round.
-AC4602	F	Tokyo Rose	1916-2006	character	activist		20	40							INTERRUPT		1	H	INTERRUPT: Tokyo Rose cancels out any loss of Morale caused by any one specific card. 
-AR4601	F	Apache	850 AD - Current	army			3000	2500									2	H	The Apache's ferocity surprises your opponent. The Apache automatically win their first battle against any opponent.
-AR4602	F	French Musketeers	1600-1850	army			2500	2500									OO	C	If the French Musketeers occupy any Land in Europe, increase their Strength by 500.
-AR4603	F	Ming Warriors	1368 - 1644	army			3500	2500									1	H	Due to their speed, when an opponent declares an attack, the Ming Warriors strike first and win the battle.
-AR4604	F	Nicaragua Contras	1979-1990	army			3000	2000									OO	C	The Contras gain an extra 500 Strength if they are in the same Land as an American Leader.
-AI4601	F	Raffaello Sanzio da Urbino	1483-1520	character	artist		40	20									1	I	Raphael's amazing artistic ability inspires your citizens, increasing their Morale by 200.
-SY4601	F	Sir William Stephenson	1897-1989	character	assassin	spy	400	500									OO	C	Stephenson prevents all your opponents from playing any Spy Cards as long as he is in your Civilization.
-AT4601	F	Babe Didrikson Zaharias	1938 - 1956	character	athlete		60	80									1	I	Babe gives strength to women. For every woman in your Civilization, increase your Morale by 100.  
-AU4601	F	Brothers Grimm	1785-1863	Authors			40	40									1	I	Increase your Morale by 200.  While scaring your opponent's civilization, decrease their Morale by 200.
-AU4602	F	Edgar Allen Poe	1809-1849	character	author		20	20									1	I	While scaring your opponent's Civilization, decrease their Morale by 300.
-BU4601	F	Frederic "The Ice King" Tudor	1783-1864	character	businessman		100	100									1	I	Tudor increases your Morale by 200 because of cool drinks and longer lasting food.
-CO3015	F	Ashoka The Great	304-232BC	character	conqueror		800	700					500				OO	C	If Ashoka is your Land's sole leader, you cannot attack after he has been there more than two turns, but gain 500 Defense .
-CO3016	F	Mao Tse-Tung	1893-1976	character	conqueror		700	800								CONSTANT	OO	C	ONCE: Decrease your Morale by 300. CONSTANT: Increase your Strength by 400 if he occupies an Asian Land.
-CO3017	F	Vlad the III, Prince of Wallachia	1431-1477	character	conqueror		800	800								CONSTANT	OO	C	ONCE: Decrease your Morale by 200. CONSTANT: Increase your Strength by 300 if he occupies an Asian Land.
-CT4601	F	Greece		land													1	I	Due to the Greeks’ rich collection of knowledge, increase your Morale by 300.
-CT4602	F	Israel		land					200								OO	C	You gain 200 Morale for every Jewish, Christian, or Islamic Spiritual Leader that occupies Israel.
-CT4603	F	Mali		land													OO	C	Increase your Morale by 300 if an African Leader resides in Mali. 
-CT4604	F	Samoa		land													OO	C	Due to being an island, increase your Defense by 500, but your small military decreases your Attack capabilities by 300.
-CT4605	F	US East Coast		land													2	H	At the beginning of your turn, you may transport any one Character card in your Civilization to this Land.
-CT4606	F	Venezuela		land												CONSTANT	OO	C	If Columbus is in this Land - ONCE: Increase your Morale by 300. With or without Columbus - CONSTANT: Increase your Strength by 500. 
-DC4601	F	Dead Sea Scrolls	1946-1956	document													1	I	The Dead Sea Scrolls increase your civilization's Morale by 300 points.
-EC4601	F	Friedrich Hayek	1899-1992	character	economist		40	40									1	I	For every Japanese Character in your Civilization increase Morale by 100.
-EN4601	F	Geisha	794-2020	character	entertainer		20	20									1	I	For every Japanese Character in your Civilization increase Morale by 100.
-EV4601	F	Black Death (Bubonic Plague)	1340-1400	event													1	I	ONCE: This card decreases the Morale of the opponent of your choice by 600.
-EV4602	F	Chernobyl	31528	event													1	I	One of your opponent's Lands is uninhabitable and must be discarded. One Character may escape to another Land in the same continent. 
-EV4603	F	October Revolution	1917	event													1	I	All players must discard all Kings, Queens, Emperors, Pharaohs, and Tsars in play. 
-EV4604	F	Swing Era	1935–1946	event													1	I	Increase your Morale by 300 points.
-EX4601	F	Joshua Slocum	1844-1909	character	explorer	sea	60	40									1	I	Slocum increases your Morale by 100, but dies after 2 turns.
-EX4605	F	Laika the Dog	19665	character	explorer	space											1	I	If Laika discovers a European or Asian Land, increase your Morale by 200.
-EX4602	F	Pedro Alvares Cabral	1467-1520	character	explorer	sea	200	300									OO	C	If he occupies a South American Land, increase his Attack by 500 for the first battle of each turn.
-EX4603	F	Sir John Franklin and Francis Crozier	1796-1848	character	explorer	sea											1	I	Search your Land pile for the Land of your choice. Discard this Explorer after discovery.
-EX4604	F	Sir John Hawkins	1532-1595	character	explorer	sea				200							1	I	Hawkins discovers a new country for you, but due to slavery you lose 200 Morale points.
-IN4601	F	Eli Whitney	1765-1825	character	inventor		40	20									1	I	Increase your Morale by 300 if you discard a Character Card already in play (other than Eli).
-IN4602	F	Ferdinand, Graf von Zeppelin	1838-1917	character	inventor		100	100							CHOICE		OO	C	CHOOSE: With this knowledge, double one of the following: all your Knowledge, Technology, or Document cards' abilities. 
-KN4601	F	Heliocentric Solar System	1660	knowledge											CHOICE		OO	C	CHOOSE: With this knowledge, double one of the following: all your Knowledge, Technology, or Document cards' abilities. 
-LE4601	F	Emperor Constatine	(c.272-337)	character	leader		300	500								CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Increase your Defense by 500 when protecting a European Land. 
-LE4602	F	Franklin D. Roosevelt	1882-1945	character	leader		500	400									1	I	You can pull one Leader out of your Discard pile and play him/her again.
-LE4603	F	Margaret Thatcher	1925-2013	character	leader		400	200								CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Increase your Defense by 500 when protecting any Land in the United Kingdom. 
-LE4604	F	Tsar Nicholas II	1868-1918	character	leader		500	600									1	H	Tsar Nicholas can call in help from an outside Army in your Civilization for one turn, but only claim half of its Strength.
-LE4601	F	Allan Pinkerton	1819-1884	LawEnforcer			200	300									OO	C	Pinkerton stops assassins, spies, or any other attempts to look at your hand. You can look at one opponent's hand, once per turn.
-LO4601	F	Eiffel Tower	1887-1889	location													1	I	With this monument, increase your Morale by 200 points.
-MU4601	F	George Frederick Handel	1685-1759	character	musician		20	20									1	I	Handel's musical genius increases your Civilization's Morale by 300.
-OR4601	F	House of Representatives	April 1, 1789	organization													OO	H	If your opponent's Morale falls below 0 for 2 rounds, you win.  If your opponent plays a Senate card, this card must be discarded.
-PI4601	F	Lope de Aguirre	1510-1561	character	outlaw	pirates	400	200								CONSTANT	1	C	ONCE: When played, discover a New Land. CONSTANT: Increase your Attack by 500 if battling in a South American Land.  
-PH4601	F	Confucius	551-479 BC	character	philosopher												1	I	Confucius's philosophical wisdom has inspired your Civilization.  Increase your Morale by 300.
-PO4601	F	Romualdo Pacheco	1831-1899	character	politician		60	80									1	I	Increase your Morale by 100 for every Latin American Character already in play in your Civilization.
-SC4601	F	Otto Hahn	1879 - 1968	character	scientist		80	60		500		500			CHOICE		OO	C	CHOOSE: Increase your Strength by 500 and lose 500 Morale OR increase Morale by 500 and lose 500 Strength.
-SP4601	F	Lemuel Haynes	1753-1833	character	spiritual_leader		20	60									OO	C	Pastor Haynes warns the Land he occupies of a coming battle. Increase your Defense by 500 before any first attack, per turn.
-TE3011	F	Shipbuilding	3000 BC	technology													OO	C	Once per turn, Shipbuilding allows you to transfer any one card from one Land to another regardless of continent.
-WA3006	F	Jason Cunningham	1975-2002	character	warrior		500	600									OO	C	Jason rescues all Characters in one Land facing imminent defeat, transporting them to another Land.
-AC4501	5	Ida Bell Wells-Barnett	1862 - 1931	character	activist		80	40									OO	C	When Wells is in play, no cards may be taken or searched by any of your opponents.
-AC4502	5	Muhammad Ali Jinnah	1876 - 1948	character	activist		300	200									OO	C	Increase your Strength by 500 when your Land is defending against the United Kingdom.
-AR4501	5	Amazon Women Warriors	600-300 BC?	army			3000	3000									OO	C	If the Amazon Warriors and a female Leader fight in the same Land, increase their Strength by 500.
-AR4502	5	Cherokee Warriors	1898–1906	army			3000	2000									1	H	Due to the Cherokees’  wilderness skills, they win the first battle in which they defend their Land.
-AR4503	5	French Army	600-1400AD	army			2000	2000									OO	C	If Charlemagne or Joan of Arc lead this army, increase that Land's Strength by 1,000.
-AR4504	5	The Great Viking Army	800 – 1066 AD	army			3000	1000									1	H	If you win the first attack and have higher Morale than the defender, you gain that Land. All defending cards must be discarded.
-AI4501	5	Rembrandt	1606-1669	character	artist		20	20									1	H	If he stays in play for three turns, increase your Morale by 500.
-AS4501	5	John Wilkes Booth	1838-1865	character	assassin		0	0							INTERRUPT		1	I	INTERRUPT: Booth sneaks into your opponent's Civilization and assassinates one Leader. Afterwards he too must be discarded.
-AT4501	5	Chuck Cooper	1926 - 1984	character	athlete		40	40									1	I	Chuck Cooper's trailblazing spirit inspires your people. Increase your Morale by 200.
-AU4501	5	Booker T. Washington	1856-1915	character	author		80	80							INTERRUPT		1	H	INTERRUPT: If a Leader occupies your opponent's attacking Land, Booker facilitates a one-turn truce.
-AU4502	5	Louisa May Alcott	1832-1888	character	author		40	40									2	H	If your Civilization has more female Characters than your opponent's Civilization, you win the first battle.
-BU4501	5	William Penn	1644-1718	character	businessman		200	100									1	I	Increase your Morale by 200. For every Spiritual Leader in your battlefield, increase your Morale by an additional 100.
-CO4501	5	Adolf Hitler	1889-1945	character	conqueror		900	600									OO	C	If he remains in play for more than two turns, increase your Land's Attack by 700, as long as he is in play. Also, decrease your Civilization's Morale by 100 per turn.
-CO4502	5	Genghis Khan	1162-1227	character	conqueror		800	500									1	I	Take control of one Land that attacked you last turn. Opponent must redistribute all that Land’s cards to the same continent or discard them. 
-CO4503	5	Ivan the Terrible	1530-1584	character	conqueror		1000	1000									OO	C	If he stays in play after two rounds, decrease your Civilization's Morale by 100 points per turn.
-CT4501	5	Australia		land													OO	H	ONCE: Increase your Morale by 200. HOLD: When Captain Cook is played in Australia, increase Morale by an additional 200.
-CT4502	5	Brazil		land													OO	C	All South American Lands you own gain 300 additional Strength while you own Brazil. If you lose the Land, you lose the Strength.
-CT4503	5	China		land													OO	C	Due to China's size and inhospitable terrain, you gain an additional 500 points Defense. Five cards may occupy this Land, and one of those five may be an Army.
-CT4504	5	French Republic		land													1	I	Due to its rich culture, increase your Morale by 200. If the Eiffel Tower is in play in your Civilization, increase your Morale by an additional 200.
-CT4505	5	Rocky Mountains		land													OO	C	Any Army who attacks the Rockies loses half of its Attack Strength.
-CT4506	5	South Africa		land													1	I	For the next two rounds, your opponents must wait an additional turn to discover a new Land.
-DO4501	5	Federalist Papers	1788	document													OO	C	Increase your Morale by 300. The US Constitution alongside this card prevents any Land with a King, Queen, or Emperor from attacking you.
-EC4501	5	Karl Marx	1818-1883	character	economist		40	40								CONSTANT	OO	C	ONCE: Decrease your Morale by 300. CONSTANT: If Karl Marx is in Russia or in the same Land as Lenin or Stalin, you gain an additional 500 Strength. When played, 
-EN4501	5	Ehrich Weiss	1874-1926	character	entertainer		80	60							INTERRUPT		1	H	INTERRUPT: When a Character is discarded due to an attack, that card escapes with Houdini to a different Land.
-EV4501	E	Jazz Era	1920s	event															Increase your Morale by 300.
-EV4502	E	The Alamo	Feb 23 - Mar 6, 1836	event													1	I	For this turn only, one of your Lands may attack one of your opponent's Lands an unlimited amount of times.                                                                             
-EV4503	E	Trail of Tears	1830-1831	event															All opponents’ Morales decrease by 200. 
-EV4504	E	Trails West	1830-1870	event													1	I	Add a new Land to your Civilization and transport a Character currently in play to occupy it.
-EX4501	E	Charles Lindbergh	1902-1974	character	explorer	air	300	300	200								1	I	Lindbergh's fearless exploration of aviation allows you to gain 200 Morale.
-EX4502	E	Gaspar and Miguel Corte-Real	1450-1501	character	explorer	sea	400	200									1	I	If they discover a North American Land, increase your Morale by 200. After two turns this card must be discarded.
-EX4503	E	Jean Francois de Galaup Laperouse	1741-1788?	character	explorer	sea	300	400									1	H	After three rounds, Laperouse discovers a second Land.
-EX4504	E	Percy Fawcett	1867-1925	character	explorer	sea	200	400									1	I	Double the Ability of any Businessperson in play.
-EX4505	E	Gus Grissom	1926-1967	character	explorer	space											1	I	Due to national pride, increase your Morale by 300. After two turns he must be discarded.
-IN4501	E	Philo Farnsworth	1906 - 1971	character	inventor				300								1	I	Farnsworth entertains your Civilization. You gain 300 Morale.
-IN4502	E	Wright Brothers	1871 - 1948	character	inventor		100	100								CONSTANT	1	I	ONCE: Increase your Morale by 200. You may move any Character or Army to any Land regardless of continent. CONSTANT: Increase your Strength by 300.
-TH4501	E	The Theory of Evolution	1859	knowledge													1	I	You learn  any one Technology card already in play.
-LE4501	E	Ho Chi Minh	1890-1969	character	leader		400	200		100							OO	C	When he leads the Viet Minh Army, add an additional 1000 Attack points. After three turns in power, you lose 100 Morale points per turn.
-LE4502	E	King Tutankhamun	1341-1323 BC	character	leader		400	500									OO	C	The Land King Tut occupies can only be attacked by another Pharaoh.
-LE4503	E	Paul Revere	1734-1818	character	leader		400	500							INTERRUPT		2	I	INTERRUPT: Revere gives you advance warning and the Land he defends wins the first battle.
-LE4504	E	Robert E. Lee	1807-1870	character	leader		400	500									1	I	Under his direction, double the Strength of any Army card for the first attack.
-LO3002	E	Brooklyn Bridge	January 3, 1870	location													1	I	Increase your Morale by 200. A Character can cross into any Land within any continent of your choice.
-MU3004	E	Marian Anderson	1897-1993	character	musician		20	20									1	I	Anderson's beautiful voice brings joy to your Civilization. Increase your Morale by 200.
-OR3006	E	The Knights of the Golden Circle	1854	organization			500	200									1	I	If the Knights reside in America or with an American leader, decrease every opponents' Morale by 300.
-PI3002	E	Jean Fleury (Florin)	?-1527	Outlaws_Pirates			400	200							INTERRUPT		1	I	INTERRUPT: Only once. When your opponent plays a Technology card, play Fleury to steal that Technology from them.
-PH3007	E	Zeno of Citium	334  - 262BC	character	philosopher				300						CHOICE		1	H	CHOICE: Increase your Morale by 200 Morale or wait three turns and gain 300 Morale.
-PO2002	E	Octaviano Ambrosio Larrazolo	1859-1930	character	politician		60	80									1	I	Larrazolo brings hope to Hispanics. Increase your Morale by 100 for every Hispanic Character you have in play.
-SC2001	E	Albert Einstein	1879-1955	character	scientist		80	60									1	H	Gain the ability of one Technology or Knowledge card that one of your opponents plays in the future.
-SP3002	E	Joseph Smith Jr.	1807-1844	character	spiritual_leader		20	50									OO	C	Your Morale will not decrease below 700.
-TE4501	E	Electric Chair	1924	technology													2	H	No outlaw dares to attack you. Your opponent may not attack your Civilization with any Outlaws or Pirates for two turns.
-TE4502	E	Invention of Gun Powder	900 AD	technology													OO	C	Increase your Civilization's Strength by 700.
-WA4501	E	Boudicea	Died: 61 AD	character	warrior		700	800								CONSTANT	OO	C	ONCE: Increase your Morale by 200. CONSTANT: Anytime Boadicea fights against a "Roman Era" card, increase your Strength by 500. 
-AC4401	D	Frances Ellen Watkins Harper	1825-1911	character	activist		20	60									1	I	With her insight, increase your Morale by 200.
-AC4402	D	Pocahontas	1595-1617	character	activist		80	40									1	I	You can exchange any one card from your opponent's hand with a card from your own. Increase your Morale by 100.
-AR4401	D	The Mamelukes	1077-1831	army			3000	2500									OO	C	Increase Strength by 500 if the Mamelukes reside in an Asian Land.
-AR4402	D	Janissary	1383-1826	army			2500	3000			500						OO	C	The Janissaries gain 500 Strength if led by a Muslim Leader or if defending an Asian Land.
-AR4403	D	The Billmen	1513	army			2000	3000									OO	C	If the Billmen are employed in the United Kingdom, increase Defense by 500.
-AR4404	D	The Knights Templar	1119-1312	army			3500	3500									OO	C	Add 500 Strength for Charlemagne and/or each Christian leader in their Land. If defending Israel or Vatican City, add 500 Defense.
-AI4401	D	Pablo Picasso	1881-1973	character	artist		20	40									1	H	When he dies, increase your Morale by 400. This increase does not take effect if you simply discard this card.
-SY4401	D	Charles J. Guiteau	1841-1882	character	assassin		100	70									1	I	Guiteau sneaks into any opponent's Civilization and assassinates one Leader. Discard after use.
-AT4401	D	George Herman Ruth, Jr	1895-1948	character	athlete		40	80									1	I	Increase your Morale by 300. Decrease all opponents' Morale by 100.
-AU4401	D	James Weldon Johnson	1871-1938	character	author		60	40									1	I	Johnson brings hope to black Characters. Increase your Morale by 100 for each black Character in play, including Johnson.
-AU4402	D	Washington Irving	1783-1859	character	author		60	60									1	I	Increase your Morale by 200. Decrease all your opponents' Morale by 200.
-BU4401	D	J.P. Morgan	1837-1913	character	businessman		200	90							INTERRUPT		1	I	INTERRUPT: Reverse any Event Card your opponent plays. Your opponent feels the effects.
-CO4401	D	Hernán Cortés	1485-1547	character	conqueror		800	600									1	H	If you win an Attack, discard one Leader from the defeated Land and decrease that opponent’s Morale by 200.
-CO4402	D	Nebuchadnezzar II	Reign: 605-562 BC	character	conqueror		700	500									1	H	You automatically win your first two attacks in Africa or Asia. Increase your Morale by 100.
-CO4403	D	William the Conqueror	1028-1087	character	conqueror		800	400									OO	C	When attacking the United Kingdom, increase your Strength by 500. 
-CT4401	D	Mexico		land													1	C	Increase Strength by 500. No Strength is gained if a Conquistador is in play anywhere in the game.
-CT4402	D	Morocco		land													OO	C	Decrease your opponent's Morale by 200 if he or she takes Morocco from your Civilization.
-CT4403	D	New Zealand		land													OO	C	If this Land is led by a British Leader, increase Defense by 600.
-CT4404	D	Russia 		land													OO	C	Increase your Strength by 700, unless Hitler, Stalin, or Lenin are in play.  5 cards may occupy this Land.
-CT4405	D	United Kingdom		land													OO	C	If you are attacked, decrease your opponent's Strength by half, unless your opponent has an Explorer in the attacking Land.
-CT4406	D	Oriental Republic of Uruguay		land													OO	C	Double your Land's total Defense points when a Spanish Leader, Conqueror, or Explorer occupies this Land.
-SC4401	D	Declaration of Independence	July 4, 1776	document											INTERRUPT	CONSTANT	OO	C	INTERRUPT: ONCE: Increase your Morale by 400. CONSTANT: Increase your Civilization's Defense by 300.
-EC4401	D	Thales of Miletus	625-Unknown BC	character	mathematician		40	40									1	I	Increase your Morale by 200. If placed in a coastal Land increase your Morale by 300.
-EN4401	D	Stepin Fetchit	1902-1985	character	entertainer		100	80									1	I	Fetchit entertains your civilization; increase your Morale by 100.
-EV4401	D	American Revolution	1775-1782	event											INTERRUPT		1	H	INTERRUPT: In battle, this Event prevents you from losing a card until an Attacker wins twice.
-EV4402	D	Boston Tea Party	December 16, 1773	event													1	I	You discover a new Land from one of your opponents' Land piles.
-EV4403	D	SF Earthquake	838	event											CHOICE		1	I	CHOICE: Pick a continent. Half of the Characters in that continent must be discarded. Round down.
-EV4404	D	Cinco de Mayo	May 5, 1862	event													1	H	When facing a French Leader, Army, or Warrior, you automatically win the first battle.
-EX4401	D	Amerigo Vespucci	1454-1512	character	explorer	sea	60	60									1	I	Look through your Land pile. Pick a North or South American country to play.
-EX4402	D	Charles Albanel	1616-1696	character	explorer	sea	20	20									1	H	If there is a Businessman in the same Land as Albanel, increase your Morale by 200.
-EX4403	D	Christopher Columbus	1451-1506	character	explorer	sea	60	60									OO	C	He can transport up to three Characters or one Army to any Coastal Land.
-EX4404	D	Diego de Almagro	1475-1538	character	explorer	land	500	400									1	C	If Almagro and one Army occupy a Land in the Americas, increase your Attack by 400.
-EX4405	D	Dr. David Livingstone 	1813-1873	character	explorer	land	20	20									1	I	Increase your Morale by 300 points if he discovers an African Land.
-IN4401	D	Hedy Lamarr	1914-2000	character	inventor		40	60									OO	C	Hedy prevents any opponent from looking at your hand if that is part of a card's ability. 
-IN4402	D	Thomas Edison	1847-1931	character	inventor		60	40									OO	I	Confiscate any two Technologies in play.
-KN4401	D	Newton's Law of Motion	1643–1727	knowledge													1	I	With this Knowledge, pull any one Technology Card from your deck and play it immediately. Reshuffle your deck.
-LE4401	D	King Henry VIII	1491-1547	character	leader		300	500									OO	C	Henry VIII cannot reside in the same Land as a Catholic Pope, Charlemagne, the Knights Templar, or a female Leader.
-LE4402	D	King Kamehameha I	1758-1819	character	leader		400	500									OO	C	While King Kamehameha is in play, your Morale points will not decrease when an opponent attacks with any Event Card.
-LE4403	D	Robert Baden Powell	1857 - 1941	character	leader		500	300								CONSTANT	OO	C	ONCE: Increase your Morale by 100. CONSTANT: You may look at one opponent's hand per turn. 
-LE4404	D	Winston Churchill	1874-1965	character	leader		500	500							INTERRUPT		OO	C	INTERRUPT: A second Army Card may permanently defend the Land he occupies. (5 cards may occupy this Land.)
-LO2003	D	The Roman Colosseum	80 AD	location													1	I	Pick one of your and your opponent's Characters to battle in the Colosseum. Lowest Attack must be discarded.
-MU4401	D	Claudio Monteverdi	1567 - 1643	character	musician		40	20									1	I	Monteverdi's music is enjoyed throughout your civilization; increase your Morale by 300.
-OR4401	D	U.S. Senate	1789-Current	organization											INTERRUPT		1	I	INTERRUPT: Reverse any Event Card played against you.
-PI4401	D	Sir Francis Drake	1540-1596	character	outlaw	pirates	400	300							INTERRUPT		1	I	INTERRUPT - ONCE: When your opponent plays an Explorer, Drake steals the newly discovered Land  for your Civilization. Explorer is discarded.
-PH4401	D	Plato	428-347BC	character	philosopher		10	10									1	I	Increase your Morale by 400. Gain the same abilities as an opponent's Knowledge Card.
-PO4401	D	Joseph Hayne Rainey	1832-1887	character	politician		60	60							INTERRUPT		1	I	INTERRUPT: Through his leadership, stop the effects of any one Event Card played against you. 
-SC4401	D	Georges Lemaître	1894-1966	character	scientist		20	20									1	I	His scientific intellect allows you to force one opponent to discard one Knowledge or Technology Card.
-SP3007	D	Pope Gregory	540-604 AD	character	spiritual_leader		40	20									1	I	Your Morale will not decrease below 700. You must reach above 700 Morale before this ability takes effect.
-TE4401	D	Invention of Ice Cream	37 AD-Current	technology													OO	C	Increase your Morale by 100 every turn until your Morale reaches 1,500 points.
-TE4402	D	Invention of the Locomotive	1784	technology													OO	C	Each turn, you can transport one Army or Character between two continents connected by land.
-WA4401	D	Gladiatrix	200 AD	character	warrior		500	300									2	H	She will challenge any one of your opponent's Characters; the highest Attack wins. Loser is discarded.
-AC4301	C	Florence Nightingale	1820-1910	character	activist		40	60									1	I	When played, she will bring back one Character from the discard pile.
-AC4302	C	Isabella Baumfree	1797-1883	character	activist		20	20									OO	C	With Sojourner Truth, your Morale will never fall below 500.
-AR4301	C	Chinese Warriors	960–1279	army			3000	3000									1	H	If you win an attack, you can restore one card from your discard pile to your hand.
-AR4302	C	Samurai Warriors	8-9th Century	army			3000	2500									OO	C	Every time you win a battle using the Samurai Warriors, you increase your Morale by 100 points.
-AR4303	C	Tuskegee Airmen	1940 - 1952	army			3000	2000									OO	C	The Tuskegee Airmen give you an additional 300 Strength during your first attack of any turn.
-AR4304	C	The Persian Immortals	539-479 BC	army			4000	3000									OO	C	If in an Asian Land, the Persian Immortals increase your Strength by 500. 
-AI4301	C	Claude Monet	1840-1926	character	artist		20	20									OO	C	If your opponent's Morale is increased by any of his or her Artists, increase your Civilization's Morale by the same number.
-SY4301	C	James Armistead	1760-1830	character	spy		80	80							INTERRUPT		1	H	INTERRUPT: When any of your  Lands is under attack, play Armistead and win the first attacks.
-AT4301	C	Akashi Shiganosuke	1600 - 1649	character	athlete		40	30									1	I	Shiganosuke's achievements inspire your Civilization. Increase your Morale by 200.
-AU4301	C	Sir Walter Scott	1771-1832	character	author		40	40									1	I	He may enter your deck and pull out any non-Character card and play it immediately.
-AU4302	C	William Shakespeare	1564-1616	character	author		20	40									1	H	While in play, Shakespeare takes control of one of your opponent's Characters. Your opponent’s card may be  played in any Land.
-BU4301	C	Andrew Carnegie	1835-1919	character	businessman		160	120							CHOICE		1	H	CHOICE: Double or re-use the ability of any card in your active area.
-CO4301	C	Alexander the Great	356-323 BC	character	conqueror		1000	800									2	C	Your Land's Strength increases by 500 during his first two turns.
-CO4302	C	King Louis XIV	1638-1715	character	conqueror		800	700									1	H	Before his first battle, a Leader from the Land he is attacking is discarded.
-CO4303	C	Pharaoh Ramses II	1300s-1213 BC	character	conqueror		1000	900									OO	H	If your opponent gives you a Character, then you will not attack for the rest of that turn.
-CT4301	C	Argentina		land													1	H	Increase both your Morale and Strength by 300 points if you discard a Character.
-CT4302	C	Egypt		land													OO	C	While under any Pharaoh's leadership, increase your Strength by 500 points.
-CT4303	C	Philippines		land													2	H	Any one US territory may combine Strength with this Land when defending against an opponent.
-CT4304	C	Scotland		land													OO	C	Double any Viking Character or Army's Attack and Defense  when defending Scotland.
-CT4305	C	Thailand		land													OO	C	No European Character cards may occupy this Land.
-CT4306	C	US West Coast		land													1	I	If you have at least three US territories, increase Morale by 300 points.
-DO4301	C	Bill of Rights	December 15, 1791	document											INTERRUPT	CONSTANT	OO	C	INTERRUPT - ONCE: Increase your Morale by 200. CONSTANT: Increase your Civilization's Defense by 300.
-EC4301	C	David Ricardo	1772 - 1823	character	economist		100	60									1	I	David Ricardo increases your Morale by 200 points.  If Karl Marx is in play, that player loses 300 Morale.
-EN4301	C	Margaret Hughes	1645-1719	character	entertainer		20	20									1	I	Hughes gives strength to women. For every woman in your Civilization, increase your Morale by 100.  
-EV4301	C	Renaissance	14th to 17th Century	event													1	I	Through enlightenment, increase your Morale by 400.
-EN4302	C	Salem Witch Trials	1692-1693	event													1	I	Decrease every opponent's Morale by 200. 
-EV4303	C	Sinking of the Titanic	4489	event											INTERRUPT		1	I	INTERRUPT: Excluding Land, one of your opponent's cards in play, of your choice, must be discarded.
-EV4304	C	Vietnam War	1956-1975	event											INTERRUPT		2	H	INTERRUPT: Send any Army in play to defend any Land under attack. Transportation rules do not apply.
-EX4301	C	Amelia Earhart	1897-1937	character	explorer	air	100	200									OO	C	Increase your Defense by 400 when the Land she occupies is under attack by another Explorer. 
-EX4302	C	George Bass	1771-1803	character	explorer	sea	300	200									1	H	If you're about to lose a Land, Bass may discover a new Land, transport one Character with him, and is discarded afterwards.
-EX4303	C	John Cabot	1450-1499	character	explorer	sea	200	400									1	I	If Cabot discovers any Canadian Land, increase your Morale by 100. If he discovers an Asian Land, increase your Morale by 200.
-EX4304	C	Vasco Núñez de Balboa	1475-1519	character	explorer	land_sea	600	700									1	H	After two turns, Balboa may discover a second Land and must be discarded  immediately. 
-EX4305	C	Yuri Gagarin	1934 - 1968	character	explorer	space	100	100									1	I	If he discovers an Asian Land increase your Morale by 300.
-IN4301	C	Johannes Gutenberg	1395-1468	character	inventor		40	60									1	I	If the Printing Press is in play, increase your Morale by 400. If it is not yet in play, increase by 200.
-IN4302	C	Lewis Latimer	1848-1928	character	inventor												1	H	Latimer drafts a copy of one of your opponents’ Technologies. You gain the same effects as that card.
-KN3004	C	English Language	15th century 	knowledge													2	H	Your vast knowledge of the English language allows you to look into any one player’s hand once per turn. 
-LE4301	C	James Madison	1751-1836	character	leader		400	500									1	I	Increase your Morale by 300. HOLD: When successful defending against a " British Empire" card, increase your Morale by 200.
-LE4302	C	King Ferdinand and Queen Isabella	1451-1516	character	leader		400	500									1	H	Your opponent must attack and win twice on the same turn to kill this card before any others. This card will remain yours until such time.
-LE4303	C	Queen Ahhotep I	1560-1530 BC	character	leader		200	400									1	I	Due to steady, wise leadership, increase your Morale by 200.
-LE4304	C	Theodore Roosevelt	1858-1919	character	leader												1	I	All Businessmen in play must be sent to the discard pile when Teddy is played.
-LO4301	C	Lost Among the Pharaohs	16th to 11th century BC	location													1	I	You can play any one card from your discard pile.
-MU4301	C	Wolfgang Amadeus Mozart	1756-1791	character	musician		20	20									1	I	Increase your Morale by 200.  For one turn, no one can attack anywhere in Europe.
-OR4301	C	Central Intelligence Agency	15966	organization											INTERRUPT		1	I	INTERRUPT: You have 10 seconds to discard an opponent's card or this card will self-destruct to the discard pile. 10, 9, 8…
-OU4301	C	Lester Gillis	1908-1934	character	outlaw	mobster	700	200									1	I	Decrease your opponent's  Morale by 400.  Discard this card after two rounds.
-PH4301	C	Socrates	469-399 BC	character	philosopher		20	20									1	I	Increase your Morale by 300. 
-PO4301	C	Aaron Burr	1756 - 1836	character	politician			70									1	I	He will duel with any one Character of your choice. The Character with the largest Attack points win. Loser is discarded.
-SC4301	C	Charles Robert Darwin	1809-1882	character	scientist		20	60									1	I	When played, you discover a new Land from one of your opponents' Land piles.
-SP4301	C	Martin Luther	1483–1546	character	spiritual_leader		20	20									1	I	Increase your Morale by 400. If any Pope is in play, he must be discarded immediately.
-TE4301	C	Invention of the Automobile	1769	technology												CONSTANT	OO	C	ONCE: All Lands in your Civilization may attack twice. CONSTANT: Increase your Civilization’s Strength by 200.
-TE4302	C	Invention of the Printing Press	1041-1048	technology													1	I	If Gutenberg is in play, increase your Morale by 400. If he is not yet in play increase by 200.
-WA4301	C	Peter Salem (Cover)	1750-1816	character	warrior		300	400									2	H	Your opponent must discard one Character when he attacks a Land Salem is defending.
-AC4201	B	Eleanor Roosevelt	1884 - 1962	character	activist		40	60									1	I	Eleanor gives strength to women. For every woman in your Civilization, increase your Morale by 100.
-AC4202	B	Jane Addams	1860-1935	character	activist		40	20							INTERRUPT		1	I	INTERRUPT: For this turn only, no Event card will affect your Civilization.
-AR4201	B	African Tribal Warriors	3000BC	army			2000	3000									OO	C	If defending a Land in Africa, increase Strength by 1000.
-AR4202	B	Tlingit Warriors	October 1804	army			2000	3000									1	H	If your Land was taken in battle, this Army reclaims it and all that opponent's  Characters and Armies are discarded.
-AR4203	B	Spanish Conquistadors	1479-1777	army			3000	2000									OO	C	When being led by a Spanish Leader, increase your Strength by 1000.
-AR4204	B	Spanish Armada	8 August 1588	army			2000	1000									OO	C	If the Spanish Armada is defending Spain, increase its Defense by 1000, but decrease its Attack by 500.
-AI4201	B	Michelangelo Buonarroti	1475-1564	character	artist		20	40									1	I	Increase your Morale by 300.
-AS4201	B	Grigori Yefimovich Rasputin	1869-1916	character	assassin		-300	-300		200							1	I	Place Rasputin in one of your opponent's Lands. He must be the last Character to be discarded from that Land. Lose 200 Morale. 
-AT4201	B	Eric Liddell	1902-1945	character	athlete		40	60									1	I	Eric Liddell's Olympic Gold inspires your Civilization. Increase your Morale by 200.
-AU4201	B	Samuel L Clemens	1835-1910	character	author		20	20							INTERRUPT		1	I	INTERRUPT: Reverse any Event card your opponent plays on you. Your opponent feels the effects.
-AU4202	B	Satomura Joha	1510–1552	character	author		0	0									OO	C	Joha doubles the Strength of one of your Characters occupying the same Land. If that Character dies, Joha trains another.
-BU4201	B	George Westinghouse	1846-1914	character	businessman		100	80									1	H	Westinghouse confiscates any one of your opponents' Technology cards and gains its abilities without the original owner losing that card's gained Morale.
-C04201	B	Attila the Hun	Ruled: 434–453	character	conqueror		800	700									OO	C	For your first attack, double your Lands’ combined Strength.
-CO4202	B	Gaius Julius Caesar	100 BC – 44 BC	character	conqueror		1000	900									2	H	Any Army card occupying the same Land as Caesar will kill a Leader in the defending Land before the attack.
-CO4203	B	Napoleon Bonaparte	1769-1821	character	conqueror		700	600									1	H	If you win your first attack, you can take a card of your choice from your opponent's hand. 
-CT4201	B	Iceland		land													OO	C	The attacking Land must have an Explorer, Pirate, or Shipbuilding Technology card to attack. Increase Defense by 500.
-CT4202	B	Indonesia		land													OO	C	Due to being on an island, increase your Defense by 1,000.
-CT4203	B	Japan		land													1	I	You gain the use of any Technology cards in play.
-CT4204	B	Libya		land													OO	H	If you have an Islamic Spiritual Leader or an Ottoman Leader in this Land, increase your Strength and Morale by 500.
-CT4205	B	Canadian Province of Quebec		land													OO	C	If Quebec is led by a French leader, increase your Strength by 500.
-CT4206	B	Venezuela		land												CONSTANT	OO	C	If Christopher Columbus is in this Land—ONCE: Increase your Morale by 300. CONSTANT: Increase your Strength by 500. 
-DC4201	B	Torah	600 BC	document													OO	C	The enlightenment you gain from the Torah gives your Civilization 400 Morale points.
-EN4201	B	Buffalo Bill Cody	1846-1917	character	entertainer		80	60									1	I	Increase your Morale by 200. For each additional Wild West or Native American Character in your Civilization, increase your Morale by 100.
-EC4201	B	Pythagoras of Samos	570 -495 BC	character	mathematician												1	H	Pythagoras allows you to use the effects of one opponent's Technology card.
-EV4201	B	Cold War	1947-1991	event													OO	C	You may look at one opponent’s hand per turn for the next five turns.
-EV4202	B	The Crusades	1095-1303	event													OO	C	If you have a Spiritual Leader in your Civilization when you play this card, increase his or her Attack and Defense by 1600 points.
-EV4203	B	Donner Party	1846–1847	event													1	I	An opponent of your choice may not attack for two turns and loses 300 Morale.
-EV4204	B	Hundred Years War	1337 -1453	event											INTERRUPT		1	I	INTERRUPT: One of your opponent’s Character or Army cards loses all its Abilities, Attack, and Defense for one turn.
-EX4201	B	Captain Robert Scott	1868-1912	character	explorer	land_sea	300	100									1	I	When played, discover a new Land and bring one active Character to this Land with him. He must be discarded after two turns.
-EX4202	B	Ernest Shackleton	1874-1922	character	explorer	land_sea	200	200							INTERRUPT		1	H	INTERRUPT: If you're about to lose a Land, move one Character and Shackleton to any other Land.  Increase Morale by 300.
-EX4203	B	Ferdinand Magellan	1480-1521	character	explorer	sea	300	100									1	I	One opponent of your choice must discard an Explorer. Magellan can only discover or occupy a coastal Land.
-EX4204	B	Leif Ericson	970-1020 AD	character	explorer	sea	500	200									OO	C	Transport any two Character and/or Army cards to battle any Land in play. 
-EX4205	B	Mansa Musa	1280s-1337	character	explorer	land	800	600									1	I	If Musa occupies an African Land, increase your Morale and Strength by 200 points.
-IN4201	B	Alexander Graham Bell	1847-1922	character	inventor		60	40									1	I	Increase your Morale by 300 points.
-IN4202	B	Thomas Crapper	1836-1910	character	inventor		60	40									1	I	Due to your people’s immense relief, increase your Morale by 300 points. 
-KN4201	B	Calculus	225 BC	knowledge													1	I	Increase your Morale by 300 points.
-LE4201	B	Juliette Gordon Low	1860-1927	character	leader		100	100								CONSTANT	OO	C	ONCE: Increase your Morale by 100. CONSTANT: Double the Strength of all female Leader cards in your Civilization. 
-LE4202	B	Miyamoto Musashi	1584-1645	character	leader		500	500									OO	C	Miyamoto teaches the Characters in his Land to fight. Increase each Character's Attack by 200.
-LE4203	B	Pancho Villa	1878-1923	character	leader		400	500								CONSTANT	OO	C	When fighting against a Land with a Conqueror—ONCE: Increase your Morale by 200. CONSTANT: Increase Strength by 500.
-LE4204	B	Sitting Bull	1831-1890	character	leader		400	500									2	H	For two turns, Sitting Bull can unite two Army cards on the same continent in order to fight together.
-LO3005	B	Great Wall of China	206 BC	location											INTERRUPT		2	I	INTERRUPT: With the Great Wall, no one may attack one of your Lands for two rounds.
-MU2001	B	Ludwig van Beethoven	1770-1827	character	musician		20	20									1	I	Increase your Morale by 300.
-OR3002	B	National Security Agency	17840	organization													1	H	The NSA allows you to copy all Technology cards held by one of your opponents.
-OU3003	B	Ernesto Che Guevara	1928 - 1967	character	outlaw	rebel	400	200		300							1	H	ONCE: With Che Guevara, if you win two attacks against your opponent's Land, you take the Land but lose 300 Morale.
-PH3001	B	Aristotle	384-322 BC	character	philosopher		20	20									OO	C	Double the Ability of any Spiritual Leader in your Civilization. Increase your Morale by 200.
-PO3002	B	Wentworth Cheswell	1746-1817	character	politician		300	300							INTERRUPT		OO	C	INTERRUPT: Because you have fair warning, increase your Land's Defense by 500 points.
-SC3005	B	Galileo Galilei	1564-1642	character	scientist		60	80							INTERRUPT		OO	H	INTERRUPT:  Your Civilization is safe from the effects of any opponent's Event while Galileo is active in your Civilization.
-SP3004	B	Mohandas Gandhi	1869-1948	character	spiritual_leader		0	0									OO	C	The Land Gandhi occupies can neither attack nor be attacked.
-TE3008	B	Invention of Penicillin Meds	15414	technology													1	I	When this card is played, you may bring one Character back from your discard pile.
-TE3005	B	Invention of the Atomic Bomb	1939	technology													1	I	The Atomic Bomb renders one of your opponent's Land unusable for 3 turns and all Characters in that Land  must be discarded.
-WA3004	B	Trung Sisters	12 –  43 AD	character	warrior		500	400									OO	C	If fighting in Asia, increase your Strength by 500. 
-AC4101	A	Frederick Douglass	1818-1895	character	activist		60	100									OO	C	Douglass inspires all your black Characters. For every black Character in your Civilization, increase his Land's Defense by 200.
-AC4102	A	Susan B. Anthony	1820-1906	character	activist		40	60									1	I	Anthony adds strength to female Characters. For every woman in your Civilization, increase your Morale by 200.
-AR4101	A	English Army	1066 - 1604	army			3000	3000									OO	C	The English Army increases his Land’s Strength by 300 if it fights  on behalf of the United Kingdom or an English Leader.
-AR4102	A	Mongolian Army (Cover)	1206BC - 1368AD	army			4000	1000									1	H	The Mongolian Army wins its  first attack on any Land, beating any other card with the same type of ability.
-AR4103	A	Steel Workers	June 30, 1892	army			1500	1500							CHOICE		OO	C	CHOICE: With every battle you win, increase this card's Attack or Defense by 500.
-AR4104	A	Viet Minh Guerrillas	1941-1975	army			2000	3000									OO	C	If the Viet Minh fight in Asia, increase this card's Attack Strength by 1,000.
-AI4101	A	Leonardo da Vinci	1452 - 1519	character	artist		80	80									OO	C	You may use all your opponents’ Technology cards until Leonardo is discarded.
-SY4101	A	Mary Elizabeth Bowser	1839-1865	character	spy												OO	C	Bowser allows you to look at one opponents' hand per turn. Through reconnaissance,   increase your Land’s Strength by 400.
-AT4101	A	Jesse Owens	1895-1948	character	athlete												1	I	Jesse Owens' inspires your people. Increase your Morale by 200.
-AU4101	A	C.S. Lewis	1898 - 1963	character	author		200	100									1	I	Increase your Morale by 200. For each Christian Leader in your Civilization, increase your Morale by an additional 100.
-AU4102	A	Homer	8th century BC	character	author		100	100							INTERRUPT		1	I	INTERRUPT: Sneak into one of your opponents’ Lands  and kill any one Character card with 100 or fewer Attack.
-BU4101	A	Madam CJ Walker	1867-1919	character	businessman		40	60									OO	C	Madam Walker's products are uplifting. For every black woman played, until Walker is discarded , increase your Morale by 100.
-CO4101	A	Charlemagne	742 - 814	character	conqueror		800	800							CHOICE		OO	C	CHOICE: If battling in Europe, your Attack OR Defense increases by an additional 500.
-CO4102	A	Eric Bloodaxe	885 - 954	character	conqueror		800	700									OO	C	During every attack, your opponent's Defense decreases by 500 until the end of that round.
-CO4103	A	Timur the Lame'	1336-1405	character	conqueror		1500	1000									OO	C	When Timur attacks in Asia or Africa, add an additional 1,000 Attack.
-CT4101	A	Alaska		land													OO	C	With any Native American Army in Alaska, increase your Strength by 1,000.
-CT4102	A	Colombia		land													OO	C	
-CT4103	A	Democratic Republic of the Congo		land													OO	C	When a rebel Army sets up camp in Congo, add 500 Strength.
-CT4104	A	Germany		land													OO	C	Your Land's Strength increases by 500 unless a World War card is played in battle.
-CT4105	A	Saudi Arabia		land													1	C	If an Asian, European, or African Land is threatened with imminent takeover, all Character and Army cards may be moved to this Land. Land rules apply.
-CT4106	A	Tonga		land													1	I	Enjoying the beauty of the islands increases your Morale by 300 points.
-DO4101	A	U.S. Constitution	September 17, 1787	document													OO	C	Increase your Morale by 400 when played. Increase your Civilization's Defense by 300.
-EC4101	A	Adam Smith	1723-1790	character	economist		70	10									1	I	You can exchange any one card from your opponent's hand with a card in your own. Both parties must agree on the exchange.
-EN4101	A	Charlie Chaplin	1889 - 1977	character	entertainer		80	40									OO	C	Increase your Morale by 100 every turn until Chaplin is discarded or until your Morale reaches 1,500 points.
-EV4101	A	Dark Ages	5th to 10th Centuries	event											CHOICE		1	I	CHOICE: One opponent must discard all Knowledge and Technology cards in play.
-EV4102	A	Gold Rush	1848 - 1905	event													1	I	Add a new Land to your civilization.
-EV4103	A	American Slavery	8000 BC	event													1	I	Abolish slavery, increase Morale by 300.
-EV4104	A	The Great Depression	10840	event											CHOICE		1	I	CHOICE: One of your opponents’ Morale decreases by 500. 
-EX4101	A	Aud the Deep-Minded	834-900 AD	character	explorer	sea	100	200									1	H	When imminent defeat is foretold, Aud transports all cards defending her Land to another Land in your Civilization. Land rules still apply.
-EX4102	A	Danish King Godfred	Ruled: 804-810	character	explorer	sea	1000	1200							INTERRUPT		OO	C	INTERRUPT, EXCHANGE: Offer to defend an opponent's Land for one turn, in exchange for a card from that player’s hand.
-EX4103	A	Erik Thorvaldsson	950-1003 AD	character	explorer	sea	500	200									1	H	If he is the last Character defending a Land, he may escape and discover a second Land.
-EX4104	A	Francisco Pizarro	1471-1541	character	explorer	sea	300	100									OO	C	When attacking  a South American Land or attacking with the Spanish Conquistadors increase his Strength by 500.
-EX4105	A	Lewis and Clark	1804-1806	character	explorer	land	80	100									1	H	After this card is played, if a Native American card is placed in your Civilization immediately discover a new Land.
-SC4101	A	Benjamin Banneker	1731-1806	character	scientist				100								1	I	For every American Revolution or Industrial Revolution card in play gain 100 Morale.
-IN4101	A	Nikola Tesla	1856-1943	character	inventor		80	100									1	H	Choose any Technology Card in play and gain double its abilities without confiscation.
-KN2005	A	Physics	3000 BC	knowledge											INTERRUPT		1	I	INTERRUPT: Reverse any Event card played against you.
-LE4101	A	Abraham Lincoln	1809-1865	character	leader		400	500									1	H	Increase your Morale by 300. When he wins his first Attack, one of your opponent’s Characters will unite with the attacking Land.
-LE4102	A	David Crockett	1786-1836	character	leader		400	700									OO	C	Each round: If an opponent attacks a Land Crockett is defending, you win the first battle. 
-LE4103	A	Geronimo	1829 - 1909	character	leader		700	500							INTERRUPT		1	I	INTERRUPT: He sneaks into your opponent's Hand and kills one Character card before it is played.
-LE4104	A	Khutulun	1260-1306	character	leader		500	400									2	H	She will challenge any one of your opponent's Characters; the highest Attack wins. Loser is discarded.
-LO4101	A	Berlin Wall	32821	location													1	I	All duplicate Lands must be discarded. Move displaced cards to another Land on the same Continent or discard them. Land rules apply.
-MU4101	A	John Philip Sousa	1854-1932	character	musician		20	60									1	I	Increase your Morale by 200.
-OR4101	A	Internal Revenue Service	July 1, 1862	organization													1	I	Place a tax over your opponent's people and lower their Morale by 300 points.
-PI4101	A	Anne Bonny	1698-1782	Outlaws_Pirates			300	150									1	I	Through frequent pillaging, decrease Morale of all your opponents by 300. 
-PH4101	A	Epicurus	341-270 BC	character	philosopher		20	20									1	H	Epicurus forces one opponent to discard one Spiritual Leader.
-PO4101	A	Hiram Rhodes Revels	1827-1901	character	politician		100	120									1	I	Revels gives strength to black characters. For every black Character in your Civilization, increase your Morale by 100.
-SC4102	A	Benjamin Franklin	1706 - 1790	character	scientist		80	60									1	H	Take one Technology or Knowledge card from each of your opponents.
-SP4101	A	John Calvin	1509 - 1564	character	spiritual_leader		20	20									1	I	Increase your Morale by 400 points.
-TE3012	A	Invention of the Personal Computer	1965	technology												CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Increase Strength for your Civilization by 300 while this card is in play.
-TE4102	A	Invention of the Tennis Shoe	1830's	technology												CONSTANT	OO	C	ONCE: Increase your Morale by 200. CONSTANT: Increase Strength for your Civilization by 200 while this card is in play.
-WA4101	A	Prince Estabrook	1741-???	character	warrior												OO	I	When you play Estabrook, you may search your Deck for any one black Character or Army card and play it immediately.
+id	deck	name	year	type	subtype1	subtype2	ability_restrict_must	ability_restrict_not	column_restrict_not	column_restrict_must	attack_strength	defense_strength	morale_add	morale_lose	strength_add	strength_lose	defense_add	defense_lose	ability_type	usage_type	frequency	when_to_play	abilities
+AU4091	9	Miguel de Cervantes	1547-1616	character	author						100	200	300								1	I	Cervantes inspires your citizens to dream and tilt at their own windmills, you gain 300 Morale points.
+CO4091	9	Suleiman the Magnificent	1494-1566	character	conqueror						1200	800									1	I	All Christian Spiritual Leaders lose their Land 300 strength points and 100 Morale when combatting Suleiman.
+DO4091	9	Morte d'Arthur	1485	document									300								1	I	The romanticism of Chivalry fourishes in your civilization, gain 300 Morale points.
+EN4091	9	Dissolution of the Monasteries	1536-1541	event																	1	I	At Henry's demand, all Spritual Leaders in play must be discarded and each discaded card causes its owner to 200 Morale.
+EN4092	9	Sack of Rome (1527)	1527	event										300					INTERRUPT		1	I	INTERRUPT: One opponent is forced to discard one knowledge or technology card and they lose 300 Morale.
+EN4093	9	Protestant Reformation	1517-1648	event															INTERRUPT		1	I	INTERRUPT: Nullify the effects of any Catholic Character card.
+EN4094	9	Spanish Inquisition	1478-1834	event											500		500		CHOICE		OO	C	CHOOSE: ONCE: Either gain 500 strength when facing a land with a Muslim character or gain 500 defense when defending Spain.
+EN4095	9	Battle of Lepanto	October 7, 1571	event															INTERRUPT		1	I	INTERRUPT:  Send all Islamic cards to the discard pile prior to a declared battle; the battle must be fought with out them.
+LE4091	9	Mary I of England	1516-1558	character	leader						500	500									OO	C	Mary gains an additional 500 strength points if she resides in the UK.
+LO4091	9	The Globe Theater		location																	1	I	ONCE: You may enjoy duplicate positive effects of all opponents' Events and Entertainer cards for one turn.
+RE4901	9	Gutenberg Bible	1440-1453	relic																	OO	C	Double the effect of any Christian Character card.
+SC4091	9	Paracelsus	1493-1541	character	scientist						40	20		200					CHOICE		1	I	CHOOSE: INTERRUPT: Discard all Scientists; each player lose 200 Morale for each discarded card OR double all scientists' effects.
+SC4092	9	Johannes Kepler	1571-1630	character	scientist						20	20	300	300					CHOICE		1	I	CHOOSE: Gain 300 Morale for inspiring your people OR force one opponent to lose 300 Morale because you disproved them.
+SC4093	9	Francis Bacon	1561-1626	character	scientist						20	20	300		500				CHOICE		1	I	CHOOSE: Gain 500 strength for technological advancements OR gain 300 Morale for improving people's quality of life.
+SC4094	9	Nicolaus Copernicus	1473-1543	character	scientist						40	20							CHOICE		1	I	CHOOSE: INTERRUPT: Cancel the effects of any opponent's Scientist OR double the effects of any one of your scientists.
+SP4091	9	Ignatius Loyola	1491-1556	character	spiritual_leader						100	200					500		CHOICE		OO	C	CHOOSE: ONCE: Gain an additional 500 strength if Ignatius is in Israel OR gain 500 defense if in the same land as a Pope.
+SP4092	9	Thomas More	1478-1535	character	spiritual_leader						80	60							CHOICE		1	I	CHOOSE: Thomas More gains 200 Morale points for every Catholic character he resided with OR just 200 Morale.
+TE4091	9	Invention of the Microscope		technology																	OO	C	ONCE: Magnify the effects of any scientist by 2 times.
+TE4092	9	Invention of the Arquebus		technology																	OO	C	The arquebus increases your strength by 400 points
+TE4093	9	Invention of the Mariner's Astrolabe		technology																	OO	C	The mariner's astrolabe enables you to double the effect of any of your sea explorers.
+BU4081	8	Cornelius Vanderbilt	1794-1877	character	businessman						60	60							CHOICE		OO	C	CHOOSE: Once per turn, transport one card to another country connected by land or offer service to opponent in exchange for 300 Morale.
+BU4082	8	Samuel Spencer	1847-1906	character	businessman						40	60	300						CHOICE		1	I	CHOOSE: Gain 300 Morale or double the effect of any businessman in your battlefield.
+BU4083	8	Leland Stanford	1824-1893	character	businessman						60	60									1	I	Search through your deck and find one document you can play immediately.
+BU4084	8	Tom Scott	1823-1881	character	businessman						200	300									OO	C	Tom Scott increases the strength of any Army residing in the same land as Scott by 500 points.
+BU4085	8	Erastus Corning	1847-1906	character	businessman						60	40							CHOICE		1	I	CHOOSE: Increase Morale by 300 points or double the effects of one Politician.
+BU4086	8	Collis Potter Huntington	1821-1900	character	businessman						40	40								CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Move one card between North America and South America each turn.
+BU4087	8	James J. Hill	1838-1916	character	businessman						40	40	500						CHOICE		OO	C	CHOOSE: Gain 500 morale or move one card (once per turn) from Canada to any US land card as long as Hill is in play.
+BU4088	8	Charles M. Schwab	1847-1906	character	businessman						40	60	300						CHOICE		1	I	CHOOSE: Gain 300 Morale or INTERRUPT: cancel out the effects of Schwab's rival Andrew Carneige.
+EN4081	8	Golden Spike	May 10, 1869	event							40	60									1	I	The Golden Spike allows the player to move one card anywhere in the continential US once per turn for 5 turns.
+IN4081	8	Sir Henry Bessemer	1823-1891	character	inventor						80	60							CHOICE		1	I	CHOOSE: Increase your morale by 500 points or double the effect of any Businessman currently in play.
+IN4082	8	Henry Ford	1863-1947	character	inventor						100	60									OO	C	The moving assembly line increases you productivity, you may play 4 cards per turn while Ford is in play.
+IN4083	8	William Kelly	1811-1888	character	inventor						100	60									OO	C	Kelly's steel production methods strengthen your people, increase your civilization's defense by 700 points.
+IN4084	8	Nikolaus Otto	1832-1891	character	inventor						80	100									1	I	Play Otto at the same time as an Explorer and that Explorer discovers two new lands instead of one.
+IN4085	8	Cyrus McCormick	1863-1947	character	inventor						100	80									OO	C	The increase of food production by McCormick's reaper results in your Army's increased strength by 500 points.
+IN4086	8	Robert H. Goddard	1882-1945	character	inventor						60	80									OO	C	Goddard's invention takes your ability to wage war to a new level, increase any one Army's strength by 500 points.
+IN4087	8	 Francis E. & Freelan O. Stanley	1849-1940	character	inventor						80	80							INTERRUPT		1	H	INTERRUPT: Any one card targeted for the discard pile uses the Stanley Steamer to escape to a new land.
+TE4081	8	Internal Combustion Engine		technology																	2	I	The Internal Combustion Engine increases your mobility, you may attack three times per turn for the next three turns.
+TE4082	8	Pneumatic Tire		technology									500						CHOICE		1	I	CHOOSE: Gain 500 morale or double the effects of either Henry Ford or the Internal Combustion Engine.
+TE4083	8	Moving Assembly Line		technology																	2	I	The moving assembly line increases you productivity, you may play 4 cards per turn for the next 5 turns.
+TE4084	8	The Wright Flyer		technology															CHOICE		OO	C	CHOOSE: Increase strength by 500 points or double the effect of any Character card which is a pilot.
+LOCR401	7	Jerusalem	1000 BC-2020	location																	OO	C	This card doubles the effect of any Christian, Jewish, or Islamic Spiritual Leader.
+LOCR402	7	Principality of Antioch	1098	location																	OO	C	The Principality of Antioch was an epicenter of trade in antiquity. Double the effects of any Businessman you currently have in play.
+LOCR403	7	Umayyad Caliphate	661–1031	location																	2	H	One of your Lands in Europe, Asia, or Africa gains the reach of the Umayyad Caliphate. You can attack on those continents for two turns.
+LOCR404	7	Constantinople	330-1453	location																	OO	C	Because Constantinople lies on both sides of the Strait of Bosporus, any European Land can also attack in Asia and vice versa.
+LOCR405	7	Holy Roman Empire	5th c.-1806	location																CONSTANT	OO	C	With Charlemagne in your Civilization—ONCE: Increase your Morale by 300. CONSTANT: Increase your Strength by 500. You may attack from Europe to Asia and vice versa.
+LOCR406	7	The Holy Lance of Longinus	1098	relic																CONSTANT	2	H	ONCE: Increase your Morale by 400. CONSTANT: Due to their zeal in battle, the defender wins the second battle against the attacker.
+710000	7	Peter the Hermit	1050-1115	character	spiritual_leader						100	100									1	I	Peter the Hermit inspires your people. Increase your Morale by 300.
+710001	7	Pope Urban II	1035-1099	character	spiritual_leader														CHOICE		2	H	CHOOSE: Pope Urban II can either gain the help of another one of your Armies for two turns or negotiate a truce for two turns.
+ASW1401	6	Gavrilo Princip		character	assassin						60	80							INTERRUPT		1	I	INTERRUPT:  One of your opponent's Leaders or Conquerors is assassinated and discarded. Discard after use.
+DOW1401	6	Triple Alliance		document															INTERRUPT		1	I	INTERRUPT: This card enables you to combine the Strength of up to three of your Lands into one fighting force for two rounds.
+EVW1401	6	Assassination of Archduke Ferdinand		event															INTERRUPT		1	I	INTERRUPT:  When an opponent attacks, choose one Leader or Conqueror card that opponent must discard.
+EVW1402	6	Sarajevo July Crisis, 1914		event																	1	I	Decrease all your opponents' Morale by 300.
+EVW1403	6	Sinking of the RMS Lusitania		event															INTERRUPT		1	I	INTERRUPT:  Discard one of your opponent's Vessels or Explorer-Sea cards.
+EVW1404	6	Battle of Verdun		event															INTERRUPT		1	H	INTERRUPT: After any opponent declares an attack, cut that Attack in half for one turn.
+EVW1405	6	German Strategic Bombing Campaign		event										200	1000						1	I	For one turn, gain 1000 Strength, but lose 200 Morale.
+TEW1401	6	Zeppelin		aircraft																	OO	C	The Zeppelin gives you an additional 500 Strength against any Land that does not have an aircraft or pilot. This vessel may move between Lands, carrying two Characters per turn.
+TEW1402	6	Vickers FB5		aircraft																	OO	C	The Vickers FB5 gives you an additional 500 Strength against any Land that does not have an aircraft or pilot. It may also move between Lands, once per turn. 
+TEW1403	6	Fokker E 1		aircraft																CONSTANT	OO	C	ONCE: For one turn, increase your     Strength by 800. CONSTANT: Afterwards, increase your Strength by 400.
+LEW1401	6	Kaiser Wilhelm II		character	leader						400	300									OO	C	Kaiser Wilhelm II gains an additional 700 Defense if he fights in defense of Germany.
+LEW1402	6	John J. Pershing		character	leader						500	400									OO	C	John J. Pershing's military genius allows you to have an additional Character in one Land.  It can be a second Army.
+LEW1403	6	Mustafa Kemal Atatürk		character	leader						400	400									OO	C	Increase your Strength by 400 if in defense of Turkey, or in defending against another WWI Character.
+LEW1404	6	Gen. William Mitchell		character	leader						600	600									OO	C	Anytime Billy Mitchell faces an Army, increase your Strength by 500.
+WAW1401	6	Eddie Rickenbacker		character	warrior						600	400								CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Increase your Strength by 400.
+WAW1402	6	Manfred von Richthofen		character	warrior						800	600									OO	C	The Red Baron takes your military ability to an elite level. Increase your Strength by 500. ONCE: Increase your Morale by 100.
+WAW1403	6	Billy Bishop		character	warrior						800	600									OO	C	Billy Bishop's aggressive flying style and amazing marksmanship increase your Land's Strength by 400 points. ONCE: Increase your Morale by 100.
+WAW1404	6	Frederick Libby		character	warrior						700	400									OO	C	Frederick Libby's brilliant flying ability increases your Land's Strength by 400 if he has an Aircraft in the same Land. 
+WAW1405	6	Douglas Campbell		character	warrior						400	300									OO	C	Douglas Campbell's brilliant flying ability increases your Land's Strength by 500 if he has an Aircraft in the same Land.
+LOW1401	6	Ottoman Empire		location																	1	I	A land of yours in Europe, Asia, or Africa gains the reach of the Ottoman Empire. You can attack on those continents for four turns.
+ARWW401	5	The Cowboys		army							2000	1000									1	H	You automatically win the first attack against a Land being defended by a Law Enforcer.
+ARWW402	5	US Marshalls	September 24, 1789	army							2000	2000									1	I	All outlaws in play must be discarded.
+EVWW401	5	Earps Vendetta Ride	1882	event																	1	I	If an opponent caused you to discard a Character within the last two rounds, you may choose one of that opponent’s Characters to discard.
+EVWW402	5	Gunfight at the O.K. Corral	October 26, 1881	event																	1	I	An opponent must discard up to two Characters in a Land you choose. One Character must remain in that Land.
+EVWW403	5	Murder of Frank Stilwell	March 20, 1882	event																	1	I	An opponent must discard a Character of your choice from any Land you attacked during the last three turns.
+LAWW401	5	Doc Holliday	(1851-1887 ) 	character	law_enforcement						300	400									OO	C	When he occupies the same Land as an Earp brother, increase his Strength by 500.
+LAWW402	5	Wyatt Earp 	(1848-1929)	character	law_enforcement						400	300									OO	C	When he occupies the same Land as Doc Holliday, increase his Strength by 500.
+LAWW403	5	Bat Masterson 	(1853 - 1921)	character	law_enforcement						300	200									OO	C	When he occupies the same Land as Wyatt Earp, increase his Strength by 300.
+LAWW404	5	Virgil Earp	(1843 – 1905) 	character	law_enforcement						300	400									1	I	Choose one of your opponent's Outlaws to send to the discard pile.
+LOWW401	5	Tombstone, AZ		location																	1	H	Move an opponent's Character card to another of his or her Lands of your choosing.
+LOWW402	5	Dodge City, Kansas		location																	OO	C	This card allows you to place a 5th Character on any one Land of your choice. 
+LEWW401	5	Captain Joseph H. Hurst	(1836 - 1896)	character	leader						400	400									1	I	Decrease your opponent’s Morale by 100 for every Outlaw in his or her Civilization.
+ORWW401	5	Pony Express	1859	organization																	OO	C	Transport one Character or Army to any Land.
+OUWW401	5	Mary Katherine Horony Cummings	(1850 - 1940)	character	outlaw						-100	-100									1	I	Increase your Morale by 300. You must keep her for at least two rounds.
+OUWW402	5	Johnny Ringo 	(1850 - 1882)	character	outlaw						300	100									OO	C	While he is in play, decrease Wyatt Earp's Attack by 300.
+OUWW403	5	William Brocius	(1845 - 1882)	character	outlaw						200	100									1	H	Discard an opponent's Character of your choice. Afterwards, this card must also be discarded.
+OUWW404	5	Ike Clanton	(1847 - 1887)	character	outlaw						50	100									1	I	While defending any Land, if he loses, he may escape to another Land of your choice without harm.
+OUWW405	5	Frank and Tom McLaury	1848 - 1881	character	outlaw						300	300									1	H	Discard two of your opponent's Characters of your choice. Afterwards, this card must also be discarded.
+ENWW19	5	Colt Peacemaker of 1873	1873	technology																	OO	C	Place this under a Character (keep it visible) and increase his or her Strength by 600 points.
+ENWW20	5	Silver Mining	1858	technology																	1	I	Increase your Morale by 300
+ARCW401	4	Army of the Confederate States	1861–1865	army							3000	2000									OO	C	If serving in the same Land as a Confederate officer, increase its  Strength by 1000.
+ARCW402	4	Union Army	1861–1865	army							3000	3000									OO	C	If serving in the same Land as a Union or other non-Confederate US military officer, increase its Strength by 1000.
+EVCW401	4	Baltimore Riots (Lincoln's Martial Law)	April 19, 1861	event															INTERRUPT		1	I	INTERRUPT: Decrease your opponent's Strength by 500 for two turns and Morale by 200 permanently. 
+EVCW402	4	Battle of Fort Sumter (Map)	April 12–14, 1861	event															INTERRUPT		1	I	INTERRUPT: After an opponent declares war, you may escape and transport all Characters to another Land.
+EVCW403	4	Fugitive Slave Act	February 12, 1793	event																	1	I	Any Character taken from you in the last two rounds must be returned to you.
+EVCW404	4	Missouri's Confederate Overthrow	1861	event																	1	I	Play this card and the Union Army during the same round and take back any Land taken from you during the game. 
+EVCW405	4	Naval blockade	April 19, 1861	event															INTERRUPT		1	I	INTERRUPT: No water-based Explorer or Technology cards may be played for the next two rounds.
+EVCW406	4	Ordinance of Secession	December 20, 1860	event																	1	I	An opponent's Land of your choice must discard half of its Characters (round down).
+EVCW407	4	Crittenden Compromise	February 4, 1861	event															INTERRUPT		1	I	INTERRUPT: Call a truce between you and an opponent for the next two turns. 
+EVCW408	4	South Abandons Congress	March 11, 1861	event																	1	I	When played, an opponent with negative Morale must discard a Land of your choice and all occupying Characters.
+EVCW409	4	Revenue Act of 1861	August 5, 1861	event																	1	I	Decrease all opponents' Morale by 200.
+LECW401	4	Brig. Gen. P. G. T. Beauregard	1818-1893	character	leader						400	500									1	I	He blocks the ability of any opponent trying to transport Characters after war is declared.
+LECW402	4	David E. Twiggs	1790-1862	character	leader						200	200									1	I	His first turn only: Increase his Strength by 1000. After that, give him to the opponent you choose, at normal Strength.
+LECW403	4	Jefferson Davis	1808-1889	character	leader						400	300									OO	C	When in play, all Confederate Armies’ in play decrease their Strength by 500. ONCE: Increase your Morale by 200.
+LECW404	4	Maj. Robert Anderson	1805-1871	character	leader						300	300							INTERRUPT		1	I	INTERRUPT: After an opponent declares war, you may escape and transport all Characters to another Land.
+LECW405	4	President James Buchanan 	1791-1868	character	leader						200	200									OO	C	When in play, increase your Confederate Army's Strength by 500. ONCE: Decrease your Morale by 200.
+LOCW401	4	 Confederate States of America "South"	1861–1865	location																	1	I	With Jefferson Davis in play anywhere in the game, increase your Morale by 300.
+LOCW402	4	Neutral States	1861–1865	location																	1	I	For three turns: Though your opponent may attack, he or she may not take one Land, of your choice, from you.
+LOCW403	4	Union States "North"	1861–1865	location																	1	I	With Abraham Lincoln in play anywhere in the game, increase your Morale by 500.
+TECW401	4	 Star of the West	June 17, 1852	vessel															INTERRUPT		OO	C	INTERRUPT: Transport any one Character from another Land to any Land under attack. This card may move between Lands, once per turn.
+ARW2401	3	442nd Regimental Combat Team	1944 - 1969	army							4000	3000							INTERRUPT		1	I	INTERRUPT: When played, reverse the effects of any Event card.
+ARW2402	3	Armia Krajowa or Home Army	1942 - 1945	army							1000	1500									1	H	ONCE: If this is the last card protecting a Land, your opponent immediately stops attacking until the next turn.
+ARW2403	3	German-Italian Troop Offensive (Pact of Steel)	14387	army							3500	2000							INTERRUPT		1	I	INTERRUPT: When played, if an opponent attacks you with an Army card, the army turns on its owner for one attack.
+ARW2404	3	British SAS	13696	army							3500	3000									1	I	The SAS disables your opponent's Army for one turn. That Army may not attack for one turn.
+DOW2401	3	Armistice of Cassibile	15952	document															INTERRUPT		1	I	INTERRUPT: Call a cease fire with your opponent after your opponent wins his or her first attack.
+EVW2401	3	D-Day Normandy	16229	event															INTERRUPT		1	I	INTERRUPT: Take back any Land that any opponent conquered in the past two turns. Occupiers must be discarded.
+EVW2402	3	Operation Shingle	16093	event																	1	I	Combine the Strengths of two Lands to attack an opponent's Land for one turn.
+EVW2403	3	Bombing of Hamburg	1939 - 1945	event															INTERRUPT		1	I	INTERRUPT: On your opponent's turn, declare war and attack his or her Land once. This ends your opponent’s turn until the next round. 
+EVW2404	3	Operation Pastorius	15493	event															INTERRUPT		1	I	INTERRUPT: Immediately stop any Event card’s effects when played against you.
+EVW2405	3	Lower Dnieper Offensives	1943	event																	1	I	You may attack any Land, even if separated by water.
+EVW2406	3	Battle of Stalingrad	1942 - 1943	event															INTERRUPT		1	I	INTERRUPT: If your opponent wins the first attack and you play this card, the battle ends until the next turn.
+EVW2407	3	Tehran Conference (Allies Meet)	November 28, 1943	event																	2	H	Call a truce with any one opponent for two turns, even if that opponent doesn't want it.
+LEW2401	3	Dwight Eisenhower	1890 - 1969	Leaders							700	700							INTERRUPT		OO	C	INTERRUPT: For one entire round, no player may attack.
+LEW2402	3	General George S. Patton	1885 - 1945	Leaders							800	800									1	I	Due to his strategic genius, Patton outmaneuvers any Axis country. That Land loses one turn.
+LEW2403	3	Major General John P. Lucas 	1890-1949	Leaders							700	500									2	H	Transport one Army to any Land, even if separated by water. 
+LEW2404	3	William Knudsen	1879 - 1948	Leaders							500	300							INTERRUPT		2	H	INTERRUPT: For one entire round, you are the only player who may attack.
+MUW2401	3	Billy Millin, "crazy" wartime bagpiper - 1st Special Service Brigade; Simon Fraser, 15th Lord Lovat	1922-2010	character	musician						200	200									1	I	Increase your Morale by 200. With his encouragement, double your Army's Strength for one turn only.
+MAW2401	3	Poland's Enigma codebreakers	1939 - 1945	Mathmaticians							20	80							INTERRUPT		OO	C	INTERRUPT: While this card is in play, no player may look in your Land pile, deck, or hand.
+TEW2401	3	Red Ball Express	16309	technology							1000	1000									2	H	Transport one Army to any Land, unless separated by water. 
+WAW2401	3	Sniper Vasily Zaytsev	1915 - 1991	character	warrior						800	400							INTERRUPT		2	H	INTERRUPT: Once attacked, Zaytsev sends one Character from the attacking Land to the discard pile.
+ARRW401	2	Patriot Militia	1774-1776	army							1500	2000									OO	C	When any European Character is used in an attack against the Militia’s Land, increase that Land’s  Defense by 500.
+ARRW402	2	British Regulars	18th and 19th Century	army							2000	3000									OO	C	When commanded by a British Leader, increase their Strength by 500.
+ARRW403	2	Minute Men	1774-1775	army							2000	2000							INTERRUPT		OO	C	INTERRUPT: If played in a North American Land, increase your Defense by 500 and Attack by 300.
+DORW401	2	Join or Die	1754	document															INTERRUPT		1	I	INTERRUPT: Choose a Character card from your discard pile to rejoin the fight for a Land that is under attack. 
+EVRW401	2	Battle on Concord	April 19, 1775	event															INTERRUPT		1	I	INTERRUPT – You win the second attack by an opponent.
+EVRW402	2	Battle on Lexington Green	April 19, 1775	event															INTERRUPT		1	I	INTERRUPT: If you lose the first attack, before the second attack starts, your remaining Characters in that Land may retreat to another Land.
+EVRW403	2	Revolutionary War First Day	April 19, 1775	event															INTERRUPT		1	I	INTERRUPT: If there is one defender left in a Land and it is under attack, your opponent must stop attacking until the next turn.
+LERW401	2	Captain Parker	1729-1775	character	leader						400	300									1	H	If a Land Parker’s occupies loses the first attack, he automatically wins the second attack.  
+LERW402	2	Dr. Joseph Warren	1741-1775	character	leader						400	300									1	H	Warren will turn any of your opponent’s Spies or Assassins into double agents and you may use their Abilities against their owner.
+LERW403	2	Lieutenant Colonel Francis Smith	1723-1791	character	leader						500	400							CHOICE		1	H	CHOICE: You may double the Attack of any Army he commands but after two turns the Army retreats to the discard pile.
+LERW404	2	Brigadier General Hugh Percy.	1742-1817	character	leader						400	500							INTERRUPT		1	H	INTERRUPT: If another Land in the same continent is under attack, Percy and an Army from his Land will help defend them for one turn.
+LERW405	2	James Barrett	1710-1779	character	leader						500	400									1	I	If the Land he is occupying is attacked, Barrett wins the first battle. 
+LERW406	2	King George	1895-1952	character	leader						600	400							CHOICE		2	H	CHOICE: You may join two Armies to fight in your Land, for two turns, but you must decrease your Morale by 300.
+LERW407	2	Major John Pitcairn 	1722-1775	character	leader						400	500									1	I	ONCE: Increase your Morale by 400 until he is used for battle. Then take away 200 of those points.
+LERW408	2	Lieutenant General Thomas Gage - British	1718-1787	character	leader						400	400							CHOICE		1	I	CHOICE: You may double the Attack of any other Leader in the Land he occupies, but decrease your Morale by 200.
+LORW401	2	Old North Church - Two lantern	1723-1775	location															INTERRUPT		1	I	INTERRUPT – Warn your Civilization of an impending attack. Increase your Defense by 2000 for one turn.
+LORW402	2	Port of Boston	1630-2020	location																	1	H	Increase your Morale by 300 if you have a Businessman in your Civilization.
+LORW403	2	North Bridge of Concord	April 19, 1775	location																CONSTANT	OO	C	The battle turns in your favor—ONCE: Increase your Morale by 200. CONSTANT: Increase one Land's Attack by 400.
+SYRW401	2	Margaret Kemble Gage	1734–1824	character	spy						40	40									2	H	Turn one of your opponent’s Characters into a spy and steal 1000 of your opponent’s Attack points and add that to your Defense.
+WARW401	2	Robert Newman and Captain John Pulling	1754-1804	character	warrior						300	300							INTERRUPT		1	H	INTERRUPT: They risk their safety to warn your citizens. Increase your Defense by 1000 for one turn.
+ARRR401	1	Celtic Tribes	58-51 BC	army							2000	3000									1	H	For one turn only, if you win an attack on your opponent, you may steal 400 Morale. 
+CORR401	1	Caesar Augustus	63 BC-14 AD	character	conqueror						1000	1000									2	H	Augustus breaks any one treaty or peace agreement in any Land.
+CORR402	1	Marcus Lepiduss	89-13 BC	character	conqueror						800	800									1	H	If Lepidus and two Roman Leaders or Conquerors are in your Civilization at one time, you may take one of your opponent’s Lands for your own.
+EVRR401	1	Cimbrian War	113–101 BC	event															INTERRUPT		1	I	INTERRUPT: When an opponent wins his or her first attack against one of your Lands, a peace treaty ensues in which they may not attack your Civilization for the rest of that turn.
+EVRR402	1	Roman Civil War	49–45 BC	event																	1	I	Decrease your opponent’s Morale by 400. 
+EVRR403	1	Cleopatra and Marc Anthony	83-30 BC	event															INTERRUPT		1	I	INTERRUPT: After your last Character in one of your Lands dies and it is taken, disaster strikes. That opponent then loses 300 Morale. 
+EVRR404	1	Gladiator Wars	73–71 BC	event																	1	I	Rebellion grows in your opponent’s Land. All Characters with fewer than 100 Attack are sent off to the discard pile. 
+EVRR405	1	Hannibal Wars (2nd Punic War)	218 – 201 BC	event																	1	I	Choose one of your opponent’s Lands to be blocked from adding any new Characters for the next two rounds. 
+EVRR406	1	Latin Wars	340–338 BC	event																	1	I	Any of your Lands taken within the last two turns are now returned. Your opponent’s Characters in that Land are exiled to the discard pile.
+EVRR407	1	Roman Republic Expansion	146-31 BC	event																	1	I	You confiscate two Lands from an opponent’s Land pile when you give one active Land to that player. All cards from that Land must be discarded. That Land is now theirs to play on their next turn.
+EVRR408	1	The Jugurthine War 	112–106 BC	event																	1	I	Retrieve any Land that was taken from you within the last two turns. Your opponent’s Characters in that Land are exiled to the discard pile.
+MLRR401	1	Fabius Maximus	280–203 BC	character	leader						500	600									2	H	Patience is your virtue. Your opponent may win the first attack against your Land, but you automatically win the second.
+ORRR401	1	The Executive Magistrate	510-44 BC	organization																	1	H	Choose a Character as magistrate.  All Characters in that Land are given the same Strength as the magistrate for one turn only.
+ORRR402	1	The Legislative Assembly	509–27 BC	organization																	1	I	Your Morale will not decrease for the next two turns. Increase your Morale an additional 200 for each of those two turns.
+ORRR403	1	The Senate	753 BC-476 AD	organization																	1	I	You gain control of any opponent's Organization in play. Move it to your Civilization or discard it.
+PIRR401	1	Cilician Pirates	2nd c. - 66 BC	character	outlaw						400	200									OO	C	Double the pirates’ Attack unless you face another Roman Leader or Conqueror.
+POE001	1	Gnaeus Pompeius Magnus	106-48 BC	character	politician						500	400									1	H	Double the Strength of any Army under Magnus's command. After the end of the round, he is assassinated and must be discarded.
+TEE001	1	Roman Ballista	400 BC	technology															INTERRUPT		1	I	INTERRUPT: Eliminate one of your opponent’s Character cards.
+WAE002	1	Roman Centurion	107 BC	character	warrior						800	800								CONSTANT	OO	C	For showing valor—ONCE: Increase your Morale by 200. CONSTANT: Increase Strength by 500 when fighting a Land with an Army.
+WAE003	1	Sparticus	111-71 BC	character	warrior						700	300									1	H	Spartacus inspires your people. For each Character with less than 100 Attack points, multiply their Strength by 10 for two rounds.
+AC4701	G	Irish Volunteers	1913-?	character	activist						400	500		200					CHOICE		1	I	CHOICE: Increase your Morale by 400 due to the Volunteers’ passion for freedom OR each of  your opponents lose 200 Morale for each European Land. 
+AR4701	G	Cossack Warriors	ca 1200s-?	army							3000	2000									OO	C	When the Cossack Warriors win their first attack, increase their Attack by 500 against that opponent.
+AR4702	G	Kamakura Shogun Army	1185-1333	army							4000	3000									2	H	After an initial attack on the Asian Land this Army is defending, you can utilize that opponent's second attack to counterattack. 
+AR4703	G	Māori Warriors	1320-2020	army							3000	2000									OO	H	When attacking from the South Pacific, the Maori gain 1000 Attack for their first attack each turn.
+AR4704	G	Soviet Red Army	1917-1991	army							4000	4000		100							OO	C	If in Russia with Lenin or Dzerzhinsky, gain 1000 Attack.  US lands defeated by the Red Army lose 100 Morale per lost battle.
+AI4701	G	Sandro Botticelli	ca. 1445-1510	character	artist						20	20		200					CHOICE		1	I	CHOICE: Increase your Morale by 300 from his brilliance OR your opponents lose 200 Morale due to nightmares from Dante's Inferno.
+AS4701	G	Nathuram Godse	1910-1949	character	assassin						0	0							INTERRUPT		1	I	INTERRUPT: Assassinate one of your opponent's Characters. Decrease opponent's Morale by 200. Discard this card after use.
+AT4701	G	Jim Thorpe	1887-1953	character	athlete						40	40									1	I	Jim Thorpe inspires your people. Increase your Morale by 300.
+AU4701	G	Bram Stoker	1847-1912	character	author						40	20	300								1	I	Dracula entertains your Civilization and frightens your opponents.  You gain 300 Morale; they lose 200.
+AU4702	G	Robert Burns	1759-1796	character	author						20	40									1	I	Robert Burns’s poetry inspires your people. Increase your Morale by 200. If he resides in the United Kingdom, increase your Morale by 400.
+BU4701	G	Mayer Rothschild	1744-1812	character	businessman						200	200									OO	C	Rothschild's financial brilliance and ability to acquire military resources increases one Army's Strength by 50%.
+CO4701	G	Hannibal	247-181 BC	character	conqueror						1000	800									OO	C	Increase your Strength by 1000 when attacking a Land with no Leader.
+CO4702	G	Qin Shi Huang	260-210 BC	character	conqueror						600	1000									OO	C	If Huang is fighting in an Asian Land, increase your Strength by 1000.
+CO4703	G	Xerxes	518-465 BC	character	conqueror						800	600									OO	C	Increase his Strength by 1000 if occupying an Asian Land.
+CO4704	G	Caesar Augustus Germanicus	13849	character	conqueror						800	600									1	I	Select one opponent's Character card to go insane... that player loses your opponent 200 Morale each turn, until discarded.
+RE4701	G	Code of Hammurabi	18th c. BC	relic																	1	I	For the next 3 turns, all cards decreasing your Morale are transferred to an opponent of your choice.
+DO4701	G	Malleus Maleficarum	1486	document																	1	I	Accuse one opponent of witchcraft.  He or she is forced to discard one Spiritual Leader and loses 500 Morale points.
+EN4701	G	Bela Lugosi	1882-1956	character	entertainer						20	40							CHOICE		1	I	CHOICE: Increase your Morale by 300 for entertaining your Civilization OR one of your opponents loses 300 Morale out of fear.
+EV4701	G	Vesuvius Eruption	79 AD	event										500					INTERRUPT		1	I	INTERRUPT: Vesuvius destroys an opponent's Land. He or she must discard the Land and lose 500 Morale. 
+EV4705	G	Galveston Hurricane of 1900	1900	event										400							1	I	Select one opponent's Land to face the hurricane. He or she must discard half that Land's Characters (round up) and lose 400 Morale.
+EV4704	G	The Lost Colony of Roanoke	1587	event															INTERRUPT		1	I	INTERRUPT: Select one opponent's Land. All that Land's cards are discarded and that player loses 100 Morale for every card discarded.
+EV4702	G	Bloody Sunday	1972	event															INTERRUPT		1	I	INTERRUPT: Choose one player. For each English Character in play, that player loses 100 Morale. 
+EV4703	G	Japanese-Americans Internment	1942-1946	event										200							1	I	All opponents must discard their Characters of Japanese heritage. Players forced to discard lose 200 Morale. 
+EX4702	G	Bessie Coleman	1892-1926	character	explorer	flight					100	80									1	I	Bessie gives Strength to African Americans. For every black Character in your Civilization, increase your Morale by 100.
+EX4704	G	Xuanzang	ca. 602–664	character	explorer	land					20	20									1	I	If Xuanzang discovers an Asian Land, increase your Morale by 300.
+EX4703	G	Sacagawea	1788-1812	character	explorer	land					60	60									1	I	Increase your Morale by 300 if she discovers a North American Land.
+EX4701	G	Alan B. Shepard	1923-1998	character	explorer	space					80	60									1	I	Your citizens rejoice at Shepard's accomplishment. Increase your Morale by 300.
+IN4701	G	William B. Kouwenhoven	1886-1975	character	inventor						20	80							INTERRUPT		1	I	INTERRUPT:  The cardiac defibrillator saves the life of one Character destined for the discard pile. Place card back in hand.
+IN4702	G	Louis Braille	1809-1852	character	inventor						30	30									1	I	Louis Braille empowers many of your Citizens. Increase your Morale by 300.
+KN4701	G	Algebra	3rd c. AD	knowledge																CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Increase Strength for your Civilization by 300 while this card is in play.
+CT4701	G	Madagascar		land																	1	I	With the beauty of the islands           increase your Morale by 300 points. 
+CT4702	G	Peru		land																	OO	C	The Andes give Peru a tactical advantage. Their Defense is increased by 500 points.
+CT4703	G	State of Hawaii		land																	OO	C	The attacking Land must have an Explorer, Pirate, or Shipbuilding Technology card to attack. Increase Defense by 500.
+CT4704	G	Republic of Turkey		land																	OO	C	Due to the Strait of Bosphorus, Turkey can battle any Land in Europe or Asia.
+CT4705	G	Republic of Vanuatu		land																	OO	C	Because Vanuatu is a series of islands, increase this Land's Defense by 1000.
+CT4706	G	Vatican City State		land			CO4101,AR4404,catholic														OO	C	If Charlemagne, the Knights Templar, or any Catholic figure reside in this Land, increase your Defense by 800.
+LE4701	G	Felix Dzerzhinsky	1877-1926	character	leader						600	400									1	I	You gain the effects of all Knowledge and Document cards in play for 5 turns, and then this card is discarded.
+LE4702	G	Oliver Cromwell	1599-1658	character	leader						400	300									OO	C	When Cromwell occupies a Land in the UK, increase his Strength by 500. If he defeats a Monarch card, your opponent loses 300 Morale.
+LE4703	G	Joseph Stalin	1878-1953	character	leader															CONSTANT	OO	C	ONCE: Decrease your Morale by 200 and an opponent's by 400. CONSTANT: If he occupies an Asian Land, increase Attack by 1,000.
+LE4704	G	Peter the Great	1877-1926	character	leader						700	600								CONSTANT	OO	C	ONCE: Increase Morale by 300 if Peter resides in Russia. CONSTANT: If Peter occupies a Land with a coast, increase Defense by 500. 
+LO4701	G	Library of Alexandria	285–246 BC	location																	1	I	You gain the effects of all Knowledge and Document cards in play for 5 turns, and then this card is discarded.
+MU4701	G	Pyotr Ilyich Tchaikovsky	1840-1893	character	musician						40	40									1	I	Tchaikovsky gains 400 Morale if he resides in Russia. Otherwise he gains 200 Morale.
+OR4701	G	Culper Spy Ring	1778-1783	organization															INTERRUPT		1	I	INTERRUPT: All effects from an opponents' Spy are reversed. That player loses 300 Morale for an exposed spy.
+OU4701	G	Guy Fawkes	1570-1606	character	outlaw						-300	-300		300							1	I	When you play Guy Fawkes in an opponent's Land, they lose 300 Morale. He cannot be discarded until the Land changes hands.
+PH4701	G	Niccolò Machiavelli	1469-1527	character	philosopher						100	60								CONSTANT	OO	C	ONCE: For every opposing politician, decrease your Morale by 200. CONSTANT: Increase Strength by 300 for every politician he battles.
+PO4701	G	Maximilien Robespierre	1758-1794	character	politician						80	40							CHOICE		1	I	CHOICE: Force one opponent to discard all Kings, Queens, and Catholic Characters.  Discard Robespierre after 3 turns.
+SC4701	G	Guglielmo Marconi	1874-1937	character	scientist						40	20									1	I	Marconi's advancements in the science of radio broadcasting inspire your people. Increase your Morale by 300.
+MA4701	G	Emmy Noether	1882-1935	character	mathematician						20	20							INTERRUPT		1	I	INTERRUPT - CHOICE: Reverse the effects of any card's ability played against you OR increase your Morale by 200 for every female in play.
+SP4701	G	Maimonides	1135 or 1138-1204	character	spiritual_leader						20	20							INTERRUPT		1	I	INTERRUPT - CHOICE: Reverse the effects of any card's ability played against you OR increase your Morale by 200 for every female in play.
+TE4701	G	RADAR	1934–1939	technology										100							OO	C	Each of your Lands currently in play gains 500 Defense.  All opponents lose 100 Morale for each plane, astronaut, or pilot in play.
+WA4701	G	Simo Häyhä	1905-2002	character	warrior						300	200							INTERRUPT		OO	C	INTERRUPT: Häyhä can kill up to a total of 3 Characters while in play, one per turn. After the 3rd target, Häyhä is discarded.
+AC4601	F	Harriet Tubman	1822-1913	character	activist						40	40							INTERRUPT		1	I	INTERRUPT: There is peace in your Civilization and no opponent may play any card against you or attack your Land for one round.
+AC4602	F	Tokyo Rose	1916-2006	character	activist						20	40							INTERRUPT		1	H	INTERRUPT: Tokyo Rose cancels out any loss of Morale caused by any one specific card. 
+AR4601	F	Apache	850 AD - Current	army							3000	2500									2	H	The Apache's ferocity surprises your opponent. The Apache automatically win their first battle against any opponent.
+AR4602	F	French Musketeers	1600-1850	army							2500	2500									OO	C	If the French Musketeers occupy any Land in Europe, increase their Strength by 500.
+AR4603	F	Ming Warriors	1368 - 1644	army							3500	2500									1	H	Due to their speed, when an opponent declares an attack, the Ming Warriors strike first and win the battle.
+AR4604	F	Nicaragua Contras	1979-1990	army							3000	2000									OO	C	The Contras gain an extra 500 Strength if they are in the same Land as an American Leader.
+AI4601	F	Raffaello Sanzio da Urbino	1483-1520	character	artist						40	20									1	I	Raphael's amazing artistic ability inspires your citizens, increasing their Morale by 200.
+SY4601	F	Sir William Stephenson	1897-1989	character	assassin	spy					400	500									OO	C	Stephenson prevents all your opponents from playing any Spy Cards as long as he is in your Civilization.
+AT4601	F	Babe Didrikson Zaharias	1938 - 1956	character	athlete						60	80									1	I	Babe gives strength to women. For every woman in your Civilization, increase your Morale by 100.  
+AU4601	F	Brothers Grimm	1785-1863	Authors							40	40									1	I	Increase your Morale by 200.  While scaring your opponent's civilization, decrease their Morale by 200.
+AU4602	F	Edgar Allen Poe	1809-1849	character	author						20	20									1	I	While scaring your opponent's Civilization, decrease their Morale by 300.
+BU4601	F	Frederic "The Ice King" Tudor	1783-1864	character	businessman						100	100									1	I	Tudor increases your Morale by 200 because of cool drinks and longer lasting food.
+CO3015	F	Ashoka The Great	304-232BC	character	conqueror						800	700					500				OO	C	If Ashoka is your Land's sole leader, you cannot attack after he has been there more than two turns, but gain 500 Defense .
+CO3016	F	Mao Tse-Tung	1893-1976	character	conqueror						700	800								CONSTANT	OO	C	ONCE: Decrease your Morale by 300. CONSTANT: Increase your Strength by 400 if he occupies an Asian Land.
+CO3017	F	Vlad the III, Prince of Wallachia	1431-1477	character	conqueror						800	800								CONSTANT	OO	C	ONCE: Decrease your Morale by 200. CONSTANT: Increase your Strength by 300 if he occupies an Asian Land.
+CT4601	F	Greece		land																	1	I	Due to the Greeks’ rich collection of knowledge, increase your Morale by 300.
+CT4602	F	Israel		land									200								OO	C	You gain 200 Morale for every Jewish, Christian, or Islamic Spiritual Leader that occupies Israel.
+CT4603	F	Mali		land																	OO	C	Increase your Morale by 300 if an African Leader resides in Mali. 
+CT4604	F	Samoa		land																	OO	C	Due to being an island, increase your Defense by 500, but your small military decreases your Attack capabilities by 300.
+CT4605	F	US East Coast		land																	2	H	At the beginning of your turn, you may transport any one Character card in your Civilization to this Land.
+CT4606	F	Venezuela		land																CONSTANT	OO	C	If Columbus is in this Land - ONCE: Increase your Morale by 300. With or without Columbus - CONSTANT: Increase your Strength by 500. 
+DC4601	F	Dead Sea Scrolls	1946-1956	document																	1	I	The Dead Sea Scrolls increase your civilization's Morale by 300 points.
+EC4601	F	Friedrich Hayek	1899-1992	character	economist						40	40									1	I	For every Japanese Character in your Civilization increase Morale by 100.
+EN4601	F	Geisha	794-2020	character	entertainer						20	20									1	I	For every Japanese Character in your Civilization increase Morale by 100.
+EV4601	F	Black Death (Bubonic Plague)	1340-1400	event																	1	I	ONCE: This card decreases the Morale of the opponent of your choice by 600.
+EV4602	F	Chernobyl	31528	event																	1	I	One of your opponent's Lands is uninhabitable and must be discarded. One Character may escape to another Land in the same continent. 
+EV4603	F	October Revolution	1917	event																	1	I	All players must discard all Kings, Queens, Emperors, Pharaohs, and Tsars in play. 
+EV4604	F	Swing Era	1935–1946	event																	1	I	Increase your Morale by 300 points.
+EX4601	F	Joshua Slocum	1844-1909	character	explorer	sea					60	40									1	I	Slocum increases your Morale by 100, but dies after 2 turns.
+EX4605	F	Laika the Dog	19665	character	explorer	space															1	I	If Laika discovers a European or Asian Land, increase your Morale by 200.
+EX4602	F	Pedro Alvares Cabral	1467-1520	character	explorer	sea					200	300									OO	C	If he occupies a South American Land, increase his Attack by 500 for the first battle of each turn.
+EX4603	F	Sir John Franklin and Francis Crozier	1796-1848	character	explorer	sea															1	I	Search your Land pile for the Land of your choice. Discard this Explorer after discovery.
+EX4604	F	Sir John Hawkins	1532-1595	character	explorer	sea								200							1	I	Hawkins discovers a new country for you, but due to slavery you lose 200 Morale points.
+IN4601	F	Eli Whitney	1765-1825	character	inventor						40	20									1	I	Increase your Morale by 300 if you discard a Character Card already in play (other than Eli).
+IN4602	F	Ferdinand, Graf von Zeppelin	1838-1917	character	inventor						100	100							CHOICE		OO	C	CHOOSE: With this knowledge, double one of the following: all your Knowledge, Technology, or Document cards' abilities. 
+KN4601	F	Heliocentric Solar System	1660	knowledge															CHOICE		OO	C	CHOOSE: With this knowledge, double one of the following: all your Knowledge, Technology, or Document cards' abilities. 
+LE4601	F	Emperor Constatine	(c.272-337)	character	leader						300	500								CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Increase your Defense by 500 when protecting a European Land. 
+LE4602	F	Franklin D. Roosevelt	1882-1945	character	leader						500	400									1	I	You can pull one Leader out of your Discard pile and play him/her again.
+LE4603	F	Margaret Thatcher	1925-2013	character	leader						400	200								CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Increase your Defense by 500 when protecting any Land in the United Kingdom. 
+LE4604	F	Tsar Nicholas II	1868-1918	character	leader						500	600									1	H	Tsar Nicholas can call in help from an outside Army in your Civilization for one turn, but only claim half of its Strength.
+LE4601	F	Allan Pinkerton	1819-1884	LawEnforcer							200	300									OO	C	Pinkerton stops assassins, spies, or any other attempts to look at your hand. You can look at one opponent's hand, once per turn.
+LO4601	F	Eiffel Tower	1887-1889	location																	1	I	With this monument, increase your Morale by 200 points.
+MU4601	F	George Frederick Handel	1685-1759	character	musician						20	20									1	I	Handel's musical genius increases your Civilization's Morale by 300.
+OR4601	F	House of Representatives	April 1, 1789	organization																	OO	H	If your opponent's Morale falls below 0 for 2 rounds, you win.  If your opponent plays a Senate card, this card must be discarded.
+PI4601	F	Lope de Aguirre	1510-1561	character	outlaw	pirates					400	200								CONSTANT	1	C	ONCE: When played, discover a New Land. CONSTANT: Increase your Attack by 500 if battling in a South American Land.  
+PH4601	F	Confucius	551-479 BC	character	philosopher																1	I	Confucius's philosophical wisdom has inspired your Civilization.  Increase your Morale by 300.
+PO4601	F	Romualdo Pacheco	1831-1899	character	politician						60	80									1	I	Increase your Morale by 100 for every Latin American Character already in play in your Civilization.
+SC4601	F	Otto Hahn	1879 - 1968	character	scientist						80	60		500		500			CHOICE		OO	C	CHOOSE: Increase your Strength by 500 and lose 500 Morale OR increase Morale by 500 and lose 500 Strength.
+SP4601	F	Lemuel Haynes	1753-1833	character	spiritual_leader						20	60									OO	C	Pastor Haynes warns the Land he occupies of a coming battle. Increase your Defense by 500 before any first attack, per turn.
+TE3011	F	Shipbuilding	3000 BC	technology																	OO	C	Once per turn, Shipbuilding allows you to transfer any one card from one Land to another regardless of continent.
+WA3006	F	Jason Cunningham	1975-2002	character	warrior						500	600									OO	C	Jason rescues all Characters in one Land facing imminent defeat, transporting them to another Land.
+AC4501	5	Ida Bell Wells-Barnett	1862 - 1931	character	activist						80	40									OO	C	When Wells is in play, no cards may be taken or searched by any of your opponents.
+AC4502	5	Muhammad Ali Jinnah	1876 - 1948	character	activist						300	200									OO	C	Increase your Strength by 500 when your Land is defending against the United Kingdom.
+AR4501	5	Amazon Women Warriors	600-300 BC?	army							3000	3000									OO	C	If the Amazon Warriors and a female Leader fight in the same Land, increase their Strength by 500.
+AR4502	5	Cherokee Warriors	1898–1906	army							3000	2000									1	H	Due to the Cherokees’  wilderness skills, they win the first battle in which they defend their Land.
+AR4503	5	French Army	600-1400AD	army							2000	2000									OO	C	If Charlemagne or Joan of Arc lead this army, increase that Land's Strength by 1,000.
+AR4504	5	The Great Viking Army	800 – 1066 AD	army							3000	1000									1	H	If you win the first attack and have higher Morale than the defender, you gain that Land. All defending cards must be discarded.
+AI4501	5	Rembrandt	1606-1669	character	artist						20	20									1	H	If he stays in play for three turns, increase your Morale by 500.
+AS4501	5	John Wilkes Booth	1838-1865	character	assassin						0	0							INTERRUPT		1	I	INTERRUPT: Booth sneaks into your opponent's Civilization and assassinates one Leader. Afterwards he too must be discarded.
+AT4501	5	Chuck Cooper	1926 - 1984	character	athlete						40	40									1	I	Chuck Cooper's trailblazing spirit inspires your people. Increase your Morale by 200.
+AU4501	5	Booker T. Washington	1856-1915	character	author						80	80							INTERRUPT		1	H	INTERRUPT: If a Leader occupies your opponent's attacking Land, Booker facilitates a one-turn truce.
+AU4502	5	Louisa May Alcott	1832-1888	character	author						40	40									2	H	If your Civilization has more female Characters than your opponent's Civilization, you win the first battle.
+BU4501	5	William Penn	1644-1718	character	businessman						200	100									1	I	Increase your Morale by 200. For every Spiritual Leader in your battlefield, increase your Morale by an additional 100.
+CO4501	5	Adolf Hitler	1889-1945	character	conqueror						900	600									OO	C	If he remains in play for more than two turns, increase your Land's Attack by 700, as long as he is in play. Also, decrease your Civilization's Morale by 100 per turn.
+CO4502	5	Genghis Khan	1162-1227	character	conqueror						800	500									1	I	Take control of one Land that attacked you last turn. Opponent must redistribute all that Land’s cards to the same continent or discard them. 
+CO4503	5	Ivan the Terrible	1530-1584	character	conqueror						1000	1000									OO	C	If he stays in play after two rounds, decrease your Civilization's Morale by 100 points per turn.
+CT4501	5	Australia		land																	OO	H	ONCE: Increase your Morale by 200. HOLD: When Captain Cook is played in Australia, increase Morale by an additional 200.
+CT4502	5	Brazil		land																	OO	C	All South American Lands you own gain 300 additional Strength while you own Brazil. If you lose the Land, you lose the Strength.
+CT4503	5	China		land																	OO	C	Due to China's size and inhospitable terrain, you gain an additional 500 points Defense. Five cards may occupy this Land, and one of those five may be an Army.
+CT4504	5	French Republic		land																	1	I	Due to its rich culture, increase your Morale by 200. If the Eiffel Tower is in play in your Civilization, increase your Morale by an additional 200.
+CT4505	5	Rocky Mountains		land																	OO	C	Any Army who attacks the Rockies loses half of its Attack Strength.
+CT4506	5	South Africa		land																	1	I	For the next two rounds, your opponents must wait an additional turn to discover a new Land.
+DO4501	5	Federalist Papers	1788	document																	OO	C	Increase your Morale by 300. The US Constitution alongside this card prevents any Land with a King, Queen, or Emperor from attacking you.
+EC4501	5	Karl Marx	1818-1883	character	economist						40	40								CONSTANT	OO	C	ONCE: Decrease your Morale by 300. CONSTANT: If Karl Marx is in Russia or in the same Land as Lenin or Stalin, you gain an additional 500 Strength. When played, 
+EN4501	5	Ehrich Weiss	1874-1926	character	entertainer						80	60							INTERRUPT		1	H	INTERRUPT: When a Character is discarded due to an attack, that card escapes with Houdini to a different Land.
+EV4501	E	Jazz Era	1920s	event																			Increase your Morale by 300.
+EV4502	E	The Alamo	Feb 23 - Mar 6, 1836	event																	1	I	For this turn only, one of your Lands may attack one of your opponent's Lands an unlimited amount of times.                                                                             
+EV4503	E	Trail of Tears	1830-1831	event																			All opponents’ Morales decrease by 200. 
+EV4504	E	Trails West	1830-1870	event																	1	I	Add a new Land to your Civilization and transport a Character currently in play to occupy it.
+EX4501	E	Charles Lindbergh	1902-1974	character	explorer	air					300	300	200								1	I	Lindbergh's fearless exploration of aviation allows you to gain 200 Morale.
+EX4502	E	Gaspar and Miguel Corte-Real	1450-1501	character	explorer	sea					400	200									1	I	If they discover a North American Land, increase your Morale by 200. After two turns this card must be discarded.
+EX4503	E	Jean Francois de Galaup Laperouse	1741-1788?	character	explorer	sea					300	400									1	H	After three rounds, Laperouse discovers a second Land.
+EX4504	E	Percy Fawcett	1867-1925	character	explorer	sea					200	400									1	I	Double the Ability of any Businessperson in play.
+EX4505	E	Gus Grissom	1926-1967	character	explorer	space															1	I	Due to national pride, increase your Morale by 300. After two turns he must be discarded.
+IN4501	E	Philo Farnsworth	1906 - 1971	character	inventor								300								1	I	Farnsworth entertains your Civilization. You gain 300 Morale.
+IN4502	E	Wright Brothers	1871 - 1948	character	inventor						100	100								CONSTANT	1	I	ONCE: Increase your Morale by 200. You may move any Character or Army to any Land regardless of continent. CONSTANT: Increase your Strength by 300.
+TH4501	E	The Theory of Evolution	1859	knowledge																	1	I	You learn  any one Technology card already in play.
+LE4501	E	Ho Chi Minh	1890-1969	character	leader						400	200		100							OO	C	When he leads the Viet Minh Army, add an additional 1000 Attack points. After three turns in power, you lose 100 Morale points per turn.
+LE4502	E	King Tutankhamun	1341-1323 BC	character	leader						400	500									OO	C	The Land King Tut occupies can only be attacked by another Pharaoh.
+LE4503	E	Paul Revere	1734-1818	character	leader						400	500							INTERRUPT		2	I	INTERRUPT: Revere gives you advance warning and the Land he defends wins the first battle.
+LE4504	E	Robert E. Lee	1807-1870	character	leader						400	500									1	I	Under his direction, double the Strength of any Army card for the first attack.
+LO3002	E	Brooklyn Bridge	January 3, 1870	location																	1	I	Increase your Morale by 200. A Character can cross into any Land within any continent of your choice.
+MU3004	E	Marian Anderson	1897-1993	character	musician						20	20									1	I	Anderson's beautiful voice brings joy to your Civilization. Increase your Morale by 200.
+OR3006	E	The Knights of the Golden Circle	1854	organization							500	200									1	I	If the Knights reside in America or with an American leader, decrease every opponents' Morale by 300.
+PI3002	E	Jean Fleury (Florin)	?-1527	Outlaws_Pirates							400	200							INTERRUPT		1	I	INTERRUPT: Only once. When your opponent plays a Technology card, play Fleury to steal that Technology from them.
+PH3007	E	Zeno of Citium	334  - 262BC	character	philosopher								300						CHOICE		1	H	CHOICE: Increase your Morale by 200 Morale or wait three turns and gain 300 Morale.
+PO2002	E	Octaviano Ambrosio Larrazolo	1859-1930	character	politician						60	80									1	I	Larrazolo brings hope to Hispanics. Increase your Morale by 100 for every Hispanic Character you have in play.
+SC2001	E	Albert Einstein	1879-1955	character	scientist						80	60									1	H	Gain the ability of one Technology or Knowledge card that one of your opponents plays in the future.
+SP3002	E	Joseph Smith Jr.	1807-1844	character	spiritual_leader						20	50									OO	C	Your Morale will not decrease below 700.
+TE4501	E	Electric Chair	1924	technology																	2	H	No outlaw dares to attack you. Your opponent may not attack your Civilization with any Outlaws or Pirates for two turns.
+TE4502	E	Invention of Gun Powder	900 AD	technology																	OO	C	Increase your Civilization's Strength by 700.
+WA4501	E	Boudicea	Died: 61 AD	character	warrior						700	800								CONSTANT	OO	C	ONCE: Increase your Morale by 200. CONSTANT: Anytime Boadicea fights against a "Roman Era" card, increase your Strength by 500. 
+AC4401	D	Frances Ellen Watkins Harper	1825-1911	character	activist						20	60									1	I	With her insight, increase your Morale by 200.
+AC4402	D	Pocahontas	1595-1617	character	activist						80	40									1	I	You can exchange any one card from your opponent's hand with a card from your own. Increase your Morale by 100.
+AR4401	D	The Mamelukes	1077-1831	army							3000	2500									OO	C	Increase Strength by 500 if the Mamelukes reside in an Asian Land.
+AR4402	D	Janissary	1383-1826	army							2500	3000			500						OO	C	The Janissaries gain 500 Strength if led by a Muslim Leader or if defending an Asian Land.
+AR4403	D	The Billmen	1513	army							2000	3000									OO	C	If the Billmen are employed in the United Kingdom, increase Defense by 500.
+AR4404	D	The Knights Templar	1119-1312	army							3500	3500									OO	C	Add 500 Strength for Charlemagne and/or each Christian leader in their Land. If defending Israel or Vatican City, add 500 Defense.
+AI4401	D	Pablo Picasso	1881-1973	character	artist						20	40									1	H	When he dies, increase your Morale by 400. This increase does not take effect if you simply discard this card.
+SY4401	D	Charles J. Guiteau	1841-1882	character	assassin						100	70									1	I	Guiteau sneaks into any opponent's Civilization and assassinates one Leader. Discard after use.
+AT4401	D	George Herman Ruth, Jr	1895-1948	character	athlete						40	80									1	I	Increase your Morale by 300. Decrease all opponents' Morale by 100.
+AU4401	D	James Weldon Johnson	1871-1938	character	author						60	40									1	I	Johnson brings hope to black Characters. Increase your Morale by 100 for each black Character in play, including Johnson.
+AU4402	D	Washington Irving	1783-1859	character	author						60	60									1	I	Increase your Morale by 200. Decrease all your opponents' Morale by 200.
+BU4401	D	J.P. Morgan	1837-1913	character	businessman						200	90							INTERRUPT		1	I	INTERRUPT: Reverse any Event Card your opponent plays. Your opponent feels the effects.
+CO4401	D	Hernán Cortés	1485-1547	character	conqueror						800	600									1	H	If you win an Attack, discard one Leader from the defeated Land and decrease that opponent’s Morale by 200.
+CO4402	D	Nebuchadnezzar II	Reign: 605-562 BC	character	conqueror						700	500									1	H	You automatically win your first two attacks in Africa or Asia. Increase your Morale by 100.
+CO4403	D	William the Conqueror	1028-1087	character	conqueror						800	400									OO	C	When attacking the United Kingdom, increase your Strength by 500. 
+CT4401	D	Mexico		land																	1	C	Increase Strength by 500. No Strength is gained if a Conquistador is in play anywhere in the game.
+CT4402	D	Morocco		land																	OO	C	Decrease your opponent's Morale by 200 if he or she takes Morocco from your Civilization.
+CT4403	D	New Zealand		land																	OO	C	If this Land is led by a British Leader, increase Defense by 600.
+CT4404	D	Russia 		land																	OO	C	Increase your Strength by 700, unless Hitler, Stalin, or Lenin are in play.  5 cards may occupy this Land.
+CT4405	D	United Kingdom		land																	OO	C	If you are attacked, decrease your opponent's Strength by half, unless your opponent has an Explorer in the attacking Land.
+CT4406	D	Oriental Republic of Uruguay		land																	OO	C	Double your Land's total Defense points when a Spanish Leader, Conqueror, or Explorer occupies this Land.
+SC4401	D	Declaration of Independence	July 4, 1776	document															INTERRUPT	CONSTANT	OO	C	INTERRUPT: ONCE: Increase your Morale by 400. CONSTANT: Increase your Civilization's Defense by 300.
+EC4401	D	Thales of Miletus	625-Unknown BC	character	mathematician						40	40									1	I	Increase your Morale by 200. If placed in a coastal Land increase your Morale by 300.
+EN4401	D	Stepin Fetchit	1902-1985	character	entertainer						100	80									1	I	Fetchit entertains your civilization; increase your Morale by 100.
+EV4401	D	American Revolution	1775-1782	event															INTERRUPT		1	H	INTERRUPT: In battle, this Event prevents you from losing a card until an Attacker wins twice.
+EV4402	D	Boston Tea Party	December 16, 1773	event																	1	I	You discover a new Land from one of your opponents' Land piles.
+EV4403	D	SF Earthquake	838	event															CHOICE		1	I	CHOICE: Pick a continent. Half of the Characters in that continent must be discarded. Round down.
+EV4404	D	Cinco de Mayo	May 5, 1862	event																	1	H	When facing a French Leader, Army, or Warrior, you automatically win the first battle.
+EX4401	D	Amerigo Vespucci	1454-1512	character	explorer	sea					60	60									1	I	Look through your Land pile. Pick a North or South American country to play.
+EX4402	D	Charles Albanel	1616-1696	character	explorer	sea					20	20									1	H	If there is a Businessman in the same Land as Albanel, increase your Morale by 200.
+EX4403	D	Christopher Columbus	1451-1506	character	explorer	sea					60	60									OO	C	He can transport up to three Characters or one Army to any Coastal Land.
+EX4404	D	Diego de Almagro	1475-1538	character	explorer	land					500	400									1	C	If Almagro and one Army occupy a Land in the Americas, increase your Attack by 400.
+EX4405	D	Dr. David Livingstone 	1813-1873	character	explorer	land					20	20									1	I	Increase your Morale by 300 points if he discovers an African Land.
+IN4401	D	Hedy Lamarr	1914-2000	character	inventor						40	60									OO	C	Hedy prevents any opponent from looking at your hand if that is part of a card's ability. 
+IN4402	D	Thomas Edison	1847-1931	character	inventor						60	40									OO	I	Confiscate any two Technologies in play.
+KN4401	D	Newton's Law of Motion	1643–1727	knowledge																	1	I	With this Knowledge, pull any one Technology Card from your deck and play it immediately. Reshuffle your deck.
+LE4401	D	King Henry VIII	1491-1547	character	leader						300	500									OO	C	Henry VIII cannot reside in the same Land as a Catholic Pope, Charlemagne, the Knights Templar, or a female Leader.
+LE4402	D	King Kamehameha I	1758-1819	character	leader						400	500									OO	C	While King Kamehameha is in play, your Morale points will not decrease when an opponent attacks with any Event Card.
+LE4403	D	Robert Baden Powell	1857 - 1941	character	leader						500	300								CONSTANT	OO	C	ONCE: Increase your Morale by 100. CONSTANT: You may look at one opponent's hand per turn. 
+LE4404	D	Winston Churchill	1874-1965	character	leader						500	500							INTERRUPT		OO	C	INTERRUPT: A second Army Card may permanently defend the Land he occupies. (5 cards may occupy this Land.)
+LO2003	D	The Roman Colosseum	80 AD	location																	1	I	Pick one of your and your opponent's Characters to battle in the Colosseum. Lowest Attack must be discarded.
+MU4401	D	Claudio Monteverdi	1567 - 1643	character	musician						40	20									1	I	Monteverdi's music is enjoyed throughout your civilization; increase your Morale by 300.
+OR4401	D	U.S. Senate	1789-Current	organization															INTERRUPT		1	I	INTERRUPT: Reverse any Event Card played against you.
+PI4401	D	Sir Francis Drake	1540-1596	character	outlaw	pirates					400	300							INTERRUPT		1	I	INTERRUPT - ONCE: When your opponent plays an Explorer, Drake steals the newly discovered Land  for your Civilization. Explorer is discarded.
+PH4401	D	Plato	428-347BC	character	philosopher						10	10									1	I	Increase your Morale by 400. Gain the same abilities as an opponent's Knowledge Card.
+PO4401	D	Joseph Hayne Rainey	1832-1887	character	politician						60	60							INTERRUPT		1	I	INTERRUPT: Through his leadership, stop the effects of any one Event Card played against you. 
+SC4401	D	Georges Lemaître	1894-1966	character	scientist						20	20									1	I	His scientific intellect allows you to force one opponent to discard one Knowledge or Technology Card.
+SP3007	D	Pope Gregory	540-604 AD	character	spiritual_leader						40	20									1	I	Your Morale will not decrease below 700. You must reach above 700 Morale before this ability takes effect.
+TE4401	D	Invention of Ice Cream	37 AD-Current	technology																	OO	C	Increase your Morale by 100 every turn until your Morale reaches 1,500 points.
+TE4402	D	Invention of the Locomotive	1784	technology																	OO	C	Each turn, you can transport one Army or Character between two continents connected by land.
+WA4401	D	Gladiatrix	200 AD	character	warrior						500	300									2	H	She will challenge any one of your opponent's Characters; the highest Attack wins. Loser is discarded.
+AC4301	C	Florence Nightingale	1820-1910	character	activist						40	60									1	I	When played, she will bring back one Character from the discard pile.
+AC4302	C	Isabella Baumfree	1797-1883	character	activist						20	20									OO	C	With Sojourner Truth, your Morale will never fall below 500.
+AR4301	C	Chinese Warriors	960–1279	army							3000	3000									1	H	If you win an attack, you can restore one card from your discard pile to your hand.
+AR4302	C	Samurai Warriors	8-9th Century	army							3000	2500									OO	C	Every time you win a battle using the Samurai Warriors, you increase your Morale by 100 points.
+AR4303	C	Tuskegee Airmen	1940 - 1952	army							3000	2000									OO	C	The Tuskegee Airmen give you an additional 300 Strength during your first attack of any turn.
+AR4304	C	The Persian Immortals	539-479 BC	army							4000	3000									OO	C	If in an Asian Land, the Persian Immortals increase your Strength by 500. 
+AI4301	C	Claude Monet	1840-1926	character	artist						20	20									OO	C	If your opponent's Morale is increased by any of his or her Artists, increase your Civilization's Morale by the same number.
+SY4301	C	James Armistead	1760-1830	character	spy						80	80							INTERRUPT		1	H	INTERRUPT: When any of your  Lands is under attack, play Armistead and win the first attacks.
+AT4301	C	Akashi Shiganosuke	1600 - 1649	character	athlete						40	30									1	I	Shiganosuke's achievements inspire your Civilization. Increase your Morale by 200.
+AU4301	C	Sir Walter Scott	1771-1832	character	author						40	40									1	I	He may enter your deck and pull out any non-Character card and play it immediately.
+AU4302	C	William Shakespeare	1564-1616	character	author						20	40									1	H	While in play, Shakespeare takes control of one of your opponent's Characters. Your opponent’s card may be  played in any Land.
+BU4301	C	Andrew Carnegie	1835-1919	character	businessman						160	120							CHOICE		1	H	CHOICE: Double or re-use the ability of any card in your active area.
+CO4301	C	Alexander the Great	356-323 BC	character	conqueror						1000	800									2	C	Your Land's Strength increases by 500 during his first two turns.
+CO4302	C	King Louis XIV	1638-1715	character	conqueror						800	700									1	H	Before his first battle, a Leader from the Land he is attacking is discarded.
+CO4303	C	Pharaoh Ramses II	1300s-1213 BC	character	conqueror						1000	900									OO	H	If your opponent gives you a Character, then you will not attack for the rest of that turn.
+CT4301	C	Argentina		land																	1	H	Increase both your Morale and Strength by 300 points if you discard a Character.
+CT4302	C	Egypt		land																	OO	C	While under any Pharaoh's leadership, increase your Strength by 500 points.
+CT4303	C	Philippines		land																	2	H	Any one US territory may combine Strength with this Land when defending against an opponent.
+CT4304	C	Scotland		land																	OO	C	Double any Viking Character or Army's Attack and Defense  when defending Scotland.
+CT4305	C	Thailand		land																	OO	C	No European Character cards may occupy this Land.
+CT4306	C	US West Coast		land																	1	I	If you have at least three US territories, increase Morale by 300 points.
+DO4301	C	Bill of Rights	December 15, 1791	document															INTERRUPT	CONSTANT	OO	C	INTERRUPT - ONCE: Increase your Morale by 200. CONSTANT: Increase your Civilization's Defense by 300.
+EC4301	C	David Ricardo	1772 - 1823	character	economist						100	60									1	I	David Ricardo increases your Morale by 200 points.  If Karl Marx is in play, that player loses 300 Morale.
+EN4301	C	Margaret Hughes	1645-1719	character	entertainer						20	20									1	I	Hughes gives strength to women. For every woman in your Civilization, increase your Morale by 100.  
+EV4301	C	Renaissance	14th to 17th Century	event																	1	I	Through enlightenment, increase your Morale by 400.
+EN4302	C	Salem Witch Trials	1692-1693	event																	1	I	Decrease every opponent's Morale by 200. 
+EV4303	C	Sinking of the Titanic	4489	event															INTERRUPT		1	I	INTERRUPT: Excluding Land, one of your opponent's cards in play, of your choice, must be discarded.
+EV4304	C	Vietnam War	1956-1975	event															INTERRUPT		2	H	INTERRUPT: Send any Army in play to defend any Land under attack. Transportation rules do not apply.
+EX4301	C	Amelia Earhart	1897-1937	character	explorer	air					100	200									OO	C	Increase your Defense by 400 when the Land she occupies is under attack by another Explorer. 
+EX4302	C	George Bass	1771-1803	character	explorer	sea					300	200									1	H	If you're about to lose a Land, Bass may discover a new Land, transport one Character with him, and is discarded afterwards.
+EX4303	C	John Cabot	1450-1499	character	explorer	sea					200	400									1	I	If Cabot discovers any Canadian Land, increase your Morale by 100. If he discovers an Asian Land, increase your Morale by 200.
+EX4304	C	Vasco Núñez de Balboa	1475-1519	character	explorer	land_sea					600	700									1	H	After two turns, Balboa may discover a second Land and must be discarded  immediately. 
+EX4305	C	Yuri Gagarin	1934 - 1968	character	explorer	space					100	100									1	I	If he discovers an Asian Land increase your Morale by 300.
+IN4301	C	Johannes Gutenberg	1395-1468	character	inventor						40	60									1	I	If the Printing Press is in play, increase your Morale by 400. If it is not yet in play, increase by 200.
+IN4302	C	Lewis Latimer	1848-1928	character	inventor																1	H	Latimer drafts a copy of one of your opponents’ Technologies. You gain the same effects as that card.
+KN3004	C	English Language	15th century 	knowledge																	2	H	Your vast knowledge of the English language allows you to look into any one player’s hand once per turn. 
+LE4301	C	James Madison	1751-1836	character	leader						400	500									1	I	Increase your Morale by 300. HOLD: When successful defending against a " British Empire" card, increase your Morale by 200.
+LE4302	C	King Ferdinand and Queen Isabella	1451-1516	character	leader						400	500									1	H	Your opponent must attack and win twice on the same turn to kill this card before any others. This card will remain yours until such time.
+LE4303	C	Queen Ahhotep I	1560-1530 BC	character	leader						200	400									1	I	Due to steady, wise leadership, increase your Morale by 200.
+LE4304	C	Theodore Roosevelt	1858-1919	character	leader																1	I	All Businessmen in play must be sent to the discard pile when Teddy is played.
+LO4301	C	Lost Among the Pharaohs	16th to 11th century BC	location																	1	I	You can play any one card from your discard pile.
+MU4301	C	Wolfgang Amadeus Mozart	1756-1791	character	musician						20	20									1	I	Increase your Morale by 200.  For one turn, no one can attack anywhere in Europe.
+OR4301	C	Central Intelligence Agency	15966	organization															INTERRUPT		1	I	INTERRUPT: You have 10 seconds to discard an opponent's card or this card will self-destruct to the discard pile. 10, 9, 8…
+OU4301	C	Lester Gillis	1908-1934	character	outlaw	mobster					700	200									1	I	Decrease your opponent's  Morale by 400.  Discard this card after two rounds.
+PH4301	C	Socrates	469-399 BC	character	philosopher						20	20									1	I	Increase your Morale by 300. 
+PO4301	C	Aaron Burr	1756 - 1836	character	politician							70									1	I	He will duel with any one Character of your choice. The Character with the largest Attack points win. Loser is discarded.
+SC4301	C	Charles Robert Darwin	1809-1882	character	scientist						20	60									1	I	When played, you discover a new Land from one of your opponents' Land piles.
+SP4301	C	Martin Luther	1483–1546	character	spiritual_leader						20	20									1	I	Increase your Morale by 400. If any Pope is in play, he must be discarded immediately.
+TE4301	C	Invention of the Automobile	1769	technology																CONSTANT	OO	C	ONCE: All Lands in your Civilization may attack twice. CONSTANT: Increase your Civilization’s Strength by 200.
+TE4302	C	Invention of the Printing Press	1041-1048	technology																	1	I	If Gutenberg is in play, increase your Morale by 400. If he is not yet in play increase by 200.
+WA4301	C	Peter Salem (Cover)	1750-1816	character	warrior						300	400									2	H	Your opponent must discard one Character when he attacks a Land Salem is defending.
+AC4201	B	Eleanor Roosevelt	1884 - 1962	character	activist						40	60									1	I	Eleanor gives strength to women. For every woman in your Civilization, increase your Morale by 100.
+AC4202	B	Jane Addams	1860-1935	character	activist						40	20							INTERRUPT		1	I	INTERRUPT: For this turn only, no Event card will affect your Civilization.
+AR4201	B	African Tribal Warriors	3000BC	army							2000	3000									OO	C	If defending a Land in Africa, increase Strength by 1000.
+AR4202	B	Tlingit Warriors	October 1804	army							2000	3000									1	H	If your Land was taken in battle, this Army reclaims it and all that opponent's  Characters and Armies are discarded.
+AR4203	B	Spanish Conquistadors	1479-1777	army							3000	2000									OO	C	When being led by a Spanish Leader, increase your Strength by 1000.
+AR4204	B	Spanish Armada	8 August 1588	army							2000	1000									OO	C	If the Spanish Armada is defending Spain, increase its Defense by 1000, but decrease its Attack by 500.
+AI4201	B	Michelangelo Buonarroti	1475-1564	character	artist						20	40									1	I	Increase your Morale by 300.
+AS4201	B	Grigori Yefimovich Rasputin	1869-1916	character	assassin						-300	-300		200							1	I	Place Rasputin in one of your opponent's Lands. He must be the last Character to be discarded from that Land. Lose 200 Morale. 
+AT4201	B	Eric Liddell	1902-1945	character	athlete						40	60									1	I	Eric Liddell's Olympic Gold inspires your Civilization. Increase your Morale by 200.
+AU4201	B	Samuel L Clemens	1835-1910	character	author						20	20							INTERRUPT		1	I	INTERRUPT: Reverse any Event card your opponent plays on you. Your opponent feels the effects.
+AU4202	B	Satomura Joha	1510–1552	character	author						0	0									OO	C	Joha doubles the Strength of one of your Characters occupying the same Land. If that Character dies, Joha trains another.
+BU4201	B	George Westinghouse	1846-1914	character	businessman						100	80									1	H	Westinghouse confiscates any one of your opponents' Technology cards and gains its abilities without the original owner losing that card's gained Morale.
+C04201	B	Attila the Hun	Ruled: 434–453	character	conqueror						800	700									OO	C	For your first attack, double your Lands’ combined Strength.
+CO4202	B	Gaius Julius Caesar	100 BC – 44 BC	character	conqueror						1000	900									2	H	Any Army card occupying the same Land as Caesar will kill a Leader in the defending Land before the attack.
+CO4203	B	Napoleon Bonaparte	1769-1821	character	conqueror						700	600									1	H	If you win your first attack, you can take a card of your choice from your opponent's hand. 
+CT4201	B	Iceland		land																	OO	C	The attacking Land must have an Explorer, Pirate, or Shipbuilding Technology card to attack. Increase Defense by 500.
+CT4202	B	Indonesia		land																	OO	C	Due to being on an island, increase your Defense by 1,000.
+CT4203	B	Japan		land																	1	I	You gain the use of any Technology cards in play.
+CT4204	B	Libya		land																	OO	H	If you have an Islamic Spiritual Leader or an Ottoman Leader in this Land, increase your Strength and Morale by 500.
+CT4205	B	Canadian Province of Quebec		land																	OO	C	If Quebec is led by a French leader, increase your Strength by 500.
+CT4206	B	Venezuela		land																CONSTANT	OO	C	If Christopher Columbus is in this Land—ONCE: Increase your Morale by 300. CONSTANT: Increase your Strength by 500. 
+DC4201	B	Torah	600 BC	document																	OO	C	The enlightenment you gain from the Torah gives your Civilization 400 Morale points.
+EN4201	B	Buffalo Bill Cody	1846-1917	character	entertainer						80	60									1	I	Increase your Morale by 200. For each additional Wild West or Native American Character in your Civilization, increase your Morale by 100.
+EC4201	B	Pythagoras of Samos	570 -495 BC	character	mathematician																1	H	Pythagoras allows you to use the effects of one opponent's Technology card.
+EV4201	B	Cold War	1947-1991	event																	OO	C	You may look at one opponent’s hand per turn for the next five turns.
+EV4202	B	The Crusades	1095-1303	event																	OO	C	If you have a Spiritual Leader in your Civilization when you play this card, increase his or her Attack and Defense by 1600 points.
+EV4203	B	Donner Party	1846–1847	event																	1	I	An opponent of your choice may not attack for two turns and loses 300 Morale.
+EV4204	B	Hundred Years War	1337 -1453	event															INTERRUPT		1	I	INTERRUPT: One of your opponent’s Character or Army cards loses all its Abilities, Attack, and Defense for one turn.
+EX4201	B	Captain Robert Scott	1868-1912	character	explorer	land_sea					300	100									1	I	When played, discover a new Land and bring one active Character to this Land with him. He must be discarded after two turns.
+EX4202	B	Ernest Shackleton	1874-1922	character	explorer	land_sea					200	200							INTERRUPT		1	H	INTERRUPT: If you're about to lose a Land, move one Character and Shackleton to any other Land.  Increase Morale by 300.
+EX4203	B	Ferdinand Magellan	1480-1521	character	explorer	sea					300	100									1	I	One opponent of your choice must discard an Explorer. Magellan can only discover or occupy a coastal Land.
+EX4204	B	Leif Ericson	970-1020 AD	character	explorer	sea					500	200									OO	C	Transport any two Character and/or Army cards to battle any Land in play. 
+EX4205	B	Mansa Musa	1280s-1337	character	explorer	land					800	600									1	I	If Musa occupies an African Land, increase your Morale and Strength by 200 points.
+IN4201	B	Alexander Graham Bell	1847-1922	character	inventor						60	40									1	I	Increase your Morale by 300 points.
+IN4202	B	Thomas Crapper	1836-1910	character	inventor						60	40									1	I	Due to your people’s immense relief, increase your Morale by 300 points. 
+KN4201	B	Calculus	225 BC	knowledge																	1	I	Increase your Morale by 300 points.
+LE4201	B	Juliette Gordon Low	1860-1927	character	leader						100	100								CONSTANT	OO	C	ONCE: Increase your Morale by 100. CONSTANT: Double the Strength of all female Leader cards in your Civilization. 
+LE4202	B	Miyamoto Musashi	1584-1645	character	leader						500	500									OO	C	Miyamoto teaches the Characters in his Land to fight. Increase each Character's Attack by 200.
+LE4203	B	Pancho Villa	1878-1923	character	leader						400	500								CONSTANT	OO	C	When fighting against a Land with a Conqueror—ONCE: Increase your Morale by 200. CONSTANT: Increase Strength by 500.
+LE4204	B	Sitting Bull	1831-1890	character	leader						400	500									2	H	For two turns, Sitting Bull can unite two Army cards on the same continent in order to fight together.
+LO3005	B	Great Wall of China	206 BC	location															INTERRUPT		2	I	INTERRUPT: With the Great Wall, no one may attack one of your Lands for two rounds.
+MU2001	B	Ludwig van Beethoven	1770-1827	character	musician						20	20									1	I	Increase your Morale by 300.
+OR3002	B	National Security Agency	17840	organization																	1	H	The NSA allows you to copy all Technology cards held by one of your opponents.
+OU3003	B	Ernesto Che Guevara	1928 - 1967	character	outlaw	rebel					400	200		300							1	H	ONCE: With Che Guevara, if you win two attacks against your opponent's Land, you take the Land but lose 300 Morale.
+PH3001	B	Aristotle	384-322 BC	character	philosopher						20	20									OO	C	Double the Ability of any Spiritual Leader in your Civilization. Increase your Morale by 200.
+PO3002	B	Wentworth Cheswell	1746-1817	character	politician						300	300							INTERRUPT		OO	C	INTERRUPT: Because you have fair warning, increase your Land's Defense by 500 points.
+SC3005	B	Galileo Galilei	1564-1642	character	scientist						60	80							INTERRUPT		OO	H	INTERRUPT:  Your Civilization is safe from the effects of any opponent's Event while Galileo is active in your Civilization.
+SP3004	B	Mohandas Gandhi	1869-1948	character	spiritual_leader						0	0									OO	C	The Land Gandhi occupies can neither attack nor be attacked.
+TE3008	B	Invention of Penicillin Meds	15414	technology																	1	I	When this card is played, you may bring one Character back from your discard pile.
+TE3005	B	Invention of the Atomic Bomb	1939	technology																	1	I	The Atomic Bomb renders one of your opponent's Land unusable for 3 turns and all Characters in that Land  must be discarded.
+WA3004	B	Trung Sisters	12 –  43 AD	character	warrior						500	400									OO	C	If fighting in Asia, increase your Strength by 500. 
+AC4101	A	Frederick Douglass	1818-1895	character	activist						60	100									OO	C	Douglass inspires all your black Characters. For every black Character in your Civilization, increase his Land's Defense by 200.
+AC4102	A	Susan B. Anthony	1820-1906	character	activist						40	60									1	I	Anthony adds strength to female Characters. For every woman in your Civilization, increase your Morale by 200.
+AR4101	A	English Army	1066 - 1604	army							3000	3000									OO	C	The English Army increases his Land’s Strength by 300 if it fights  on behalf of the United Kingdom or an English Leader.
+AR4102	A	Mongolian Army (Cover)	1206BC - 1368AD	army							4000	1000									1	H	The Mongolian Army wins its  first attack on any Land, beating any other card with the same type of ability.
+AR4103	A	Steel Workers	June 30, 1892	army							1500	1500							CHOICE		OO	C	CHOICE: With every battle you win, increase this card's Attack or Defense by 500.
+AR4104	A	Viet Minh Guerrillas	1941-1975	army							2000	3000									OO	C	If the Viet Minh fight in Asia, increase this card's Attack Strength by 1,000.
+AI4101	A	Leonardo da Vinci	1452 - 1519	character	artist						80	80									OO	C	You may use all your opponents’ Technology cards until Leonardo is discarded.
+SY4101	A	Mary Elizabeth Bowser	1839-1865	character	spy																OO	C	Bowser allows you to look at one opponents' hand per turn. Through reconnaissance,   increase your Land’s Strength by 400.
+AT4101	A	Jesse Owens	1895-1948	character	athlete																1	I	Jesse Owens' inspires your people. Increase your Morale by 200.
+AU4101	A	C.S. Lewis	1898 - 1963	character	author						200	100									1	I	Increase your Morale by 200. For each Christian Leader in your Civilization, increase your Morale by an additional 100.
+AU4102	A	Homer	8th century BC	character	author						100	100							INTERRUPT		1	I	INTERRUPT: Sneak into one of your opponents’ Lands  and kill any one Character card with 100 or fewer Attack.
+BU4101	A	Madam CJ Walker	1867-1919	character	businessman						40	60									OO	C	Madam Walker's products are uplifting. For every black woman played, until Walker is discarded , increase your Morale by 100.
+CO4101	A	Charlemagne	742 - 814	character	conqueror	catholic					800	800							CHOICE		OO	C	CHOICE: If battling in Europe, your Attack OR Defense increases by an additional 500.
+CO4102	A	Eric Bloodaxe	885 - 954	character	conqueror						800	700									OO	C	During every attack, your opponent's Defense decreases by 500 until the end of that round.
+CO4103	A	Timur the Lame'	1336-1405	character	conqueror						1500	1000									OO	C	When Timur attacks in Asia or Africa, add an additional 1,000 Attack.
+CT4101	A	Alaska		land																	OO	C	With any Native American Army in Alaska, increase your Strength by 1,000.
+CT4102	A	Colombia		land																	OO	C	
+CT4103	A	Democratic Republic of the Congo		land																	OO	C	When a rebel Army sets up camp in Congo, add 500 Strength.
+CT4104	A	Germany		land																	OO	C	Your Land's Strength increases by 500 unless a World War card is played in battle.
+CT4105	A	Saudi Arabia		land																	1	C	If an Asian, European, or African Land is threatened with imminent takeover, all Character and Army cards may be moved to this Land. Land rules apply.
+CT4106	A	Tonga		land																	1	I	Enjoying the beauty of the islands increases your Morale by 300 points.
+DO4101	A	U.S. Constitution	September 17, 1787	document																	OO	C	Increase your Morale by 400 when played. Increase your Civilization's Defense by 300.
+EC4101	A	Adam Smith	1723-1790	character	economist						70	10									1	I	You can exchange any one card from your opponent's hand with a card in your own. Both parties must agree on the exchange.
+EN4101	A	Charlie Chaplin	1889 - 1977	character	entertainer						80	40									OO	C	Increase your Morale by 100 every turn until Chaplin is discarded or until your Morale reaches 1,500 points.
+EV4101	A	Dark Ages	5th to 10th Centuries	event															CHOICE		1	I	CHOICE: One opponent must discard all Knowledge and Technology cards in play.
+EV4102	A	Gold Rush	1848 - 1905	event																	1	I	Add a new Land to your civilization.
+EV4103	A	American Slavery	8000 BC	event																	1	I	Abolish slavery, increase Morale by 300.
+EV4104	A	The Great Depression	10840	event															CHOICE		1	I	CHOICE: One of your opponents’ Morale decreases by 500. 
+EX4101	A	Aud the Deep-Minded	834-900 AD	character	explorer	sea					100	200									1	H	When imminent defeat is foretold, Aud transports all cards defending her Land to another Land in your Civilization. Land rules still apply.
+EX4102	A	Danish King Godfred	Ruled: 804-810	character	explorer	sea					1000	1200							INTERRUPT		OO	C	INTERRUPT, EXCHANGE: Offer to defend an opponent's Land for one turn, in exchange for a card from that player’s hand.
+EX4103	A	Erik Thorvaldsson	950-1003 AD	character	explorer	sea					500	200									1	H	If he is the last Character defending a Land, he may escape and discover a second Land.
+EX4104	A	Francisco Pizarro	1471-1541	character	explorer	sea					300	100									OO	C	When attacking  a South American Land or attacking with the Spanish Conquistadors increase his Strength by 500.
+EX4105	A	Lewis and Clark	1804-1806	character	explorer	land					80	100									1	H	After this card is played, if a Native American card is placed in your Civilization immediately discover a new Land.
+SC4101	A	Benjamin Banneker	1731-1806	character	scientist								100								1	I	For every American Revolution or Industrial Revolution card in play gain 100 Morale.
+IN4101	A	Nikola Tesla	1856-1943	character	inventor						80	100									1	H	Choose any Technology Card in play and gain double its abilities without confiscation.
+KN2005	A	Physics	3000 BC	knowledge															INTERRUPT		1	I	INTERRUPT: Reverse any Event card played against you.
+LE4101	A	Abraham Lincoln	1809-1865	character	leader						400	500									1	H	Increase your Morale by 300. When he wins his first Attack, one of your opponent’s Characters will unite with the attacking Land.
+LE4102	A	David Crockett	1786-1836	character	leader						400	700									OO	C	Each round: If an opponent attacks a Land Crockett is defending, you win the first battle. 
+LE4103	A	Geronimo	1829 - 1909	character	leader						700	500							INTERRUPT		1	I	INTERRUPT: He sneaks into your opponent's Hand and kills one Character card before it is played.
+LE4104	A	Khutulun	1260-1306	character	leader						500	400									2	H	She will challenge any one of your opponent's Characters; the highest Attack wins. Loser is discarded.
+LO4101	A	Berlin Wall	32821	location																	1	I	All duplicate Lands must be discarded. Move displaced cards to another Land on the same Continent or discard them. Land rules apply.
+MU4101	A	John Philip Sousa	1854-1932	character	musician						20	60									1	I	Increase your Morale by 200.
+OR4101	A	Internal Revenue Service	July 1, 1862	organization																	1	I	Place a tax over your opponent's people and lower their Morale by 300 points.
+PI4101	A	Anne Bonny	1698-1782	Outlaws_Pirates							300	150									1	I	Through frequent pillaging, decrease Morale of all your opponents by 300. 
+PH4101	A	Epicurus	341-270 BC	character	philosopher						20	20									1	H	Epicurus forces one opponent to discard one Spiritual Leader.
+PO4101	A	Hiram Rhodes Revels	1827-1901	character	politician						100	120									1	I	Revels gives strength to black characters. For every black Character in your Civilization, increase your Morale by 100.
+SC4102	A	Benjamin Franklin	1706 - 1790	character	scientist						80	60									1	H	Take one Technology or Knowledge card from each of your opponents.
+SP4101	A	John Calvin	1509 - 1564	character	spiritual_leader						20	20									1	I	Increase your Morale by 400 points.
+TE3012	A	Invention of the Personal Computer	1965	technology																CONSTANT	OO	C	ONCE: Increase your Morale by 300. CONSTANT: Increase Strength for your Civilization by 300 while this card is in play.
+TE4102	A	Invention of the Tennis Shoe	1830's	technology																CONSTANT	OO	C	ONCE: Increase your Morale by 200. CONSTANT: Increase Strength for your Civilization by 200 while this card is in play.
+WA4101	A	Prince Estabrook	1741-???	character	warrior																OO	I	When you play Estabrook, you may search your Deck for any one black Character or Army card and play it immediately.

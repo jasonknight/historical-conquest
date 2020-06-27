@@ -7,35 +7,8 @@
         <link rel="stylesheet" href="/wp-content/plugins/historical-conquest/assets/style.css" />
         <script type="text/javascript" src="/wp-content/plugins/historical-conquest/assets/game.js"></script>
         <script type="text/javascript">
-            window.board = {
-                "players": [
-                    {
-                        "name": "Player1",
-                        "id": 1,
-                        "hand": [
-                            {
-                                id: 1,
-                            },
-                            {
-                                id: 2,
-                            },
-                            {
-                                id: 3,
-                            },
-                            {
-                                id: 4,
-                            },
-                            {
-                                id: 5,
-                            }, 
-                        ],
-                    },
-                    {
-                        "name": "Player2",
-                        "id": 2,
-                    }, 
-                ],
-            };
+            window.board = <?php $asset('test-board.json');?>;
+            window.carddb = <?php $asset('card-db.json'); ?>;
         </script>
     </head>
     <body>

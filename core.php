@@ -49,15 +49,21 @@ function find_template($template_name) {
     $wp_theme_root    = \get_theme_root( $wp_template );
     $stylesheet_dir   = \get_stylesheet_directory();
     // So in the theme it should be like theme-folder/templates/plugin-name/temaplate.php
+    $test_path_raw = $stylesheet_dir . '/' . basename(dirname(__FILE__)) . "/" . $template_name;
+    if ( file_exists( $test_path_raw ) )
+        return $test_path_raw;
     $test_path = $stylesheet_dir . '/templates/' . basename(dirname(__FILE__)) . "/" . $template_name;
     if ( file_exists( $test_path ) ) {
         return $test_path;
     } else {
+        $test_path = __DIR__ . '/' . $template_name;
+        if ( file_exists($test_path) ) 
+            return $test_path;
         $test_path = __DIR__ . '/templates/' . $template_name;
         if ( file_exists($test_path) ) {
             return $test_path;
         } else {
-            throw new Exception( __('Core Template was not found: ') . ' ' . $template_name );
+            throw new \Exception( __('Core Template was not found: ') . ' ' . $template_name . " in " . join(',',[$test_path_raw,$test_path]) );
         }
     }
 }
@@ -72,14 +78,17 @@ function render_template($template_name, $vars_in_scope = array()) {
             $$n = $v;
         }
         $render = function ($file,$vars=[]) {
-            echo render_template($file,$vars);
+            echo render_template("assets/$file",$vars);
+        };
+        $asset = function ($file,$vars=[]) {
+            echo render_template("assets/$file",$vars);
         };
         include $template_path;
         $content = ob_get_contents();
         ob_end_clean();
-    } catch ( Exception $err) {
+    } catch ( \Exception $err) {
       ob_end_clean();
-      throw new Exception( 
+      throw new \Exception( 
           __(
               'Error while rendering template ' . $template_name . ' -- ' . $err->getMessage(), 
               settings()->prefix 

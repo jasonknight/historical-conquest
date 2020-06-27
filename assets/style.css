@@ -50,6 +50,24 @@ div.card {
     margin-left: auto;
     margin-right: auto;
 }
+div.card-type-land {
+    background-color: lawngreen;
+}
+div.card-type-character {
+    background-color: orange;
+}
+div.card-type-explorer {
+    background-color: lightcyan;
+}
+div.card-type-army {
+    background-color: darkkhaki;
+}
+div.card-type-vessel {
+    background-color: darkcyan;
+}
+div.card-type-knowledge {
+    background-color: gainsboro;
+}
 div.card table {
     width: 100%;
     height: 100%;

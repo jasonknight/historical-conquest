@@ -98,8 +98,13 @@
         d.append(clone);
         return d;
     }
-    function get_card(c) {
+    function get_card(id) {
         let card = $($('div.card-template').html()) ;
+        let card_def = window.carddb[id];
+        if ( card_def ) {
+            card.find('.name-plate').html(card_def.name);
+            card.addClass('card-type-' + card_def.type);
+        }
         card.css({
             "width": get_card_column_width() + 'px',
             "height": get_card_column_height() + 'px',
@@ -142,7 +147,7 @@
         rows_cols[rl-2][cl-1] = land_pile;
         rows_cols[rl-2][cl-2] = draw_pile;
         rows_cols[rl-3][cl-1] = discard_pile;
-        let tcard = get_card();
+        let tcard = get_card("AR4304");
         render_card(rows_cols,tcard,1,1);
         let table = $('<table></table>');
             table.addClass('grid');
@@ -184,6 +189,25 @@
             d.hide();
         });
     }
+    function process_player(player) {
+        let draw_pile = [];
+        let land_pile = [];
+        for ( let i = 0; i < player.draw_pile.length; i++ ) {
+            let id = player.draw_pile[i];
+            let card_def = window.carddb[id];
+            if ( card_def.type == 'land' ) {
+                land_pile.push(id);
+            } else {
+                draw_pile.push(id);
+            }
+        }
+        player.draw_pile = draw_pile;
+        player.land_pile = land_pile;
+        while (player.hand.length < 5) {
+            player.hand.push(player.draw_pile.pop());
+        }
+        return player;
+    }
     $(function () {
         panels.main = $('div.main');
         panels.tab_panel = $('div.tab-panel');
@@ -192,6 +216,8 @@
         panels.data.grid_height = get_grid_column_height();
         $.each(window.board.players, function () {
             this.playmat = get_base_table();
+            process_player(this);
+            console.log('player',this);
         });
         render_players(window.board.players);
         $('#player_1_tab_button').trigger($.Event('click'));
