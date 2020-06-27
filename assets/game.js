@@ -307,6 +307,7 @@
         card.on('click',function () {
             $('div.card-zoom-holder').remove();
             $('.card-controls').remove();
+            unhighlight_playable_squares();
             let cont = get_card_zoom_holder($(this),true);
         });
         return card;
