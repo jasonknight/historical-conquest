@@ -124,3 +124,26 @@ td.playmat-column.highlight-square {
 div.tab {
     display: none;
 }
+div.button {
+    border-radius: 5px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+    background-color: blue;
+    color: white;
+    display: block;
+    float: left;
+}
+div.transport-holder {
+    display: block;
+    float: left;
+    padding: 5px;
+    margin-right: 5px;
+}
+p.land-owner-tag {
+    margin: 1px;
+    font-size: 10px;
+    background-color: blue;
+    color: white;
+}
