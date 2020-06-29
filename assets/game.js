@@ -185,6 +185,14 @@
                 convert_to_transport_widget(d,src,clone);
             });
             button_row.append(transport);
+        } else {
+            console.log(
+                "no transport",
+                src.attr('card-id'),
+                src.hasClass('card-type-explorer'),
+                get_current_player().hand.indexOf(src.attr('card-id')) == -1,
+                get_transportable(src)
+            );
         }
         $('body').append(button_row);
         button_row.css({
@@ -202,7 +210,7 @@
             if ( cid == 0 )
                 continue;
             let cdef = window.carddb[cid];
-            if ( ['character','army'].indexOf(cdef.type) != -1 && cdef.id != src.attr('card-id') ) {
+            if ( cdef && ['character','army'].indexOf(cdef.type) != -1 && cdef.id != src.attr('card-id') ) {
                 transportable.push(cid);
             }
         }
@@ -244,7 +252,7 @@
             holder.on('click',function () {
                 let destinations = get_transport_destinations();
                 let p = get_current_player();
-                if ( !contains_army(transportable) ) {
+                if ( !contains_card_type(transportable,'army') ) {
                     let new_dests = [];
                     for ( let i = 0; i < destinations.length; i++ ) {
                         if ( destinations[i].player.id != p.id ) 
@@ -282,10 +290,18 @@
             });
         }
     }
-    function contains_army(lst) {
+    function contains_card_type(lst,t,s1) {
         for ( let i = 0; i < lst.length; i++ ) {
-            if ( window.carddb[lst[i]] && window.carddb[lst[i]].type == 'army' )
-                return true;
+            if ( t && s1 ) {
+                if ( window.carddb[lst[i]] && window.carddb[lst[i]].type == t && window.carddb[lst[i]].subtype1 == s1 )
+                    return true;
+            } else if (t) {
+                if ( window.carddb[lst[i]] && window.carddb[lst[i]].type == t )
+                    return true;
+            } else if (s1) {
+                if ( window.carddb[lst[i]] && window.carddb[lst[i]].subtype1 == s1 )
+                    return true;
+            }
         }
         return false;
     }
