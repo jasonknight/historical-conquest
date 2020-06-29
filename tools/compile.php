@@ -189,6 +189,12 @@ function get_html_entries() {
             $e['Type'] = 'character';
             $e['SubType1'] = 'outlaw';
         }
+        if ( $e['Type'] == 'Outlaws_Pirates' ) {
+            $e['Type'] = 'character';
+            $e['SubType1'] = 'outlaw';
+            $e['SubType2'] = 'pirate';
+        }
+        
         $keys = ['ID','Deck','Name','Year','Type','SubType1','SubType2','Attack Strength','Defense Strength','Summaries'];
         foreach ( ['morale','strength','defense'] as $d ) {
             $keys[] = "{$d}_add";
@@ -204,6 +210,10 @@ function get_html_entries() {
             $nkey = str_replace(' ','_',strtolower($key));
             $new_e[$nkey] = $e[$key];
         }
+        if ( $e['ID'] == 'PI4101' ) {
+            //print_r($new_e);
+            //exit;
+        }
         return $new_e;
     },$entries);
     return $entries;
@@ -215,11 +225,17 @@ function get_summaries($entries) {
     }
     return $new_entries;
 }
-$entries  = get_summaries(get_html_entries()); 
+$html_entries = get_html_entries();
+$cds = [];
+foreach ( $html_entries as $e ) {
+    $cds[$e['id']] = $e;
+}
+
+$entries  = get_summaries($html_entries); 
 $lines = file(__DIR__ . '/master_list.tsv');
 $hline = array_shift($lines);
 $hline = explode("\t",trim($hline));
-$cards = array_map(function ($l) use ($hline,$entries) {
+$cards = array_map(function ($l) use ($hline,$entries,$cds) {
     $parts = explode("\t",trim($l)); 
     $card = new stdClass;
     for ( $i = 0; $i < count($hline); $i++ ) {
@@ -227,6 +243,9 @@ $cards = array_map(function ($l) use ($hline,$entries) {
        $card->{$key} = $parts[$i]; 
     } 
     $card->summary = $entries[$card->id];
+    $card->type = $cds[$card->id]['type'];
+    $card->subtype1 = $cds[$card->id]['subtype1'];
+    $card->subtype2 = $cds[$card->id]['subtype2'];
     return $card;
 },$lines);
 $final_cards = [];
