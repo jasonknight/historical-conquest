@@ -5,10 +5,11 @@
   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
   crossorigin="anonymous"></script>
         <link rel="stylesheet" href="/wp-content/plugins/historical-conquest/assets/style.css" />
-        <script type="text/javascript" src="/wp-content/plugins/historical-conquest/assets/game.js"></script>
         <script type="text/javascript">
             window.board = <?php echo include(dirname(__DIR__) . '/tools/generate_player.php');?>;
             window.carddb = <?php $asset('card-db.json'); ?>;
+             
+            <?php $asset('game.js'); ?>
         </script>
     </head>
     <body>

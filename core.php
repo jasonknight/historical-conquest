@@ -83,7 +83,14 @@ function render_template($template_name, $vars_in_scope = array()) {
         $asset = function ($file,$vars=[]) {
             echo render_template("assets/$file",$vars);
         };
-        include $template_path;
+        if ( end(explode('.',$template_path)) != 'php') {
+            $np = $template_path . ".php";
+            file_put_contents($np,file_get_contents($template_path));
+            include $np;
+            unlink($np);
+        } else {
+            include $template_path;
+        }
         $content = ob_get_contents();
         ob_end_clean();
     } catch ( \Exception $err) {
