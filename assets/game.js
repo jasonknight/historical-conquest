@@ -5,6 +5,7 @@
         panels.data.card_height = 0.85
     let current_move = 0;
     <?php $asset('explorer.js'); ?>
+    <?php $asset('land_card.js'); ?>
     
     <?php $asset('helper.js'); ?> 
     function unhighlight_playable_squares() { 
@@ -40,6 +41,7 @@
     }
 
     function get_card_zoom_holder(src,and_append) {
+        $('body').trigger($.Event('close_zoom_holder'));
         let d = _div(null,'card-zoom-holder');
         if ( and_append ) {
             $('body').append(d);
@@ -85,8 +87,8 @@
         });
         clone.on('click',function() {
             d.remove();
-            $('.card-controls').remove();
-            unhighlight_playable_squares();
+            $('body').trigger($.Event('close_zoom_holder'));
+            
         });
         clone.find('.history-plate').html(get_card_summary(src.attr('card-id')));
         clone.find('.ability-plate').html(get_card_abilities(src.attr('card-id')));
@@ -109,8 +111,9 @@
         return d;
     }
     function add_card_controls(d,src,clone) {
-        let button_row = _div('card_controls','card-controls');
+        let button_row = _div('card_controls','card-controls zoom-holder-child');
         maybe_add_explorer_controls(d,src,clone,button_row); 
+        maybe_add_str_def_display(d,src,clone);
         $('body').append(button_row);
         button_row.css({
             position: 'absolute',
@@ -351,5 +354,9 @@
         });
         $('body').trigger($.Event('refresh_board'));
         $('#player_1_tab_button').trigger($.Event('click'));
+        $('body').on('close_zoom_holder',function () {
+            $('.zoom-holder-child').remove();
+            unhighlight_playable_squares();
+        });
     });
 })(jQuery);

@@ -106,3 +106,9 @@ function get_card_attack_defense(id) {
     }
     return '';
 }
+function is_land_row_card(el) {
+   let td = el.parent();
+    if ( parseInt(td.attr('y')) == get_current_player().playmat.length - 2 ) 
+        return true;
+    return false;
+}

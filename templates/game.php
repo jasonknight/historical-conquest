@@ -11,7 +11,8 @@
             window.card_layer = 1;
             window.overlay_layer = 2;
             window.popup_layer = 3; 
-            window.alert_layer = 4;
+            window.popup_layer2 = 4; 
+            window.alert_layer = 5;
             <?php $asset('game.js'); ?>
         </script>
     </head>

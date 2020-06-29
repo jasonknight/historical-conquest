@@ -49,7 +49,14 @@ div.card {
     margin-right: auto;
     cursor: pointer;
 }
-
+div.defense-display {
+    background-color: lawngreen;
+    min-width: 100px;
+    min-height: 1em;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
 div.card td {
     overflow: hidden;
     vertical-align: top;
