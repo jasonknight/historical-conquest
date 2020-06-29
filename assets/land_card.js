@@ -16,7 +16,6 @@ function get_column_defense_amount(mat,col) {
 }
 function maybe_add_str_def_display(d,src,clone) {
     if ( is_land_row_card(src) ) {
-        console.log("should show str/def");
         let def_div = _div('def_display');
         let id = src.attr('card-id');
         let def_amount = 0;
@@ -27,13 +26,11 @@ function maybe_add_str_def_display(d,src,clone) {
         $('body').append(def_div);
         def_div.addClass('defense-display');
         def_div.addClass('zoom-holder-child');
-        console.log('def_div.width',def_div.width());
         def_div.css({
             position: 'absolute',
             left: (d.offset().left + d.width()) - 100,
             top: d.offset().top - def_div.height(),
             'z-index': window.popup_layer,
         });
-        console.log(def_div);
     }
 }

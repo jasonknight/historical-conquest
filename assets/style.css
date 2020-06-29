@@ -147,6 +147,7 @@ div.button {
     color: white;
     display: block;
     float: left;
+    margin-right: 5px;
 }
 div.transport-holder {
     display: block;
