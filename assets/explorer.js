@@ -87,3 +87,26 @@ function convert_to_destination_widget(d,src,clone,origin_holder,destinations) {
         });
     }
 }
+function maybe_add_explorer_controls(d,src,clone,button_row) {
+    if ( 
+                src.hasClass('card-type-explorer') && 
+                get_current_player().hand.indexOf(src.attr('card-id')) == -1 && 
+                get_transportable(src).length != 0
+    ) {
+       let transport = _div(null,'button transport-button'); 
+        transport.html('Transport');
+        transport.on('click',function () {
+            convert_to_transport_widget(d,src,clone);
+        });
+        button_row.append(transport);
+    } else {
+        console.log(
+            "no transport",
+            src.attr('card-id'),
+            src.hasClass('card-type-explorer'),
+            get_current_player().hand.indexOf(src.attr('card-id')) == -1,
+            get_transportable(src)
+        );
+    }
+    return button_row;
+}

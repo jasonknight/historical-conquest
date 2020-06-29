@@ -49,8 +49,14 @@ div.card {
     margin-right: auto;
     cursor: pointer;
 }
+
 div.card td {
     overflow: hidden;
+    vertical-align: top;
+    padding: 0px;
+}
+div.card p {
+    margin: 0px;
 }
 div.card-type-land {
     background-color: lawngreen;

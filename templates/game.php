@@ -8,7 +8,10 @@
         <script type="text/javascript">
             window.board = <?php echo include(dirname(__DIR__) . '/tools/generate_player.php');?>;
             window.carddb = <?php $asset('card-db.json'); ?>;
-             
+            window.card_layer = 1;
+            window.overlay_layer = 2;
+            window.popup_layer = 3; 
+            window.alert_layer = 4;
             <?php $asset('game.js'); ?>
         </script>
     </head>
