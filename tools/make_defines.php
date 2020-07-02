@@ -24,6 +24,9 @@ $iota = array_to_defines($s->apply_to_scope_types,$iota,'SCOPE_');
 $iota = array_to_defines($s->apply_to_types,$iota,'APPLY_');
 $iota = array_to_defines($s->usage_types,$iota,'USAGE_');
 $iota = array_to_defines($s->ability_types,$iota,'ABILITY_');
+$iota = array_to_defines($s->card_religions,$iota,'RELIGION_');
+$iota = array_to_defines($s->card_continents,$iota,'CONTINENT_');
+$iota = array_to_defines($s->card_climates,$iota,'CLIMATE_');
 $defs_by_prefix = [];
 foreach ( $defs as $def ) {
     preg_match("/^([A-Z]+)_/",$def,$m);

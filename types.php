@@ -56,6 +56,29 @@ define('USAGE_CONSTANT',52);
 define('ABILITY_INTERRUPT',53);
 define('ABILITY_CHOICE',54);
 define('ABILITY_MULTI',55);
+define('RELIGION_CHRISTIAN',56);
+define('RELIGION_CATHOLIC',57);
+define('RELIGION_ORTHODOX_CHRISTIAN',58);
+define('RELIGION_PROTESTANT',59);
+define('RELIGION_MUSLIM',60);
+define('RELIGION_MUSLIM_SHIITE',61);
+define('RELIGION_MUSLIM_SUNNI',62);
+define('RELIGION_BUDDHIST',63);
+define('RELIGION_HINDU',64);
+define('RELIGION_ATHEIST',65);
+define('RELIGION_JEWISH',66);
+define('CONTINENT_NORTH_AMERICA',67);
+define('CONTINENT_ASIA',68);
+define('CONTINENT_EUROPE',69);
+define('CONTINENT_AFRICA',70);
+define('CONTINENT_SOUTH_AMERICA',71);
+define('CONTINENT_ANTARCTICA',72);
+define('CONTINENT_AUSTRALIA',73);
+define('CLIMATE_TROPICAL',74);
+define('CLIMATE_DRY',75);
+define('CLIMATE_TEMPERATE',76);
+define('CLIMATE_CONTINENTAL',77);
+define('CLIMATE_POLAR',78);
 function type_to_name($val) { 
 	 if ( $val == CARD_LAND ) { return 'CARD_LAND'; }
 	 if ( $val == CARD_CHARACTER_ACTIVIST ) { return 'CARD_CHARACTER_ACTIVIST'; }
@@ -113,6 +136,29 @@ function type_to_name($val) {
 	 if ( $val == ABILITY_INTERRUPT ) { return 'ABILITY_INTERRUPT'; }
 	 if ( $val == ABILITY_CHOICE ) { return 'ABILITY_CHOICE'; }
 	 if ( $val == ABILITY_MULTI ) { return 'ABILITY_MULTI'; }
+	 if ( $val == RELIGION_CHRISTIAN ) { return 'RELIGION_CHRISTIAN'; }
+	 if ( $val == RELIGION_CATHOLIC ) { return 'RELIGION_CATHOLIC'; }
+	 if ( $val == RELIGION_ORTHODOX_CHRISTIAN ) { return 'RELIGION_ORTHODOX_CHRISTIAN'; }
+	 if ( $val == RELIGION_PROTESTANT ) { return 'RELIGION_PROTESTANT'; }
+	 if ( $val == RELIGION_MUSLIM ) { return 'RELIGION_MUSLIM'; }
+	 if ( $val == RELIGION_MUSLIM_SHIITE ) { return 'RELIGION_MUSLIM_SHIITE'; }
+	 if ( $val == RELIGION_MUSLIM_SUNNI ) { return 'RELIGION_MUSLIM_SUNNI'; }
+	 if ( $val == RELIGION_BUDDHIST ) { return 'RELIGION_BUDDHIST'; }
+	 if ( $val == RELIGION_HINDU ) { return 'RELIGION_HINDU'; }
+	 if ( $val == RELIGION_ATHEIST ) { return 'RELIGION_ATHEIST'; }
+	 if ( $val == RELIGION_JEWISH ) { return 'RELIGION_JEWISH'; }
+	 if ( $val == CONTINENT_NORTH_AMERICA ) { return 'CONTINENT_NORTH_AMERICA'; }
+	 if ( $val == CONTINENT_ASIA ) { return 'CONTINENT_ASIA'; }
+	 if ( $val == CONTINENT_EUROPE ) { return 'CONTINENT_EUROPE'; }
+	 if ( $val == CONTINENT_AFRICA ) { return 'CONTINENT_AFRICA'; }
+	 if ( $val == CONTINENT_SOUTH_AMERICA ) { return 'CONTINENT_SOUTH_AMERICA'; }
+	 if ( $val == CONTINENT_ANTARCTICA ) { return 'CONTINENT_ANTARCTICA'; }
+	 if ( $val == CONTINENT_AUSTRALIA ) { return 'CONTINENT_AUSTRALIA'; }
+	 if ( $val == CLIMATE_TROPICAL ) { return 'CLIMATE_TROPICAL'; }
+	 if ( $val == CLIMATE_DRY ) { return 'CLIMATE_DRY'; }
+	 if ( $val == CLIMATE_TEMPERATE ) { return 'CLIMATE_TEMPERATE'; }
+	 if ( $val == CLIMATE_CONTINENTAL ) { return 'CLIMATE_CONTINENTAL'; }
+	 if ( $val == CLIMATE_POLAR ) { return 'CLIMATE_POLAR'; }
 }
 function name_to_type($val) { 
 	 if ( $val == 'CARD_LAND' ) { return CARD_LAND; }
@@ -171,6 +217,29 @@ function name_to_type($val) {
 	 if ( $val == 'ABILITY_INTERRUPT' ) { return ABILITY_INTERRUPT; }
 	 if ( $val == 'ABILITY_CHOICE' ) { return ABILITY_CHOICE; }
 	 if ( $val == 'ABILITY_MULTI' ) { return ABILITY_MULTI; }
+	 if ( $val == 'RELIGION_CHRISTIAN' ) { return RELIGION_CHRISTIAN; }
+	 if ( $val == 'RELIGION_CATHOLIC' ) { return RELIGION_CATHOLIC; }
+	 if ( $val == 'RELIGION_ORTHODOX_CHRISTIAN' ) { return RELIGION_ORTHODOX_CHRISTIAN; }
+	 if ( $val == 'RELIGION_PROTESTANT' ) { return RELIGION_PROTESTANT; }
+	 if ( $val == 'RELIGION_MUSLIM' ) { return RELIGION_MUSLIM; }
+	 if ( $val == 'RELIGION_MUSLIM_SHIITE' ) { return RELIGION_MUSLIM_SHIITE; }
+	 if ( $val == 'RELIGION_MUSLIM_SUNNI' ) { return RELIGION_MUSLIM_SUNNI; }
+	 if ( $val == 'RELIGION_BUDDHIST' ) { return RELIGION_BUDDHIST; }
+	 if ( $val == 'RELIGION_HINDU' ) { return RELIGION_HINDU; }
+	 if ( $val == 'RELIGION_ATHEIST' ) { return RELIGION_ATHEIST; }
+	 if ( $val == 'RELIGION_JEWISH' ) { return RELIGION_JEWISH; }
+	 if ( $val == 'CONTINENT_NORTH_AMERICA' ) { return CONTINENT_NORTH_AMERICA; }
+	 if ( $val == 'CONTINENT_ASIA' ) { return CONTINENT_ASIA; }
+	 if ( $val == 'CONTINENT_EUROPE' ) { return CONTINENT_EUROPE; }
+	 if ( $val == 'CONTINENT_AFRICA' ) { return CONTINENT_AFRICA; }
+	 if ( $val == 'CONTINENT_SOUTH_AMERICA' ) { return CONTINENT_SOUTH_AMERICA; }
+	 if ( $val == 'CONTINENT_ANTARCTICA' ) { return CONTINENT_ANTARCTICA; }
+	 if ( $val == 'CONTINENT_AUSTRALIA' ) { return CONTINENT_AUSTRALIA; }
+	 if ( $val == 'CLIMATE_TROPICAL' ) { return CLIMATE_TROPICAL; }
+	 if ( $val == 'CLIMATE_DRY' ) { return CLIMATE_DRY; }
+	 if ( $val == 'CLIMATE_TEMPERATE' ) { return CLIMATE_TEMPERATE; }
+	 if ( $val == 'CLIMATE_CONTINENTAL' ) { return CLIMATE_CONTINENTAL; }
+	 if ( $val == 'CLIMATE_POLAR' ) { return CLIMATE_POLAR; }
 }
 function options_by_prefix($pref) { 
 	 $defs = array (
@@ -244,6 +313,38 @@ function options_by_prefix($pref) {
     0 => 'ABILITY_INTERRUPT',
     1 => 'ABILITY_CHOICE',
     2 => 'ABILITY_MULTI',
+  ),
+  'RELIGION' => 
+  array (
+    0 => 'RELIGION_CHRISTIAN',
+    1 => 'RELIGION_CATHOLIC',
+    2 => 'RELIGION_ORTHODOX_CHRISTIAN',
+    3 => 'RELIGION_PROTESTANT',
+    4 => 'RELIGION_MUSLIM',
+    5 => 'RELIGION_MUSLIM_SHIITE',
+    6 => 'RELIGION_MUSLIM_SUNNI',
+    7 => 'RELIGION_BUDDHIST',
+    8 => 'RELIGION_HINDU',
+    9 => 'RELIGION_ATHEIST',
+    10 => 'RELIGION_JEWISH',
+  ),
+  'CONTINENT' => 
+  array (
+    0 => 'CONTINENT_NORTH_AMERICA',
+    1 => 'CONTINENT_ASIA',
+    2 => 'CONTINENT_EUROPE',
+    3 => 'CONTINENT_AFRICA',
+    4 => 'CONTINENT_SOUTH_AMERICA',
+    5 => 'CONTINENT_ANTARCTICA',
+    6 => 'CONTINENT_AUSTRALIA',
+  ),
+  'CLIMATE' => 
+  array (
+    0 => 'CLIMATE_TROPICAL',
+    1 => 'CLIMATE_DRY',
+    2 => 'CLIMATE_TEMPERATE',
+    3 => 'CLIMATE_CONTINENTAL',
+    4 => 'CLIMATE_POLAR',
   ),
 );
 

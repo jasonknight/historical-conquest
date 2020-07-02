@@ -67,6 +67,35 @@ function settings() {
         'location',
         'document'
     ];
+	$o->card_religions = [
+		'christian',
+		'catholic',
+		'orthodox_christian',
+		'protestant',
+		'muslim',
+        'muslim_shiite',
+        'muslim_sunni',
+		'buddhist',
+		'hindu',
+		'atheist',
+		'jewish',
+    ];
+    $o->card_continents = [
+	    'north_america',
+        'asia',
+        'europe',
+        'africa',
+        'south_america',
+        'antarctica',
+        'australia'   
+	];
+    $o->card_climates = [
+        'tropical',
+        'dry',
+        'temperate',
+        'continental',
+        'polar', 
+    ];
     $o->usage_types = [
         'immediate',
         'hold', 
