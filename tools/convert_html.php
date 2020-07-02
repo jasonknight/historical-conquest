@@ -1,38 +1,43 @@
 <?php
-$html = file_get_contents(__DIR__ . '/card_master_list.html');
+$html = file_get_contents(__DIR__ . '/masterlist.xhtml');
 $dom = new DomDocument();
 $dom->loadHTML($html);
 $dom->preserveWhiteSpace = false;
 $tables = $dom->getElementsByTagName('table');
-$rows = $tables->item(0)->getElementsByTagName('tr');
-$row1 = false;
-$keys = [];
-$entries = [];
-$stats = [];
-foreach ( $rows as $row ) {
-    $cols = $row->getElementsByTagName('td');
-    if ( $row1 === false ) {
-        foreach ( $cols as $col ) {
-            $keys[] = $col->nodeValue;
-        } 
-        $row1 = true;
-    } else {
-        $i = 0;
-        $entry = [];
-        foreach ( $cols as $col ) {
-            $entry[ $keys[$i] ] = $col->nodeValue;
-            $i++;
+foreach ( $tables as $table ) {
+    $rows = $table->getElementsByTagName('tr');
+    $row1 = false;
+    $keys = [];
+    $entries = [];
+    $stats = [];
+    foreach ( $rows as $row ) {
+        $cols = $row->getElementsByTagName('td');
+        if ( $row1 === false ) {
+            foreach ( $cols as $col ) {
+                $keys[] = $col->nodeValue;
+            } 
+            $row1 = true;
+        } else {
+            $i = 0;
+            $entry = [];
+            foreach ( $cols as $col ) {
+                $entry[ $keys[$i] ] = $col->nodeValue;
+                $i++;
+            }
+            
+            $entry['Type'] = str_replace(" ",'',$entry['Type']);
+            $entry['Type'] = str_replace(" ",'',$entry['Type']);
+            $entry['Type'] = str_replace('/','_',$entry['Type']);
+            $entry['Type'] = str_replace('-','_',$entry['Type']);
+            if ( ! isset($stats['by_type'][ $entry['Type'] ]) ) {
+                $stats['by_type'][ $entry['Type'] ] = 0;
+            }
+            $stats['by_type'][ $entry['Type'] ]++;
+            if ( strlen(trim($entry['Name'])) < 3 ) {
+                continue;
+            }
+            $entries[] = $entry;
         }
-        
-        $entry['Type'] = str_replace(" ",'',$entry['Type']);
-        $entry['Type'] = str_replace(" ",'',$entry['Type']);
-        $entry['Type'] = str_replace('/','_',$entry['Type']);
-        $entry['Type'] = str_replace('-','_',$entry['Type']);
-        if ( ! isset($stats['by_type'][ $entry['Type'] ]) ) {
-            $stats['by_type'][ $entry['Type'] ] = 0;
-        }
-        $stats['by_type'][ $entry['Type'] ]++;
-        $entries[] = $entry;
     }
 }
 $card_types = [
@@ -148,7 +153,6 @@ $entries = array_map(function ($e) {
         $e['Type'] = 'Aircraft';
     if ( $e['Type'] == 'Knowledge_Theory' )
         $e['Type'] = 'Knowledge';
-    unset($e['Summaries']);
     $e['SubType1'] = '';
     $e['SubType2'] = '';
     if ( isset($card_types[ strtolower($e['Type']) ] ) ) {
@@ -190,6 +194,11 @@ $entries = array_map(function ($e) {
         $e['Type'] = 'character';
         $e['SubType1'] = 'outlaw';
     }
+    if ( $e['Type'] == 'Outlaws_Pirates' ) {
+        $e['Type'] = 'character';
+        $e['SubType1'] = 'outlaw';
+        $e['SubType2'] = 'pirate';
+    }
     $keys = ['ID','Deck','Name','Year','Type','SubType1','SubType2','Attack Strength','Defense Strength'];
     foreach ( ['morale','strength','defense'] as $d ) {
         $keys[] = "{$d}_add";
@@ -200,6 +209,7 @@ $entries = array_map(function ($e) {
     $keys[] = 'Frequency';
     $keys[] = 'When to Play';
     $keys[] = 'Abilities';
+    $keys[] = 'Summaries';
     $new_e = [];
     foreach ( $keys as $key ) {
         $nkey = str_replace(' ','_',strtolower($key));
@@ -207,11 +217,4 @@ $entries = array_map(function ($e) {
     }
     return $new_e;
 },$entries);
-ob_start();
-echo join("\t",array_keys($entries[0])) . PHP_EOL;
-foreach ( $entries as $entry ) {
-    echo join("\t",array_values($entry)) . PHP_EOL;
-}
-$contents = ob_get_contents();
-ob_end_clean();
-file_put_contents(__DIR__ . '/master_list.tsv',$contents);
+print_r($entries);
