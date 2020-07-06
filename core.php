@@ -212,6 +212,7 @@ function get_cards() {
         if ( !is_character_card($card) ) {
             $card['gender'] = '';
         }
+        $card['ability_desc'] = $card['abilities'];
         $card['abilities'] = get_abilities($card);
     }
     return $cards;
@@ -232,6 +233,7 @@ function get_not_updated_cards() {
         if ( !is_character_card($card) ) {
             $card['gender'] = '';
         }
+        $card['ability_desc'] = $card['abilities'];
         $card['abilities'] = get_abilities($card);
     }
     return $cards;
@@ -250,6 +252,7 @@ function get_duplicate_cards() {
         if ( !is_character_card($card) ) {
             $card['gender'] = '';
         }
+        $card['ability_desc'] = $card['abilities'];
         $card['abilities'] = get_abilities($card);
     }
     return $cards;
@@ -274,6 +277,7 @@ function get_cards_without_abilities() {
         if ( !is_character_card($card) ) {
             $card['gender'] = '';
         }
+        $card['ability_desc'] = $card['abilities'];
         $card['abilities'] = get_abilities($card);
     }
     return $cards;

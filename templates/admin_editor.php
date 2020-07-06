@@ -92,6 +92,7 @@ namespace HistoricalConquest;
         $('div.tab').hide();
         $('div#edit_card').show();
         for ( let key in record ) {
+            console.log('key',key,record);
             let sel = 'input[name="card[' + key + ']"]';
             let val_to_set = record[key];
             if ( ['background_image','illustration'].indexOf(key) != -1 ) 
@@ -131,7 +132,6 @@ namespace HistoricalConquest;
                     }
                     $('div#edit_card .add-ability').trigger($.Event('click'));
                 } 
-                return;
             }
             $('div#edit_card').find(sel).val(val_to_set);
             $('div#edit_card').find('select[name="card[' + key + ']"]').val(val_to_set);

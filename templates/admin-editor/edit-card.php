@@ -91,8 +91,8 @@ namespace HistoricalConquest;
             <td colspan="4">
                 <p class="label">Summary</p>
                 <textarea cols="40" rows="5" name="card[summary]"></textarea>
-                <p class="label">Abilities </p>
-                <textarea cols="40" rows="5" name="card[abilities]" disabled></textarea>
+                <p class="label">Abilities Desc </p>
+                <textarea cols="40" rows="5" name="card[ability_desc]" disabled></textarea>
                 <h3>Ability Definitions</h3>
                 <table align="center" width="100%">
                     <?php $render('admin-editor/_ability.php',['i' => 0]); ?>
