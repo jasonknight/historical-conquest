@@ -260,16 +260,15 @@ function get_cards_without_abilities() {
         "SELECT card_id,COUNT(card_id) FROM `hc_card_abilities` GROUP BY card_id HAVING COUNT(card_id) > 0",
         ARRAY_A
     );
-    if ( $wpdb->last_error ) {
-        echo $wpdb->last_error;
-        die();
-    }
     if ( ! empty($cards) ) {
         $ext_ids = [];
         foreach ( $cards as $card ) {
             $ext_ids[] = $wpdb->prepare('%d',$card['card_id']);
         }
         $cards = $wpdb->get_results("SELECT * FROM `hc_cards` WHERE id NOT IN (".join(',',$ext_ids).")",ARRAY_A);
+    }
+    if ( empty($cards) {
+        $cards = $wpdb->get_results("SELECT * FROM `hc_cards`",ARRAY_A);
     }
     foreach ( $cards as &$card ) {
         if ( !is_character_card($card) ) {
