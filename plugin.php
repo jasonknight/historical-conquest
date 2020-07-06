@@ -83,6 +83,8 @@ function create_new_card($card,$abilities) {
 }
 function create_new_ability($card,$ability) {
     global $wpdb;
+    if ( empty($ability['description']) )
+        return;
     $keys = [];
     $values = [];
     $ability['created_at'] = date('Y-m-d H:i:s');
