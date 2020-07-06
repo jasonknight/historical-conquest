@@ -91,6 +91,8 @@ function create_new_ability($card,$ability) {
     foreach ( ['apply_to_type','apply_to_scope'] as $def ) {
         if ( defined($ability[$def]) ) {
             $ability[$def] = constant($ability[$def]);
+        } else {
+            die("$def is not defined?");
         }
     }   
     $ability['card_id'] = $card['id'];

@@ -205,6 +205,25 @@ function get_abilities($card) {
     global $wpdb;
     return $wpdb->get_results("SELECT * FROM `hc_card_abilities` WHERE card_id = {$card['id']}");
 }
+function filter_slashes($ar) {
+    foreach ($ar as &$v) {
+        if ( is_string($v) ) {
+            $v =  stripslashes($v);
+        }
+        if ( is_array($v) ) {
+            $v = filter_slashes($v);
+        }
+    }
+    return $ar;
+}
+function filter_cards($cards) {
+    foreach ( $cards as $key => &$card ) {
+        if ( $key == 'abilities' )
+            continue;
+        $card = filter_slashes($card);
+    }
+    return $cards;
+}
 function get_cards() {
     global $wpdb;
     $cards = $wpdb->get_results("SELECT * FROM `hc_cards`",ARRAY_A);
@@ -215,7 +234,7 @@ function get_cards() {
         $card['ability_desc'] = $card['abilities'];
         $card['abilities'] = get_abilities($card);
     }
-    return $cards;
+    return filter_cards($cards);
 }
 function get_all_card_ext_ids() {
     global $wpdb;
@@ -236,7 +255,7 @@ function get_not_updated_cards() {
         $card['ability_desc'] = $card['abilities'];
         $card['abilities'] = get_abilities($card);
     }
-    return $cards;
+    return filter_cards($cards);
 }
 function get_duplicate_cards() {
     global $wpdb;
@@ -255,7 +274,7 @@ function get_duplicate_cards() {
         $card['ability_desc'] = $card['abilities'];
         $card['abilities'] = get_abilities($card);
     }
-    return $cards;
+    return filter_cards($cards);
 }
 function get_cards_without_abilities() {
     global $wpdb;
@@ -280,7 +299,7 @@ function get_cards_without_abilities() {
         $card['ability_desc'] = $card['abilities'];
         $card['abilities'] = get_abilities($card);
     }
-    return $cards;
+    return filter_cards($cards);
 }
 function get_types_for_js() {
     $types = new \stdClass;
