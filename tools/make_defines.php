@@ -7,8 +7,11 @@ function array_to_defines($a,$iota = 0,$prefix='') {
     global $defs;
     foreach ( $a as $k=>$v) {
         if ( is_array($v) ) {
-           $iota = array_to_defines($v,$iota,$prefix . $k . '_'); 
-           continue;
+            $name = strtoupper($prefix . $k);
+            echo "define('$name',$iota);\n";
+            $iota++;
+            $iota = array_to_defines($v,$iota,$prefix . $k . '_'); 
+            continue;
         }
         $name = strtoupper($prefix . $v);
         $defs[] = $name;
@@ -52,8 +55,22 @@ $contents = ob_get_contents();
 ob_end_clean();
 echo "\t \$defs = " . $contents . ';' . "\n";
 echo "\n";
-echo " return \$defs[\$pref];" . "\n";
+echo " return !empty(\$pref) ? \$defs[\$pref] : \$defs;" . "\n";
 echo "}" . "\n";
+
+echo "function options_as_array() { " . "\n";
+ob_start();
+echo "\t\$defs = [];\n";
+foreach ( $defs as $def ) {
+    echo "\t\$defs['$def'] = $def;\n";
+}
+$contents = ob_get_contents();
+ob_end_clean();
+echo $contents;
+echo "\n";
+echo " return \$defs;" . "\n";
+echo "}" . "\n";
+
 $contents = ob_get_contents();
 ob_end_clean();
 file_put_contents(dirname(__DIR__) . '/types.php',$contents);

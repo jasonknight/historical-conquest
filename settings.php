@@ -20,6 +20,8 @@ function settings() {
         'card_played',
         'cards_in_column',
         'cards_played', 
+        'gender_in_same_column',
+        'religion_in_same_column',
         'opponent_card_in_same_column',
         'opponent_card_played',
         'opponent_cards_in_column',
@@ -30,7 +32,9 @@ function settings() {
         'character' => [
             'activist',
             'artist',
-            'assassin',
+            'assassin' => [
+                'spy'    
+            ],
             'athlete',
             'author',
             'businessman',
@@ -41,12 +45,14 @@ function settings() {
                 'sea',
                 'air',
                 'land',
+                'land_sea',
                 'space' 
             ],
             'inventor',
             'law_enforcement',
             'leader',
             'musician',
+            'mathematician',
             'outlaw' => [
                 'pirate', 
                 'mobster',
@@ -55,17 +61,21 @@ function settings() {
             'philosopher',
             'politician',
             'scientist',
-            'spirtual_leader',
+            'spiritual_leader',
+            'spy',
             'warrior' 
         ], 
         'army',
         'vessel',
+        'aircraft',
         'event',
         'knowledge',
         'organization',
         'technology',
         'location',
-        'document'
+        'document',
+        'relic',
+        'mathematicians',
     ];
 	$o->card_religions = [
 		'christian',
@@ -87,7 +97,7 @@ function settings() {
         'africa',
         'south_america',
         'antarctica',
-        'australia'   
+        'oceania'   
 	];
     $o->card_climates = [
         'tropical',

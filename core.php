@@ -78,7 +78,7 @@ function render_template($template_name, $vars_in_scope = array()) {
             $$n = $v;
         }
         $render = function ($file,$vars=[]) {
-            echo render_template("assets/$file",$vars);
+            echo render_template("$file",$vars);
         };
         $asset = function ($file,$vars=[]) {
             echo render_template("assets/$file",$vars);
@@ -133,7 +133,6 @@ function add_notice($class,$msg) {
 	$notices = \get_option(__NAMESPACE__ . "_notices",[]);
 	$notices[] = [$class,$msg];
 	\update_option(__NAMESPACE__ . "_notices",$notices);
-	return $this;
 }
 function show_notices() {
 	$notices = \get_option(__NAMESPACE__ . "_notices",[]);
@@ -143,7 +142,6 @@ function show_notices() {
 		echo $notice;
 	}
 	\update_option(__NAMESPACE__ . "_notices",[]);
-	return $this;
 }
 function create_admin_user($username,$pass) {
 	global $wpdb;
@@ -186,3 +184,103 @@ function register_widgets($shortcode=true) {
 \add_action('widgets_init',function () {
         register_widgets();        
 });
+function is_character_card($card) {
+    if ( is_array($card) ) {
+        $str = type_to_name($card['maintype']);
+        if ( preg_match('/^CARD_CHARACTER/',$str) ) {
+            return true;
+        } 
+    }
+    return false;
+}
+function is_land_card($card) {
+    if ( is_array($card) ) {
+        if ( $card['maintype'] == CARD_LAND ) {
+            return true;
+        }
+    }
+    return false;
+}
+function get_abilities($card) {
+    global $wpdb;
+    return $wpdb->get_results("SELECT * FROM `hc_card_abilities` WHERE card_id = {$card['id']}");
+}
+function get_cards() {
+    global $wpdb;
+    $cards = $wpdb->get_results("SELECT * FROM `hc_cards`",ARRAY_A);
+    foreach ( $cards as &$card ) {
+        if ( !is_character_card($card) ) {
+            $card['gender'] = '';
+        }
+        $card['abilities'] = get_abilities($card);
+    }
+    return $cards;
+}
+function get_all_card_ext_ids() {
+    global $wpdb;
+    $cards = $wpdb->get_results("SELECT ext_id FROM `hc_cards`",ARRAY_A);
+    $results = [];
+    foreach ( $cards as $card ) {
+        $results[] = $card['ext_id'];
+    }
+    return $results;
+}
+function get_not_updated_cards() {
+    global $wpdb;
+    $cards = $wpdb->get_results("SELECT * FROM `hc_cards` WHERE updated_at IS NULL",ARRAY_A);
+    foreach ( $cards as &$card ) {
+        if ( !is_character_card($card) ) {
+            $card['gender'] = '';
+        }
+        $card['abilities'] = get_abilities($card);
+    }
+    return $cards;
+}
+function get_duplicate_cards() {
+    global $wpdb;
+    $cards = $wpdb->get_results("SELECT ext_id,COUNT(ext_id) FROM `hc_cards` GROUP BY ext_id HAVING COUNT(ext_id) > 1",ARRAY_A);
+    if ( ! empty($cards) ) {
+        $ext_ids = [];
+        foreach ( $cards as $card ) {
+            $ext_ids[] = $wpdb->prepare('%s',$card['ext_id']);
+        }
+        $cards = $wpdb->get_results("SELECT * FROM `hc_cards` WHERE ext_id IN (".join(',',$ext_ids).")",ARRAY_A);
+    }
+    foreach ( $cards as &$card ) {
+        if ( !is_character_card($card) ) {
+            $card['gender'] = '';
+        }
+        $card['abilities'] = get_abilities($card);
+    }
+    return $cards;
+}
+function get_cards_without_abilities() {
+    global $wpdb;
+    $cards = $wpdb->get_results(
+        "SELECT card_id,COUNT(card_id) FROM `hc_card_abilities` GROUP BY card_id HAVING COUNT(card_id) > 0",
+        ARRAY_A
+    );
+    if ( ! empty($cards) ) {
+        $ext_ids = [];
+        foreach ( $cards as $card ) {
+            $ext_ids[] = $wpdb->prepare('%d',$card['card_id']);
+        }
+        $cards = $wpdb->get_results("SELECT * FROM `hc_cards` WHERE id NOT IN (".join(',',$ext_ids).")",ARRAY_A);
+    }
+    foreach ( $cards as &$card ) {
+        if ( !is_character_card($card) ) {
+            $card['gender'] = '';
+        }
+        $card['abilities'] = get_abilities($card);
+    }
+    return $cards;
+}
+function get_types_for_js() {
+    $types = new \stdClass;
+    $types->by_prefix = options_by_prefix('');     
+    $types->key_values = options_as_array();     
+    return $types;
+}
+function named_ability_functions() {
+    return ['ability_generic'];
+}
