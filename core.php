@@ -267,7 +267,7 @@ function get_cards_without_abilities() {
         }
         $cards = $wpdb->get_results("SELECT * FROM `hc_cards` WHERE id NOT IN (".join(',',$ext_ids).")",ARRAY_A);
     }
-    if ( empty($cards) {
+    if ( empty($cards) ) {
         $cards = $wpdb->get_results("SELECT * FROM `hc_cards`",ARRAY_A);
     }
     foreach ( $cards as &$card ) {
