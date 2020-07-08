@@ -1,5 +1,6 @@
 <?php
 namespace HistoricalConquest;
+define('NONE',-1);
 define('CARD_LAND',0);
 define('CARD_CHARACTER',1);
 define('CARD_CHARACTER_ACTIVIST',2);

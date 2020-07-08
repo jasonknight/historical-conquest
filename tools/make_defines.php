@@ -22,6 +22,7 @@ function array_to_defines($a,$iota = 0,$prefix='') {
 }
 ob_start();
 echo "<?php\nnamespace HistoricalConquest;\n";
+echo "define('NONE',-1);\n";
 $iota = array_to_defines($s->card_types,0,'CARD_');
 $iota = array_to_defines($s->apply_to_scope_types,$iota,'SCOPE_');
 $iota = array_to_defines($s->apply_to_types,$iota,'APPLY_');

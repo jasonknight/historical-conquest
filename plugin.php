@@ -89,6 +89,8 @@ function create_new_ability($card,$ability) {
     $values = [];
     $ability['created_at'] = date('Y-m-d H:i:s');
     foreach ( ['apply_to_type','apply_to_scope'] as $def ) {
+        if ( !isset($ability[$def]) )
+            continue;
         if ( defined($ability[$def]) ) {
             $ability[$def] = constant($ability[$def]);
         } else {
