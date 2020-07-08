@@ -308,5 +308,5 @@ function get_types_for_js() {
     return $types;
 }
 function named_ability_functions() {
-    return ['ability_generic'];
+    return ['ability_generic','ability_choice','ability_interrupt'];
 }
