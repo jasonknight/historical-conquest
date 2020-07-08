@@ -26,6 +26,11 @@ function files($key) {
 		return $_FILES[$key];
 	return null;
 }
+function session($key) {
+    if ( isset($_SESSION[$key]) )
+        return $_SESSION[$key];
+    return null;
+}
 function _datetime($d) {
 	$date = \DateTime::createFromFormat("Y-m-d H:i:s",$d);
 	if ( $date ) 
@@ -228,7 +233,11 @@ function filter_cards($cards) {
 }
 function get_cards() {
     global $wpdb;
-    $cards = $wpdb->get_results("SELECT * FROM `hc_cards`",ARRAY_A);
+    $sql = "SELECT * FROM `hc_cards` WHERE 1=1";
+    if ( session('deck_filter') && session('deck_filter') != 'N/A') {
+        $sql .= $wpdb->prepare(' AND deck = %s',session('deck_filter'));
+    }
+    $cards = $wpdb->get_results($sql,ARRAY_A);
     foreach ( $cards as &$card ) {
         if ( !is_character_card($card) ) {
             $card['gender'] = '';
@@ -249,7 +258,11 @@ function get_all_card_ext_ids() {
 }
 function get_not_updated_cards() {
     global $wpdb;
-    $cards = $wpdb->get_results("SELECT * FROM `hc_cards` WHERE updated_at IS NULL",ARRAY_A);
+    $sql = "SELECT * FROM `hc_cards` WHERE updated_at IS NULL";
+    if ( session('deck_filter') && session('deck_filter') != 'N/A') {
+        $sql .= $wpdb->prepare(' AND deck = %s',session('deck_filter'));
+    }
+    $cards = $wpdb->get_results($sql,ARRAY_A);
     foreach ( $cards as &$card ) {
         if ( !is_character_card($card) ) {
             $card['gender'] = '';
@@ -267,7 +280,11 @@ function get_duplicate_cards() {
         foreach ( $cards as $card ) {
             $ext_ids[] = $wpdb->prepare('%s',$card['ext_id']);
         }
-        $cards = $wpdb->get_results("SELECT * FROM `hc_cards` WHERE ext_id IN (".join(',',$ext_ids).")",ARRAY_A);
+        $sql = "SELECT * FROM `hc_cards` WHERE ext_id IN (".join(',',$ext_ids).")";
+        $cards = $wpdb->get_results($sql,ARRAY_A);
+        if ( session('deck_filter') && session('deck_filter') != 'N/A') {
+            $sql .= $wpdb->prepare(' AND deck = %s',session('deck_filter'));
+        }
     }
     foreach ( $cards as &$card ) {
         if ( !is_character_card($card) ) {
@@ -289,11 +306,41 @@ function get_cards_without_abilities() {
         foreach ( $cards as $card ) {
             $ext_ids[] = $wpdb->prepare('%d',$card['card_id']);
         }
-        $cards = $wpdb->get_results("SELECT * FROM `hc_cards` WHERE id NOT IN (".join(',',$ext_ids).")",ARRAY_A);
+        $sql = "SELECT * FROM `hc_cards` WHERE id NOT IN (".join(',',$ext_ids).")"; 
     }
     if ( empty($cards) ) {
-        $cards = $wpdb->get_results("SELECT * FROM `hc_cards`",ARRAY_A);
+        $sql = "SELECT * FROM `hc_cards` WHERE 1=1";
     }
+    if ( session('deck_filter') && session('deck_filter') != 'N/A') {
+        $sql .= $wpdb->prepare(' AND deck = %s',session('deck_filter'));
+    }
+    $cards = $wpdb->get_results($sql,ARRAY_A);
+    foreach ( $cards as &$card ) {
+        if ( !is_character_card($card) ) {
+            $card['gender'] = '';
+        }
+        $card['ability_desc'] = $card['abilities'];
+        $card['abilities'] = get_abilities($card);
+    }
+    return filter_cards($cards);
+}
+function get_cards_with_abilities() {
+    global $wpdb;
+    $cards = $wpdb->get_results(
+        "SELECT card_id,COUNT(card_id) FROM `hc_card_abilities` GROUP BY card_id HAVING COUNT(card_id) > 0",
+        ARRAY_A
+    );
+    if ( ! empty($cards) ) {
+        $ext_ids = [];
+        foreach ( $cards as $card ) {
+            $ext_ids[] = $wpdb->prepare('%d',$card['card_id']);
+        }
+        $sql = "SELECT * FROM `hc_cards` WHERE id IN (".join(',',$ext_ids).")"; 
+    }
+    if ( session('deck_filter') && session('deck_filter') != 'N/A') {
+        $sql .= $wpdb->prepare(' AND deck = %s',session('deck_filter'));
+    }
+    $cards = $wpdb->get_results($sql,ARRAY_A);
     foreach ( $cards as &$card ) {
         if ( !is_character_card($card) ) {
             $card['gender'] = '';
@@ -312,3 +359,37 @@ function get_types_for_js() {
 function named_ability_functions() {
     return ['ability_generic','ability_choice','ability_interrupt'];
 }
+function get_unique_deck_values() {
+    global $wpdb;
+    $sql = "SELECT DISTINCT(deck) FROM `hc_cards`";
+    $decks = array_map(function ($r) {
+        return $r['deck']; }, $wpdb->get_results($sql,ARRAY_A));
+    array_unshift($decks,'N/A');
+    return $decks;
+}
+function select($args) {
+    $attrs = [];
+    foreach ( ['id','name','class'] as $name ) {
+        if ( !isset($args[$name]) )
+            continue;
+        $attrs[] = "$name=\"".\esc_attr($args[$name])."\""; 
+    }
+    $opts = [];
+    foreach ($args['options'] as $k=>$v) {
+        $selected = '';
+        if ( isset($args['value']) && $v == $args['value']) {
+            $selected = 'selected';
+        }
+        if ( is_string($k) ) {
+            $opts[] = "<option $selected value=\"$v\">$k</option>";
+        } else {
+            $opts[] = "<option $selected>$v</option>";
+        }
+    }
+    return "
+        <select ".join(" ", $attrs).">
+            ".join(' ',$opts)."
+        </select>
+    ";
+}
+

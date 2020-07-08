@@ -38,8 +38,12 @@ function init() {
        import_cards_table();
        exit; 
    }
-   if ( get('subaction') == 'edit-card' ) {
+   if ( get('subaction') == 'edit-card' && is_array(post('card')) ) {
         edit_card();
+   }
+   if ( get('admin-editor') && get('deck') ) {
+       session_start();
+        $_SESSION['deck_filter'] = get('deck');
    }
 }
 function initialize_notices() {

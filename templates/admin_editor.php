@@ -44,10 +44,12 @@ namespace HistoricalConquest;
     <body>
         <table class="tab-menu">
             <tr>
+                <td>Deck: <?php echo select(['value' => $_SESSION['deck_filter'], 'id' => 'set_deck_filter', 'options' => get_unique_deck_values()]); ?></td>
                 <td><button class="button" target="cards_full_list">Full List</button></td>
                 <td><button class="button" target="cards_not_updated">Not Updated List</button></td>
                 <td><button class="button" target="cards_duplicated_ids">Duplicated List</button></td>
                 <td><button class="button" target="cards_without_abilities">Without Abilities</button></td>
+                <td><button class="button" target="cards_with_abilities">With Abilities</button></td>
             </tr>
         </table>
         <div id="cards_full_list" class="tab">
@@ -70,6 +72,11 @@ namespace HistoricalConquest;
             <?php $cards_without_abilities = get_cards_without_abilities(); ?> 
             <?php $render('admin-editor/_cards-full-list.php',['cards' => $cards_without_abilities]); ?> 
         </div>
+        <div id="cards_with_abilities" class="tab">
+            <h2>With Abilities</h2>
+            <?php $cards_with_abilities = get_cards_with_abilities(); ?> 
+            <?php $render('admin-editor/_cards-full-list.php',['cards' => $cards_with_abilities]); ?> 
+        </div>
         <div id="edit_card" class="tab">
 <?php $render('admin-editor/edit-card.php',[]); ?> 
         </div>
@@ -84,7 +91,9 @@ namespace HistoricalConquest;
         $('div#'+id).show();
     });    
     $('table.tab-menu button').first().trigger($.Event('click'));
-
+    $('select#set_deck_filter').on('change',function () {
+        window.location = '?action=historical-conquest-game&admin-editor=1&deck=' + $(this).val(); 
+    });
     $('tr.card-entry-row td').on('click',function () {
         let id = $(this).parent().attr('card-id'); 
         let record = window.carddb.filter(function (c) { return parseInt(c.id) == id });
