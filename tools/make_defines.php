@@ -30,6 +30,7 @@ $iota = array_to_defines($s->ability_types,$iota,'ABILITY_');
 $iota = array_to_defines($s->card_religions,$iota,'RELIGION_');
 $iota = array_to_defines($s->card_continents,$iota,'CONTINENT_');
 $iota = array_to_defines($s->card_climates,$iota,'CLIMATE_');
+$iota = array_to_defines($s->ethnicities,$iota,'ETH_');
 $defs_by_prefix = [];
 foreach ( $defs as $def ) {
     preg_match("/^([A-Z]+)_/",$def,$m);

@@ -92,13 +92,12 @@ namespace HistoricalConquest;
         $('div.tab').hide();
         $('div#edit_card').show();
         for ( let key in record ) {
-            console.log('key',key,record);
             let sel = 'input[name="card[' + key + ']"]';
             let val_to_set = record[key];
             if ( ['background_image','illustration'].indexOf(key) != -1 ) 
                 continue;
             // Now we need to convert constant values to their names
-            if ( ['maintype','continent','climate','religion'].indexOf(key) != -1 ) {
+            if ( ['ethnicity','maintype','continent','climate','religion'].indexOf(key) != -1 ) {
                 for ( let type_key in window.types.key_values ) {
                     if ( parseInt(window.types.key_values[type_key]) == parseInt(val_to_set) ) {
                        val_to_set = type_key; 

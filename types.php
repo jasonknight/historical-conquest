@@ -91,6 +91,13 @@ define('CLIMATE_DRY',87);
 define('CLIMATE_TEMPERATE',88);
 define('CLIMATE_CONTINENTAL',89);
 define('CLIMATE_POLAR',90);
+define('ETH_WHITE',91);
+define('ETH_BLACK',92);
+define('ETH_ARAB',93);
+define('ETH_HISPANIC',94);
+define('ETH_ASIAN',95);
+define('ETH_IDIGENOUS',96);
+define('ETH_JEWISH',97);
 function type_to_name($val) { 
 	 if ( $val == CARD_LAND ) { return 'CARD_LAND'; }
 	 if ( $val == CARD_CHARACTER_ACTIVIST ) { return 'CARD_CHARACTER_ACTIVIST'; }
@@ -179,6 +186,13 @@ function type_to_name($val) {
 	 if ( $val == CLIMATE_TEMPERATE ) { return 'CLIMATE_TEMPERATE'; }
 	 if ( $val == CLIMATE_CONTINENTAL ) { return 'CLIMATE_CONTINENTAL'; }
 	 if ( $val == CLIMATE_POLAR ) { return 'CLIMATE_POLAR'; }
+	 if ( $val == ETH_WHITE ) { return 'ETH_WHITE'; }
+	 if ( $val == ETH_BLACK ) { return 'ETH_BLACK'; }
+	 if ( $val == ETH_ARAB ) { return 'ETH_ARAB'; }
+	 if ( $val == ETH_HISPANIC ) { return 'ETH_HISPANIC'; }
+	 if ( $val == ETH_ASIAN ) { return 'ETH_ASIAN'; }
+	 if ( $val == ETH_IDIGENOUS ) { return 'ETH_IDIGENOUS'; }
+	 if ( $val == ETH_JEWISH ) { return 'ETH_JEWISH'; }
 }
 function name_to_type($val) { 
 	 if ( $val == 'CARD_LAND' ) { return CARD_LAND; }
@@ -268,6 +282,13 @@ function name_to_type($val) {
 	 if ( $val == 'CLIMATE_TEMPERATE' ) { return CLIMATE_TEMPERATE; }
 	 if ( $val == 'CLIMATE_CONTINENTAL' ) { return CLIMATE_CONTINENTAL; }
 	 if ( $val == 'CLIMATE_POLAR' ) { return CLIMATE_POLAR; }
+	 if ( $val == 'ETH_WHITE' ) { return ETH_WHITE; }
+	 if ( $val == 'ETH_BLACK' ) { return ETH_BLACK; }
+	 if ( $val == 'ETH_ARAB' ) { return ETH_ARAB; }
+	 if ( $val == 'ETH_HISPANIC' ) { return ETH_HISPANIC; }
+	 if ( $val == 'ETH_ASIAN' ) { return ETH_ASIAN; }
+	 if ( $val == 'ETH_IDIGENOUS' ) { return ETH_IDIGENOUS; }
+	 if ( $val == 'ETH_JEWISH' ) { return ETH_JEWISH; }
 }
 function options_by_prefix($pref) { 
 	 $defs = array (
@@ -382,6 +403,16 @@ function options_by_prefix($pref) {
     3 => 'CLIMATE_CONTINENTAL',
     4 => 'CLIMATE_POLAR',
   ),
+  'ETH' => 
+  array (
+    0 => 'ETH_WHITE',
+    1 => 'ETH_BLACK',
+    2 => 'ETH_ARAB',
+    3 => 'ETH_HISPANIC',
+    4 => 'ETH_ASIAN',
+    5 => 'ETH_IDIGENOUS',
+    6 => 'ETH_JEWISH',
+  ),
 );
 
  return !empty($pref) ? $defs[$pref] : $defs;
@@ -475,6 +506,13 @@ function options_as_array() {
 	$defs['CLIMATE_TEMPERATE'] = CLIMATE_TEMPERATE;
 	$defs['CLIMATE_CONTINENTAL'] = CLIMATE_CONTINENTAL;
 	$defs['CLIMATE_POLAR'] = CLIMATE_POLAR;
+	$defs['ETH_WHITE'] = ETH_WHITE;
+	$defs['ETH_BLACK'] = ETH_BLACK;
+	$defs['ETH_ARAB'] = ETH_ARAB;
+	$defs['ETH_HISPANIC'] = ETH_HISPANIC;
+	$defs['ETH_ASIAN'] = ETH_ASIAN;
+	$defs['ETH_IDIGENOUS'] = ETH_IDIGENOUS;
+	$defs['ETH_JEWISH'] = ETH_JEWISH;
 
  return $defs;
 }

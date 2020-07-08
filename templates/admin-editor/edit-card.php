@@ -47,6 +47,12 @@ namespace HistoricalConquest;
                         <option><?php echo $opt; ?></option>
                     <?php } ?>
                 </select>
+                <p class="label">Ethnicity</p>
+                <select name="card[ethnicity]">
+                    <?php foreach (options_by_prefix('ETH') as $opt ) { ?>
+                        <option><?php echo $opt; ?></option>
+                    <?php } ?>
+                </select>
                 <p class="label">Continent</p>
                 <select name="card[religion]">
                     <?php foreach (options_by_prefix('CONTINENT') as $opt ) { ?>

@@ -58,7 +58,7 @@ function edit_card() {
     foreach ( $card as $key=>$value ) {
         if ( $key == 'id' )
             continue;
-        if ( in_array($key,['maintype','continent','religion','climate']) ) {
+        if ( in_array($key,['ethnicity','maintype','continent','religion','climate']) ) {
             if ( defined($value) ) {
                 $value = constant($value);
             }

@@ -116,5 +116,14 @@ function settings() {
         'choice',
         'multi', 
     ];
+    $o->ethnicities = [
+        'white',
+        'black',
+        'arab',
+        'hispanic',
+        'asian',
+        'idigenous',
+        'jewish', 
+    ];
     return $o;
 }

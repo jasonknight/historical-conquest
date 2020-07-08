@@ -21,7 +21,6 @@ CREATE TABLE `hc_player_transactions` (
 	PRIMARY KEY (`id`),
     INDEX `idxes` (`game_id`,`player_id`)
 );
-DROP TABLE IF EXISTS `hc_games`;
 CREATE TABLE `hc_games` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`created_at` DATETIME,
@@ -57,6 +56,7 @@ CREATE TABLE `hc_cards` (
 	`continent` TINYINT NOT NULL DEFAULT '0',
 	`religion` TINYINT NOT NULL DEFAULT '0',
 	`climate` TINYINT NOT NULL DEFAULT '0',
+	`ethnicity` TINYINT NOT NULL DEFAULT '0',
 	`strength` INT NOT NULL DEFAULT '0',
 	`defense` INT NOT NULL DEFAULT '0',
 	`carry_capacity` INT NOT NULL DEFAULT '1',
