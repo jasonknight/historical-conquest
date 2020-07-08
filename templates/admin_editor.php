@@ -105,6 +105,20 @@ namespace HistoricalConquest;
                 }
             }
             if ( key == 'abilities' ) {
+                if ( !record.abilities.length > 0 ) {
+                    let sel = 'input[name*="abilities"]';
+                    $(sel).val('');
+                    sel = 'textarea[name*="abilities"]';
+                    $(sel).val('');
+                    sel = 'select[name*="abilities"]';
+                    $(sel).val('');
+                    let cnt = 0;
+                    $('tr.ability-row').each(function () {
+                        cnt++;
+                        if ( cnt > 1 )
+                           $(this).remove(); 
+                    });
+                }
                 for ( let i = 0; i < record.abilities.length; i++ ) {
                     let row = $('tr.ability-row').last();
                     let ability = record.abilities[i];
