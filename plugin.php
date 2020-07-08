@@ -92,7 +92,8 @@ function create_new_ability($card,$ability) {
         if ( defined($ability[$def]) ) {
             $ability[$def] = constant($ability[$def]);
         } else {
-            die("$def is not defined?");
+            print_r($ability);
+            die("$def {$ability[$def]} is not defined?");
         }
     }   
     $ability['card_id'] = $card['id'];
