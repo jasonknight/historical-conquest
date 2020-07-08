@@ -206,8 +206,12 @@ function get_abilities($card) {
     return $wpdb->get_results("SELECT * FROM `hc_card_abilities` WHERE card_id = {$card['id']}");
 }
 function filter_slashes($ar) {
-    foreach ($ar as &$v) {
+    foreach ($ar as $key=>&$v) {
+        if ( $key == 'abilities' ) {
+            continue;
+        }
         if ( is_string($v) ) {
+            $v =  stripslashes($v);
             $v =  stripslashes($v);
         }
         if ( is_array($v) ) {
@@ -218,8 +222,6 @@ function filter_slashes($ar) {
 }
 function filter_cards($cards) {
     foreach ( $cards as $key => &$card ) {
-        if ( $key == 'abilities' )
-            continue;
         $card = filter_slashes($card);
     }
     return $cards;

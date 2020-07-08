@@ -63,7 +63,7 @@ function edit_card() {
                 $value = constant($value);
             }
         }
-        $updates[] = $wpdb->prepare("`$key` = %s",$value);
+        $updates[] = $wpdb->prepare("`$key` = %s",stripslashes($value));
     }
     $sql = "UPDATE `hc_cards` SET " . join(',',$updates) . " WHERE `id` = {$card['id']}";
     $wpdb->query($sql); 
@@ -88,7 +88,7 @@ function create_new_ability($card,$ability) {
     $keys = [];
     $values = [];
     $ability['created_at'] = date('Y-m-d H:i:s');
-    foreach ( ['apply_to_type','apply_to_scope'] as $def ) {
+    foreach ( ['ability_type','usage_type','apply_to_type','apply_to_scope'] as $def ) {
         if ( !isset($ability[$def]) )
             continue;
         if ( defined($ability[$def]) ) {

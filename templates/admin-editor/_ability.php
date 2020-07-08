@@ -27,6 +27,20 @@ namespace HistoricalConquest;
                             <option><?php echo $opt; ?></option>
                         <?php } ?>
                     </select>
+                    <p class="label">Ability Type</p> 
+                    <select name="abilities[<?php echo $i; ?>][ability_type]">
+                            <option>NONE</option>
+                        <?php foreach (options_by_prefix('ABILITY') as $opt ) { ?>
+                            <option><?php echo $opt; ?></option>
+                        <?php } ?>
+                    </select>
+                    <p class="label">Usage Type</p> 
+                    <select name="abilities[<?php echo $i; ?>][usage_type]">
+                            <option>NONE</option>
+                        <?php foreach (options_by_prefix('USAGE') as $opt ) { ?>
+                            <option><?php echo $opt; ?></option>
+                        <?php } ?>
+                    </select>
                     <p class="label">Apply to Types</p> 
                     <textarea name="abilities[<?php echo $i; ?>][apply_to_card_types]"></textarea>
                     <p class="label">Named Function</p> 

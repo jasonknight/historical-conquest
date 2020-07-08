@@ -35,7 +35,6 @@ CREATE TABLE `hc_games` (
     `effectmats` TEXT,
 	PRIMARY KEY (`id`)
 );
-DROP TABLE IF EXISTS `hc_cards`;
 CREATE TABLE `hc_cards` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`created_at` DATETIME,
@@ -85,3 +84,5 @@ CREATE TABLE `hc_card_abilities` (
 	PRIMARY KEY (`id`),
 	INDEX `card_id` (`card_id`)
 );
+ALTER TABLE `hc_card_abilities` ADD COLUMN `ability_type` TINYINT NOT NULL DEFAULT '0' AFTER `apply_to_scope`;
+ALTER TABLE `hc_card_abilities` ADD COLUMN `usage_type` TINYINT NOT NULL DEFAULT '0' AFTER `apply_to_scope`;
