@@ -72,7 +72,7 @@ function edit_card() {
     $sql = "UPDATE `hc_cards` SET " . join(',',$updates) . " WHERE `id` = {$card['id']}";
     $wpdb->query($sql); 
     if ( $wpdb->last_error) {
-        add_notice($wpdb->last_error);
+        add_notice('error',$wpdb->last_error);
     }
     if ( !is_array($abilities) ) {
         $abilities = [];
@@ -116,7 +116,7 @@ function create_new_ability($card,$ability) {
     $sql = "INSERT INTO `hc_card_abilities` (" . join(',',$keys) . ") VALUES (" . join(',',$values) . ")";
     $wpdb->query($sql);
     if ( $wpdb->last_error) {
-       add_notice($wpdb->last_error); 
+       add_notice('error',$wpdb->last_error); 
     } 
 }
 function import_cards_table() {
