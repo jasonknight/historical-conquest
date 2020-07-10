@@ -44,7 +44,7 @@ namespace HistoricalConquest;
                     <p class="label">Apply to Types</p> 
                     <textarea name="abilities[<?php echo $i; ?>][apply_to_card_types]"></textarea>
                     <p class="label">Named Function</p> 
-                    <select name="abilities[<?php echo $i; ?>][apply_to_type]">
+                    <select name="abilities[<?php echo $i; ?>][named_function]">
                             <option>NONE</option>
                         <?php foreach (named_ability_functions() as $opt ) { ?>
                             <option><?php echo $opt; ?></option>
