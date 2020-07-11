@@ -357,7 +357,7 @@ function get_types_for_js() {
     return $types;
 }
 function named_ability_functions() {
-    return ['force_discard','force_all_discard','ability_generic','ability_choice','ability_interrupt'];
+    return ['nullify_card_abilities','force_discard','force_all_discard','ability_generic','ability_choice','ability_interrupt'];
 }
 function get_unique_deck_values() {
     global $wpdb;
