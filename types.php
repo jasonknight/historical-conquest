@@ -99,6 +99,7 @@ define('ETH_HISPANIC',94);
 define('ETH_ASIAN',95);
 define('ETH_IDIGENOUS',96);
 define('ETH_JEWISH',97);
+define('USAGE_ONCE',98);
 function type_to_name($val) { 
 	 if ( $val == CARD_LAND ) { return 'CARD_LAND'; }
 	 if ( $val == CARD_CHARACTER_ACTIVIST ) { return 'CARD_CHARACTER_ACTIVIST'; }
@@ -161,6 +162,7 @@ function type_to_name($val) {
 	 if ( $val == USAGE_IMMEDIATE ) { return 'USAGE_IMMEDIATE'; }
 	 if ( $val == USAGE_HOLD ) { return 'USAGE_HOLD'; }
 	 if ( $val == USAGE_CONSTANT ) { return 'USAGE_CONSTANT'; }
+	 if ( $val == USAGE_ONCE ) { return 'USAGE_ONCE'; }
 	 if ( $val == ABILITY_INTERRUPT ) { return 'ABILITY_INTERRUPT'; }
 	 if ( $val == ABILITY_CHOICE ) { return 'ABILITY_CHOICE'; }
 	 if ( $val == ABILITY_MULTI ) { return 'ABILITY_MULTI'; }
@@ -257,6 +259,7 @@ function name_to_type($val) {
 	 if ( $val == 'USAGE_IMMEDIATE' ) { return USAGE_IMMEDIATE; }
 	 if ( $val == 'USAGE_HOLD' ) { return USAGE_HOLD; }
 	 if ( $val == 'USAGE_CONSTANT' ) { return USAGE_CONSTANT; }
+	 if ( $val == 'USAGE_ONCE' ) { return USAGE_ONCE; }
 	 if ( $val == 'ABILITY_INTERRUPT' ) { return ABILITY_INTERRUPT; }
 	 if ( $val == 'ABILITY_CHOICE' ) { return ABILITY_CHOICE; }
 	 if ( $val == 'ABILITY_MULTI' ) { return ABILITY_MULTI; }
@@ -365,6 +368,7 @@ function options_by_prefix($pref) {
     0 => 'USAGE_IMMEDIATE',
     1 => 'USAGE_HOLD',
     2 => 'USAGE_CONSTANT',
+    3 => 'USAGE_ONCE',
   ),
   'ABILITY' => 
   array (
@@ -514,6 +518,7 @@ function options_as_array() {
 	$defs['ETH_ASIAN'] = ETH_ASIAN;
 	$defs['ETH_IDIGENOUS'] = ETH_IDIGENOUS;
 	$defs['ETH_JEWISH'] = ETH_JEWISH;
+	$defs['USAGE_ONCE'] = USAGE_ONCE;
 
  return $defs;
 }
