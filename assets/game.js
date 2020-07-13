@@ -112,12 +112,9 @@ namespace HistoricalConquest;
         }
     }
     function render_morale(player,target) {
-        let s = get_player_morale(player);
+        let s = 100;
         let end = 3000;
-        let step = Math.ceil((end - s) / 9);
-        if ( s < 100 ) {
-            s = 100;
-        }
+        let step = 100;
         let c = s;
         let last_c = c;
         let bar = _div('morale_bar_' + player.id,'morale-bar');
@@ -129,15 +126,25 @@ namespace HistoricalConquest;
                 width: w,
             });
             bar.append(cont);
-            if ( player.morale >= c ) {
+            if ( get_player_morale(player) >= c ) {
                 cont.addClass('morale-display-current');
             }
             last_c = c;
             c = c + step;
+            if ( step < 500 ) {
+                step = step + 100;
+            }
             
         }
         cont = _div(null,'morale-display'); 
         cont.html(end);
+        w = panels.main.width() / 10;
+        cont.css({
+            width: w,
+        });
+        bar.append(cont);
+        cont = _div(null,'morale-display'); 
+        cont.html(get_current_round());
         w = panels.main.width() / 10;
         cont.css({
             width: w,
