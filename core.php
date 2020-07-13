@@ -31,6 +31,13 @@ function session($key) {
         return $_SESSION[$key];
     return null;
 }
+function convert_to_std($ar) {
+    $na = new \stdClass;
+    foreach ( $ar as $k=>$v) {
+        $na->{$k} = $v;
+    }
+    return $na;
+}
 function _datetime($d) {
 	$date = \DateTime::createFromFormat("Y-m-d H:i:s",$d);
 	if ( $date ) 
@@ -392,4 +399,45 @@ function select($args) {
         </select>
     ";
 }
-
+function create_game() {
+    
+}
+function get_carddb() {
+    $cards = get_cards();
+    $fcards = [];
+    foreach ( $cards as $card ) {
+        $fcards[ $card['ext_id'] ] = $card;
+    }
+    return $fcards;
+}
+function get_type_conversion_js() {
+    $opts = options_as_array();
+    ob_start();
+    echo "function type_to_name(t) {\n";
+    foreach ( $opts as $k=>$v) {
+        echo "\tif ( t == window.types.key_values.$k ) { return '$k'; }\n";
+    }
+    echo "\treturn '';\n";
+    echo "}\n";
+    echo "function name_to_type(t) {\n";
+    foreach ( $opts as $k=>$v) {
+        echo "\tif ( t == '$k' ) { return window.types.key_values.$k; }\n";
+    }
+    echo "\treturn '';\n";
+    echo "}\n";
+    echo "function type_to_css_class(t) {\n";
+    foreach ( $opts as $k=>$v) {
+        $name = $k;
+        foreach ( ['CARD_CHARACTER_','CARD_'] as $r ) {
+            $name = str_replace($r,'',$name);
+        }
+        $name = str_replace('_','-',$name);
+        $name = strtolower($name);
+        echo "\tif ( t == window.types.key_values.$k) { return '$name'; }\n";
+    }
+    echo "\treturn '';\n";
+    echo "}\n";
+    $contents = ob_get_contents();
+    ob_end_clean();
+    return $contents;
+}

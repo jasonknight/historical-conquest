@@ -1,3 +1,6 @@
+<?php
+    namespace HistoricalConquest;
+?>
 <html>
     <head>
         <script
@@ -6,8 +9,9 @@
   crossorigin="anonymous"></script>
         <link rel="stylesheet" href="/wp-content/plugins/historical-conquest/assets/style.css" />
         <script type="text/javascript">
+            window.types = <?php echo json_encode(get_types_for_js()); ?>;
             window.board = <?php echo include(dirname(__DIR__) . '/tools/generate_player.php');?>;
-            window.carddb = <?php $asset('card-db.json'); ?>;
+            window.carddb = <?php echo json_encode(get_carddb(),JSON_PRETTY_PRINT); ?>;
             window.card_layer = 1;
             window.overlay_layer = 2;
             window.popup_layer = 3; 

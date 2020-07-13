@@ -7,7 +7,7 @@ function get_transportable(src) {
         if ( cid == 0 )
             continue;
         let cdef = window.carddb[cid];
-        if ( cdef && ['character','army'].indexOf(cdef.type) != -1 && cdef.id != src.attr('card-id') ) {
+        if ( cdef && (is_character(cdef.maintype) || is_army(cdef.maintype)) && cdef.ext_id != src.attr('card-id') ) {
             transportable.push(cid);
         }
     }
@@ -36,6 +36,7 @@ function convert_to_transport_widget(d,src,clone) {
     if ( transportable.length == 0 )
         return;
     d.html('');
+    get_current_player().transport = [];
     for ( let i = 0; i < transportable.length; i++ ) {
         let card = get_card(transportable[i]);
         card.unbind('click');
@@ -47,18 +48,36 @@ function convert_to_transport_widget(d,src,clone) {
         holder.css('height',(d.height() / 2) * 0.90);
         d.append(holder);
         holder.on('click',function () {
+            if ( $(this).hasClass('transport-carry-active') ) {
+                console.log("Removing transport-carry-active");
+                $(this).removeClass('transport-carry-active');
+                get_current_player().transporting = get_current_player().transporting.filter(function (id) {
+                    return id != card.attr('card-id');
+                });
+                // remove from transport
+                return;
+            }
             let destinations = get_transport_destinations();
             let p = get_current_player();
-            if ( !contains_card_type(transportable,'army') ) {
-                let new_dests = [];
-                for ( let i = 0; i < destinations.length; i++ ) {
-                    if ( destinations[i].player.id != p.id ) 
-                        continue;
-                    new_dests.push(destinations[i]);
-                }
-                destinations = new_dests;
-            }        
-            convert_to_destination_widget(d,src,clone,holder,destinations);
+            let def = get_card_def(src.attr('card-id'));
+            $(this).addClass('transport-carry-active');
+            get_current_player().transport.push(card.attr('card-id'));
+            console.log("Appending ",card.attr('card-id'));
+            if ( def.carry_capacity == 1 || get_current_player().transport.length == def.carry_capacity) {
+                // I.E. we are splitting attack out, so always remove
+                // other player cards
+                if ( true ) {
+                    let new_dests = [];
+                    for ( let i = 0; i < destinations.length; i++ ) {
+                        if ( destinations[i].player.id != p.id ) 
+                            continue;
+                        new_dests.push(destinations[i]);
+                    }
+                    destinations = new_dests;
+                }        
+                get_current_player().transport.push(src.attr('card-id'));
+                convert_to_destination_widget(d,src,clone,holder,destinations);
+            }
         });
     }
 }
@@ -83,7 +102,26 @@ function convert_to_destination_widget(d,src,clone,origin_holder,destinations) {
 
         d.append(holder);
         holder.on('click',function () {
-            console.log("transporting to: ",card.attr('card-id'));
+            let def = get_card_def(card.attr('card-id'));
+            let dest = get_row_col_for(get_current_player(),card.attr('card-id'));
+            let to_transport = get_current_player().transport; 
+            while ( to_transport.length > 0 ) {
+                let player = get_current_player();
+                let card_to_play = to_transport.pop();
+                let nrow = get_next_open_row(player,dest.row,dest.col);
+                if ( ! nrow ) {
+                    console.log("Could not determine next open row");
+                    return;
+                }
+                player.hand.push(card_to_play);
+                let old_dest = get_row_col_for(player,card_to_play);
+                player.playmat[old_dest.row][old_dest.col] = 0;
+                play_card(player,card_to_play,nrow,dest.col);
+                current_move--;
+                console.log("playing", card_to_play, "to", nrow,dest.col);
+            }
+            trigger_refresh();
+            trigger_close_zoom_holder();
         });
     }
 }

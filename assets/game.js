@@ -1,3 +1,6 @@
+<?php
+namespace HistoricalConquest;
+?>
 (function ($) {
     let panels = {};
         panels.data = {};
@@ -9,6 +12,7 @@
     <?php $asset('land_card.js'); ?>
     
     <?php $asset('helper.js'); ?> 
+    <?php echo get_type_conversion_js(); ?> 
     function unhighlight_playable_squares() { 
         $('table.grid td.highlight-square').unbind('click');
         $('table.grid td.highlight-square').removeClass('highlight-square');
@@ -46,14 +50,17 @@
     function contains_card_type(lst,t,s1) {
         for ( let i = 0; i < lst.length; i++ ) {
             if ( t && s1 ) {
-                if ( window.carddb[lst[i]] && window.carddb[lst[i]].type == t && window.carddb[lst[i]].subtype1 == s1 )
+                if ( window.carddb[lst[i]] && window.carddb[lst[i]].maintype == t) {
                     return true;
+                }
             } else if (t) {
-                if ( window.carddb[lst[i]] && window.carddb[lst[i]].type == t )
+                if ( window.carddb[lst[i]] && window.carddb[lst[i]].maintype == t ) {
                     return true;
+                }
             } else if (s1) {
-                if ( window.carddb[lst[i]] && window.carddb[lst[i]].subtype1 == s1 )
+                if ( window.carddb[lst[i]] && window.carddb[lst[i]].subtype1 == s1 ) {
                     return true;
+                }
             }
         }
         return false;
@@ -63,9 +70,12 @@
         let card_def = window.carddb[id];
         if ( card_def ) {
             card.find('.name-plate').html(card_def.name);
-            card.addClass('card-type-' + card_def.type);
-            if ( card_def.subtype1 ) {
-                card.addClass('card-type-' + card_def.subtype1);
+            card.addClass('card-type-' + type_to_css_class(card_def.maintype));
+            if ( type_to_css_class(card_def.maintype).match(/explorer-/) ) {
+                card.addClass('card-type-explorer');
+            }
+            if ( is_character(card_def.maintype) ) {
+                card.addClass('card-type-character');
             }
         }
         card.attr('card-id',id);
@@ -178,8 +188,8 @@
                 played_def.x = x;
                 player.played.push(played_def);
                 player.playmat[y][x] = id;
-                console.log("card_def",card_def);
-                if ( card_def.subtype1 == 'explorer' ) {
+                console.log("card_def",card_def, is_explorer(card_def.maintype));
+                if ( is_explorer(card_def.maintype) ) {
                     if ( player.playmat[y+1][x] == 0 ) {
                         play_card(player,player.land_pile[0],y+1,x);
                         current_move--;
@@ -204,17 +214,7 @@
             }
         }
         player.land_pile = new_land_pile;
-        if ( y == 0 ) {
-            let nr = [];
-            for ( let i = 0; i < player.playmat[0].length; i++ ) {
-                nr[i] = 0;
-            }
-            let new_mat = [nr];
-            for ( let i = 0; i < player.playmat.length; i++) {
-                new_mat.push(player.playmat[i]);
-            }
-            player.playmat = new_mat;
-        }
+        expand_playmat(player);
         current_move++;
     }
     function render_players(players) {
@@ -238,7 +238,11 @@
         for ( let i = 0; i < player.draw_pile.length; i++ ) {
             let id = player.draw_pile[i];
             let card_def = window.carddb[id];
-            if ( card_def.type == 'land' ) {
+            if ( ! card_def ) {
+                console.log("id",id, "does not exist in carddb?");
+                continue;
+            }
+            if ( card_def && card_def.maintype == window.types.key_values.CARD_LAND ) {
                 land_pile.push(id);
             } else {
                 draw_pile.push(id);

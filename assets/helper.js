@@ -51,6 +51,13 @@ function get_grid_column_height(player) {
 function get_card_column_height(player) {
     return get_grid_column_height(player) * panels.data.card_height;
 }
+function get_card_def(id) {
+    let def = window.carddb[id];
+    if ( ! def ) {
+       console.log("Failed to find card " + id); 
+    }
+    return def;
+}
 function get_land_pile() {
     let d = _div(null,null);
     d.addClass('land-pile');
@@ -111,4 +118,84 @@ function is_land_row_card(el) {
     if ( parseInt(td.attr('y')) == get_current_player().playmat.length - 2 ) 
         return true;
     return false;
+}
+function is_character(t) {
+    return type_to_name(t).match(/CHARACTER/);
+}
+function is_explorer(t) {
+    let type = type_to_name(t);
+    let m = type.match(/EXPLORER/)
+    console.log("Type",type,m);
+    return m;
+}
+function is_army(t) {
+    return t == window.types.key_values.CARD_ARMY;
+}
+function get_row_col_for(player,id) {
+    let mat = player.playmat;
+    for ( let row = 0; row < mat.length - 1; row++ ) {
+        for (let col = 0; col < mat[0].length - 2; col++ ) {
+            if ( mat[row][col] == id ) {
+                return {
+                    row: row,
+                    col: col
+                };
+            }
+        }
+    }
+    return null;
+}
+function expand_playmat(player) {
+    let vexpand = false;
+    let hexpand = false;
+    for ( let y = 0; y < player.playmat.length - 1; y++ ) {
+        if ( player.playmat[y][0] != 0 ) {
+            hexpand = true;
+        }
+    }
+    if ( hexpand ) {
+        for ( let y = 0; y < player.playmat.length; y++ ) {
+            let nr = [0];
+            let len = player.playmat[0].length;
+            for ( let x = 0; x < len; x++ ) {
+                nr.push(player.playmat[y][x]);
+            }
+            player.playmat[y] = nr;
+        }
+    }
+    for ( let x = 0; x < player.playmat[0].length; x++ ) {
+        if ( player.playmat[0][x] != 0 ) {
+            vexpand = true;   
+        }
+    }
+    if ( vexpand ) {
+        let nr = [];
+        for ( let i = 0; i < player.playmat[0].length; i++ ) {
+            nr[i] = 0;
+        }
+        let new_mat = [nr];
+        for ( let i = 0; i < player.playmat.length; i++) {
+            new_mat.push(player.playmat[i]);
+        }
+        player.playmat = new_mat;
+    }
+}
+function get_next_open_row(player,row,col) {
+    expand_playmat(player);
+    let mat = player.playmat;
+    if ( mat[row][col] == 0 ) {
+        return row;
+    }
+    for ( let y = row; y > -1; y-- ) {
+        if ( mat[y][col] == 0 ) {
+            return y;
+        }   
+    }
+    return null;
+}
+function trigger_refresh() {
+    $('body').trigger($.Event('refresh_board'));
+}
+function trigger_close_zoom_holder() {
+    $('body').trigger($.Event('close_zoom_holder'));
 }
