@@ -74,8 +74,27 @@ function can_play(card_element) {
     }
     return false;
 }
+function next_player() {
+    window.board.player_pointer++;
+    if ( window.board.player_pointer >= window.board.players.length ) {
+        window.board.player_pointer = 0;
+    }
+    window.board.current_move = 0;
+}
+function advance_move() {
+    window.board.current_move++;
+    if ( window.board.current_move == 3 ) {
+        next_player();
+    }
+}
+function unadvance_move() {
+    window.board.current_move--;
+}
+function current_move() {
+    return window.board.current_move;
+}
 function get_current_player() {
-    return window.current_player;
+    return window.board.players[window.board.player_pointer];
 }
 
 function get_card_summary(id) {
@@ -198,4 +217,7 @@ function trigger_refresh() {
 }
 function trigger_close_zoom_holder() {
     $('body').trigger($.Event('close_zoom_holder'));
+}
+function get_player_morale(player) {
+    return player.morale;
 }

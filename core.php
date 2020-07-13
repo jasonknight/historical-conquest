@@ -441,3 +441,12 @@ function get_type_conversion_js() {
     ob_end_clean();
     return $contents;
 }
+function get_base_table() {
+    return [
+        [0,0,0,0,0],
+        [0,0,0,0,0],
+        [0,0,0,0,0],
+        [0,0,0,0,0],
+        [0,0,0,0,0],
+    ];
+}

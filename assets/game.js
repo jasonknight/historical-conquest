@@ -6,7 +6,8 @@ namespace HistoricalConquest;
         panels.data = {};
         panels.data.card_width = 0.90;
         panels.data.card_height = 0.85
-    let current_move = 0;
+    window.board.current_move = 0;
+    window.board.player_pointer = 0;
     <?php $asset('card_zoom.js'); ?>
     <?php $asset('explorer.js'); ?>
     <?php $asset('land_card.js'); ?>
@@ -110,6 +111,42 @@ namespace HistoricalConquest;
             col--;
         }
     }
+    function render_morale(player,target) {
+        let s = get_player_morale(player);
+        let end = 3000;
+        let step = Math.ceil((end - s) / 9);
+        if ( s < 100 ) {
+            s = 100;
+        }
+        let c = s;
+        let last_c = c;
+        let bar = _div('morale_bar_' + player.id,'morale-bar');
+        while ( c < end ) {
+           let cont = _div(null,'morale-display'); 
+            cont.html(c);
+            let w = panels.main.width() / 10 * 0.98;
+            cont.css({
+                width: w,
+            });
+            bar.append(cont);
+            if ( player.morale >= c ) {
+                cont.addClass('morale-display-current');
+            }
+            last_c = c;
+            c = c + step;
+            
+        }
+        cont = _div(null,'morale-display'); 
+        cont.html(end);
+        w = panels.main.width() / 10;
+        cont.css({
+            width: w,
+        });
+        bar.append(cont);
+        target.append(bar);
+
+
+    }
     function render_play_mat(player,target) {
         let rows_cols = player.playmat;
         let rl = rows_cols.length;
@@ -118,6 +155,8 @@ namespace HistoricalConquest;
         rows_cols[rl-2][cl-2] = 'DRAW_PILE';
         rows_cols[rl-3][cl-1] = 'DISCARD_PILE';
         player.playmat = rows_cols;
+        target.html('')
+        render_morale(player,target);
         let table = $('<table></table>');
             table.addClass('grid');
         let last_row = rows_cols.length - 1;
@@ -129,8 +168,8 @@ namespace HistoricalConquest;
            }
         }
         if ( ! land_card_present ) {
+            unadvance_move();
             play_card(player,player.land_pile[0],last_row - 1,last_col - 2);
-            current_move--;
             rows_cols = player.playmat;
         }
         setup_hand(player,rows_cols);
@@ -165,7 +204,6 @@ namespace HistoricalConquest;
             }
             table.append(tr);
         }
-        target.html('')
         target.append(table);
     }
     function get_card_def(id) {
@@ -174,7 +212,7 @@ namespace HistoricalConquest;
     function play_card(player,id,y,x) {
         y = parseInt(y);
         x = parseInt(x);
-        if ( current_move > 2 )
+        if ( current_move() > 2 )
             return;
         let card = get_card(id);
         let card_def = get_card_def(id);
@@ -189,10 +227,11 @@ namespace HistoricalConquest;
                 player.played.push(played_def);
                 player.playmat[y][x] = id;
                 console.log("card_def",card_def, is_explorer(card_def.maintype));
+
                 if ( is_explorer(card_def.maintype) ) {
                     if ( player.playmat[y+1][x] == 0 ) {
+                        unadvance_move();
                         play_card(player,player.land_pile[0],y+1,x);
-                        current_move--;
                     }
                 }
             } else {
@@ -215,12 +254,12 @@ namespace HistoricalConquest;
         }
         player.land_pile = new_land_pile;
         expand_playmat(player);
-        current_move++;
+        advance_move();
     }
     function render_players(players) {
         panels.main.html('');
         panels.tab_panel.html('');
-        console.log("Rendering", "Round", window.board.round, "Move", current_move);
+        console.log("Rendering", "Round", window.board.round, "Move", current_move());
         $.each(players, function () {
             let id = 'player_' + this.id;
             let d = _div( id, 'player tab');
@@ -250,7 +289,7 @@ namespace HistoricalConquest;
         }
         player.draw_pile = draw_pile;
         player.land_pile = land_pile;
-        if ( window.board.round == 0 && current_move == 0 ) {
+        if ( window.board.round == 0 && current_move() == 0 ) {
             while (player.hand.length < 5) {
                 player.hand.push(player.draw_pile.pop());
             }
@@ -269,7 +308,9 @@ namespace HistoricalConquest;
             window.current_player = window.board.players[0];
         }
         $.each(window.board.players, function () {
-            this.playmat = get_base_table();
+            if ( this.playmat.length == 0 ) {
+                this.playmat = get_base_table();
+            }
             process_player(this);
         });
         $('body').on('refresh_board',function () {

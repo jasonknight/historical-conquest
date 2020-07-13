@@ -77,6 +77,7 @@ function get_card_zoom_holder(src,and_append) {
         let y = $(this).attr('y');
         let x = $(this).attr('x');
         play_card(p,id,y,x);
+        trigger_close_zoom_holder();
         $('body').trigger($.Event('refresh_board'));
         d.remove();
         unhighlight_playable_squares();

@@ -161,3 +161,19 @@ p.land-owner-tag {
     background-color: blue;
     color: white;
 }
+div.morale-bar {
+    display: block;
+    text-align: center;
+}
+div.morale-bar .morale-display {
+    float: left;
+    display: block;
+    background-color: blue;
+    color: white;
+    margin-right: 2px;
+    font-weight: bolder;
+    font-size: 110%;
+}
+div.morale-bar .morale-display-current {
+    background-color: red;
+}
