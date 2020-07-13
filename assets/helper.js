@@ -78,8 +78,12 @@ function next_player() {
     window.board.player_pointer++;
     if ( window.board.player_pointer >= window.board.players.length ) {
         window.board.player_pointer = 0;
+        next_round();
     }
     window.board.current_move = 0;
+}
+function next_round() {
+    window.board.round++;
 }
 function advance_move() {
     window.board.current_move++;
@@ -238,4 +242,7 @@ function integer_to_roman(num) {
         roman_num = (key[+digits.pop() + (i * 10)] || "") + roman_num;
     }
     return Array(+digits.join("") + 1).join("M") + roman_num;
+}
+function get_current_player_tab_button_id() {
+    return '#player_' + get_current_player().id + '_tab_button';
 }

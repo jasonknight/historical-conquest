@@ -276,7 +276,8 @@ namespace HistoricalConquest;
             panels.tab_panel.append(btn);
             d.hide();
         });
-        $('#player_1_tab_button').trigger($.Event('click'));
+
+        $(get_current_player_tab_button_id()).trigger($.Event('click'));
     }
     function process_player(player) {
         let draw_pile = [];
