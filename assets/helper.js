@@ -81,6 +81,7 @@ function next_player() {
         next_round();
     }
     window.board.current_move = 0;
+    process_player(window.board.players[window.board.player_pointer]);
 }
 function next_round() {
     window.board.round++;

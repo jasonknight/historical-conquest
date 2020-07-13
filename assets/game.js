@@ -236,6 +236,7 @@ namespace HistoricalConquest;
                 console.log("card_def",card_def, is_explorer(card_def.maintype));
 
                 if ( is_explorer(card_def.maintype) ) {
+                    console.log("It's an explorer, so",player,y,x);
                     if ( player.playmat[y+1][x] == 0 ) {
                         unadvance_move();
                         play_card(player,player.land_pile[0],y+1,x);
@@ -246,6 +247,8 @@ namespace HistoricalConquest;
             }
         }
         player.hand = new_hand;
+        console.log("old land pile",player.land_pile);
+
         let new_land_pile = [];
         for ( let i = 0; i < player.land_pile.length; i++ ) {
             if ( card && player.land_pile[i] == id ) {
@@ -259,6 +262,7 @@ namespace HistoricalConquest;
                 new_land_pile.push(player.land_pile[i]);
             }
         }
+        console.log("new land pile",new_land_pile);
         player.land_pile = new_land_pile;
         expand_playmat(player);
         advance_move();
@@ -295,14 +299,24 @@ namespace HistoricalConquest;
                 draw_pile.push(id);
             }
         }
-        player.draw_pile = draw_pile;
-        player.land_pile = land_pile;
-        if ( window.board.round == 0 && current_move() == 0 ) {
+        if ( player.draw_pile.length < 1 ) {
+            player.draw_pile = draw_pile;
+        }
+        if ( player.land_pile.length < 1) {
+            player.land_pile = land_pile;
+        }
+        if ( current_move() == 0 ) {
             while (player.hand.length < 5) {
-                player.hand.push(player.draw_pile.pop());
+                let c = player.draw_pile.pop();
+                let def = get_card_def(c);
+                console.log("Adding: ", player.id,def, type_to_name(def.maintype));
+                if ( def.maintype == window.types.key_values.CARD_LAND ) {
+                    player.land_pile.push(c);
+                    continue;
+                }
+                player.hand.push(c);
             }
         }
-        console.log("hand",player.hand);
         return player;
     }
     function debug_playmat(player) {
