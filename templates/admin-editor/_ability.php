@@ -55,7 +55,7 @@ namespace HistoricalConquest;
                     <p class="label">Attribute</p> 
                     <select name="abilities[<?php echo $i; ?>][affects_attribute]">
                             <option>NONE</option>
-                        <?php foreach (['can_attack','morale','strength','defense'] as $opt ) { ?>
+                        <?php foreach (['can_attack','morale','attack','defense','strength'] as $opt ) { ?>
                             <option><?php echo $opt; ?></option> 
                         <?php } ?>
                     </select>

@@ -21,7 +21,7 @@ namespace HistoricalConquest;
         
         <tr>
             <td colspan="2">
-                <p class="label">Strength</p>
+                <p class="label">Attack</p>
                 <input type="text" name="card[strength]" />
                 <p class="label">Defense</p>
                 <input type="text" name="card[defense]" />
@@ -144,3 +144,7 @@ namespace HistoricalConquest;
         </tr>
     </table>
 </form>
+<h3>Raw JSON</h3>
+<pre class="card-json-data" style="overflow-x: scroll;">
+
+</pre>

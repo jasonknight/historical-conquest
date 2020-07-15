@@ -12,6 +12,7 @@ namespace HistoricalConquest;
 require_once(__DIR__ . '/core.php');
 require_once(__DIR__ . '/settings.php');
 require_once(__DIR__ . '/types.php');
+
 function install_game_tables() {
     global $wpdb;
     $sql = render_template('installation.sql');
@@ -38,16 +39,23 @@ function init() {
        import_cards_table();
        exit; 
    }
-   if ( get('subaction') == 'edit-card' && is_array(post('card')) ) {
-        edit_card();
-   }
-   if ( get('admin-editor') && get('deck') ) {
+   
+   if ( get('admin-editor')) {
        session_start();
-        $_SESSION['deck_filter'] = get('deck');
+       if ( get('deck') ) {
+           $_SESSION['deck_filter'] = get('deck');
+       }
+       if ( get('subaction') == 'edit-card' && is_array(post('card')) ) {
+            edit_card();
+       }
    }
 }
 function initialize_notices() {
     update_option('hcnotices',[]);
+}
+function splat_and_die($ar) {
+    echo "<pre>".print_r($ar,true)."</pre>". PHP_EOL;
+    die(__FUNCTION__);
 }
 function edit_card() {
     global $wpdb;

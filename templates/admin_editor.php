@@ -134,7 +134,7 @@ namespace HistoricalConquest;
                     for ( let akey in ability ) {
                         let aval = ability[akey]; 
                         let sel = 'input[name="abilities['+i+'][' + akey + ']"]';
-                        if ( ['apply_to_type','apply_to_scope'].indexOf(akey) != -1 ) {
+                        if ( ['usage_type','ability_type','apply_to_type','apply_to_scope'].indexOf(akey) != -1 ) {
                             for ( let type_key in window.types.key_values ) {
                                 if ( parseInt(window.types.key_values[type_key]) == parseInt(aval) ) {
                                    aval = type_key; 
@@ -158,6 +158,7 @@ namespace HistoricalConquest;
             $('div#edit_card').find(sel).val(val_to_set);
             $('div#edit_card').find('select[name="card[' + key + ']"]').val(val_to_set);
             $('div#edit_card').find('textarea[name="card[' + key + ']"]').val(val_to_set);
+            $('div#edit_card').find('.card-json-data').html(JSON.stringify(record,null,2));
         }
     });
 })(jQuery);

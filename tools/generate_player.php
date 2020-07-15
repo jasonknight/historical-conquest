@@ -71,6 +71,7 @@ for ( $i = 1; $i < 3; $i++ ) {
     $player->played = [];
     $player->playmat = get_base_table();
     $player->effectmat = get_base_table();
+    $player->damagemat = get_base_table();
     array_push($players,$player);
 }
 $board = new \stdClass;
