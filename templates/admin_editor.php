@@ -129,7 +129,13 @@ namespace HistoricalConquest;
                     });
                 }
                 for ( let i = 0; i < record.abilities.length; i++ ) {
-                    let row = $('tr.ability-row').last();
+                    let arows = $('tr.ability-row');
+                    while ( arows.length > 1 ) {
+                        arows.last().remove(); 
+                        arows = $('tr.ability-row')
+                    }
+                    arows = $('tr.ability-row')
+                    let row = arows.last();
                     let ability = record.abilities[i];
                     for ( let akey in ability ) {
                         let aval = ability[akey]; 
