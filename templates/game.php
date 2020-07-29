@@ -50,6 +50,8 @@
         </div>
         <div class="tab-panel"></div>
         <div class="main container"></div> 
+        <h1>Active Abilities Debug</h1>
+        <div class="abilitymats container"></div> 
         
     </body>
 </html>

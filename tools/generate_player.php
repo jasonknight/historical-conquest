@@ -70,7 +70,7 @@ for ( $i = 1; $i < 3; $i++ ) {
     $player->land_count = $land_count;
     $player->played = [];
     $player->playmat = get_base_table();
-    $player->effectmat = get_base_table();
+    $player->abilitymat = get_base_table();
     $player->damagemat = get_base_table();
     array_push($players,$player);
 }

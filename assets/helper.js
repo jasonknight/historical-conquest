@@ -17,7 +17,9 @@ function _tab_button(id,player) {
     d.on('click',function () {
         $('.tab-button').removeClass('active-tab');
         $('div.tab').hide();
+        $('div.abilitymat-tab').hide();
         $('#' + id).show();
+        $('#' + id + '_abilitymat').show();
         window.current_player = player;
         $(this).addClass('active-tab');
     });
@@ -33,6 +35,32 @@ function get_base_table() {
         [0,0,0,0,0],
     ];
 }
+function get_card(id) {
+        let card = $($('div.card-template').html()) ;
+        let card_def = window.carddb[id];
+        if ( card_def ) {
+            card.find('.name-plate').html(card_def.name);
+            card.addClass('card-type-' + type_to_css_class(card_def.maintype));
+            if ( type_to_css_class(card_def.maintype).match(/explorer-/) ) {
+                card.addClass('card-type-explorer');
+            }
+            if ( is_character(card_def.maintype) ) {
+                card.addClass('card-type-character');
+            }
+        }
+        card.attr('card-id',id);
+        card.css({
+            "width": get_card_column_width() + 'px',
+            "height": get_card_column_height() + 'px',
+        });
+        card.on('click',function () {
+            $('div.card-zoom-holder').remove();
+            $('.card-controls').remove();
+            unhighlight_playable_squares();
+            let cont = get_card_zoom_holder($(this),true);
+        });
+        return card;
+    }
 function get_grid_column_width(player) {
     let grid = get_base_table();
     if ( player ) {

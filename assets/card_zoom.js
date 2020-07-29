@@ -123,7 +123,7 @@ function convert_to_abilities_widget(d,src,clone) {
         let btn = _div(null,'button activate-ability');
             btn.html("Activate");
             btn.on('click',function () {
-                _log('Activate Ability',a);
+                trigger_activate_ability(d,src,clone,a);
             });
             col1.append(btn);
             row.append(col1);

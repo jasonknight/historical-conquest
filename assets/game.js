@@ -69,32 +69,6 @@ namespace HistoricalConquest;
         }
         return false;
     }
-    function get_card(id) {
-        let card = $($('div.card-template').html()) ;
-        let card_def = window.carddb[id];
-        if ( card_def ) {
-            card.find('.name-plate').html(card_def.name);
-            card.addClass('card-type-' + type_to_css_class(card_def.maintype));
-            if ( type_to_css_class(card_def.maintype).match(/explorer-/) ) {
-                card.addClass('card-type-explorer');
-            }
-            if ( is_character(card_def.maintype) ) {
-                card.addClass('card-type-character');
-            }
-        }
-        card.attr('card-id',id);
-        card.css({
-            "width": get_card_column_width() + 'px',
-            "height": get_card_column_height() + 'px',
-        });
-        card.on('click',function () {
-            $('div.card-zoom-holder').remove();
-            $('.card-controls').remove();
-            unhighlight_playable_squares();
-            let cont = get_card_zoom_holder($(this),true);
-        });
-        return card;
-    }
     function render_card(table,card,row,col) {
         table[row][col] = card;
     }
@@ -156,6 +130,50 @@ namespace HistoricalConquest;
         target.append(bar);
 
 
+    }
+    function render_ability_mat(player,target) {
+        let rows_cols = player.abilitymat;
+        let rl = rows_cols.length;
+        let cl = rows_cols[0].length;
+        rows_cols[rl-2][cl-1] = 'LAND_PILE';
+        rows_cols[rl-2][cl-2] = 'DRAW_PILE';
+        rows_cols[rl-3][cl-1] = 'DISCARD_PILE';
+        player.abilitymat = rows_cols;
+        target.html('')
+        let table = $('<table></table>');
+            table.addClass('grid');
+        let last_row = rows_cols.length - 1;
+        let last_col = rows_cols[0].length - 1;
+        for ( let row = 0; row < rows_cols.length; row++) {
+            let tr = $('<tr />');
+            tr.attr('y',row);
+            for ( let col = 0; col < rows_cols[0].length; col++ ) {
+                let td = $('<td />');
+                tr.append(td); 
+                td.attr('y',row);
+                td.attr('x',col);
+                td.attr('yx',row + ',' + col);
+                td.css({
+                    "width": get_grid_column_width(player) + 'px',
+                    "height": get_grid_column_height(player) + 'px',
+                });
+                td.addClass('playmat-column abilitymat-column');
+                if ( rows_cols[row][col] !== 0 ) {
+                    let id = rows_cols[row][col];
+                    if ( id == 'LAND_PILE' ) {
+                        td.addClass('land-pile');
+                    } else if ( id == 'DRAW_PILE' ) {
+                        td.addClass('draw-pile');
+                    } else if ( id == 'DISCARD_PILE' ) {
+                        td.addClass('discard-pile');
+                    } else {
+                        // Okay we handle abilities display here
+                    }
+                } 
+            }
+            table.append(tr);
+        }
+        target.append(table);
     }
     function render_play_mat(player,target) {
         let rows_cols = player.playmat;
@@ -271,6 +289,7 @@ namespace HistoricalConquest;
         advance_move();
     }
     function render_players(players) {
+        render_players_abilitymat(players);
         panels.main.html('');
         panels.tab_panel.html('');
         _log("Rendering", "Round", window.board.round, "Move", current_move());
@@ -285,6 +304,16 @@ namespace HistoricalConquest;
         });
 
         $(get_current_player_tab_button_id()).trigger($.Event('click'));
+    }
+    function render_players_abilitymat(players) {
+        panels.abilitymats.html('');
+        $.each(players, function () {
+            let id = 'player_' + this.id + '_abilitymat';
+            let d = _div( id, 'abilitymat-tab');
+            render_ability_mat(this,d);
+            panels.abilitymats.append(d);
+            d.hide();
+        });
     }
     function process_player(player) {
         let draw_pile = [];
@@ -327,6 +356,7 @@ namespace HistoricalConquest;
     }
     $(function () {
         panels.main = $('div.main');
+        panels.abilitymats = $('div.abilitymats');
         panels.tab_panel = $('div.tab-panel');
         panels.tab_panel.css('height',$(window).height() * 0.05);
         if ( ! window.current_player ) {
