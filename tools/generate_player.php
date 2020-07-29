@@ -42,7 +42,7 @@ for ( $i = 1; $i < 3; $i++ ) {
     $player = new \stdClass;
     $player->name = "Player" . $i;
     $player->id = $i;
-    $player->morale = 1001;
+    $player->morale = 0;
     $player->transport = [];
     $player->hand = [
         get_random_explorer(get_cards_with_abilities()), 

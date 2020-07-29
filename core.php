@@ -215,11 +215,11 @@ function is_land_card($card) {
 }
 function get_abilities($card) {
     global $wpdb;
-    return $wpdb->get_results("SELECT * FROM `hc_card_abilities` WHERE card_id = {$card['id']}");
+    return $wpdb->get_results("SELECT * FROM `hc_card_abilities` WHERE card_id = {$card['id']}",ARRAY_A);
 }
 function filter_slashes($ar) {
     foreach ($ar as $key=>&$v) {
-        if ( $key == 'abilities' ) {
+        if ( $key === 'abilities' ) {
             continue;
         }
         if ( is_string($v) ) {
@@ -235,6 +235,9 @@ function filter_slashes($ar) {
 function filter_cards($cards) {
     foreach ( $cards as $key => &$card ) {
         $card = filter_slashes($card);
+        if ( isset($card['abilities']) && is_array($card['abilities']) ) {
+            $card['abilities'] = filter_slashes($card['abilities']);
+        }
     }
     return $cards;
 }

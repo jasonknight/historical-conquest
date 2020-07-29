@@ -138,7 +138,7 @@ function maybe_add_explorer_controls(d,src,clone,button_row) {
         });
         button_row.append(transport);
     } else {
-        console.log(
+        _log(
             "no transport",
             src.attr('card-id'),
             src.hasClass('card-type-explorer'),
@@ -148,3 +148,4 @@ function maybe_add_explorer_controls(d,src,clone,button_row) {
     }
     return button_row;
 }
+

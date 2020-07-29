@@ -1,3 +1,6 @@
+function _log() {
+    console.log.apply(null,arguments);
+}
 function _div(id,kls) {
     let d = null;
     if ( id ) {
@@ -54,7 +57,7 @@ function get_card_column_height(player) {
 function get_card_def(id) {
     let def = window.carddb[id];
     if ( ! def ) {
-       console.log("Failed to find card " + id); 
+       _log("Failed to find card " + id); 
     }
     return def;
 }
@@ -149,7 +152,7 @@ function is_character(t) {
 function is_explorer(t) {
     let type = type_to_name(t);
     let m = type.match(/EXPLORER/)
-    console.log("Type",type,m);
+    _log("Type",type,m);
     return m;
 }
 function is_army(t) {
@@ -217,12 +220,7 @@ function get_next_open_row(player,row,col) {
     }
     return null;
 }
-function trigger_refresh() {
-    $('body').trigger($.Event('refresh_board'));
-}
-function trigger_close_zoom_holder() {
-    $('body').trigger($.Event('close_zoom_holder'));
-}
+
 function get_player_morale(player) {
     return player.morale;
 }
