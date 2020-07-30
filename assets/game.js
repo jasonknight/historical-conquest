@@ -17,58 +17,7 @@ namespace HistoricalConquest;
     
     <?php echo get_type_conversion_js(); ?> 
     _log("Logging","is","on");
-    function unhighlight_playable_squares() { 
-        $('table.grid td.highlight-square').unbind('click');
-        $('table.grid td.highlight-square').removeClass('highlight-square');
-    }
-    function highlight_playable_squares_for(card) {
-        let p = get_current_player();    
-        let mat = p.playmat;
-        let last_row = mat.length - 1;
-        let last_col = mat[0].length - 1;
-        // For regular cards
-        let playable_squares = [];
-        for ( let y = 0; y <= last_row - 2; y++ ) {
-            for ( let x = 0; x <= last_col - 2; x++ ) {
-               if ( mat[last_row-1][x] != 0  && mat[y][x] == 0) {
-                    playable_squares.push([y,x]);
-               }
-            }
-        }
-        if ( card.hasClass('card-type-explorer') ) {
-            let y = last_row - 2;
-            for ( let x = 0; x <= last_col - 2; x++ ) {
-               if ( mat[y+1][x] == 0 && mat[y+1][x+1] != 0 && mat[y][x] == 0 ) {
-                    playable_squares.push([y,x]);
-               }
-            }
-        }
-        for ( let i = 0; i < playable_squares.length; i++ ) {
-            let pos = playable_squares[i];
-            $('table.grid td[yx="' + pos.join(',') + '"]').addClass('highlight-square');
-        }
-    }
-
-   
     
-    function contains_card_type(lst,t,s1) {
-        for ( let i = 0; i < lst.length; i++ ) {
-            if ( t && s1 ) {
-                if ( window.carddb[lst[i]] && window.carddb[lst[i]].maintype == t) {
-                    return true;
-                }
-            } else if (t) {
-                if ( window.carddb[lst[i]] && window.carddb[lst[i]].maintype == t ) {
-                    return true;
-                }
-            } else if (s1) {
-                if ( window.carddb[lst[i]] && window.carddb[lst[i]].subtype1 == s1 ) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
     function render_card(table,card,row,col) {
         table[row][col] = card;
     }
@@ -237,6 +186,31 @@ namespace HistoricalConquest;
     function get_card_def(id) {
         return window.carddb[id];
     }
+    function discard(player,card_def) {
+        if ( player.hand.indexOf(card_def.ext_id) != -1 ) {
+            let nh = [];
+            for ( let i = 0; i < 5; i++ ) {
+                 if ( player.hand[i] == card_def.ext_id ) {
+                     continue;
+                 }
+                 nh.push(player.hand[i]);
+            }
+            player.hand = nh;
+            advance_move();
+            trigger_refresh();
+            return;
+        }
+        let loc = get_row_col_of_played_card(player,card_def.ext_id);
+        if ( loc && loc.row ) {
+            player.playmat[loc.row][loc.col] = 0;
+            // TODO: Is this always the case? Maybe not.
+            player.abilitymat[loc.row][loc.col] = 0;
+            advance_move();
+            trigger_refresh();
+            return;
+        }
+        _log("Discarding failed?",player,card_def);
+    }
     function play_card(player,id,y,x) {
         y = parseInt(y);
         x = parseInt(x);
@@ -254,22 +228,18 @@ namespace HistoricalConquest;
                 played_def.x = x;
                 player.played.push(played_def);
                 player.playmat[y][x] = id;
-                _log("card_def",card_def, is_explorer(card_def.maintype));
-
                 if ( is_explorer(card_def.maintype) ) {
-                    _log("It's an explorer, so",player,y,x);
                     if ( player.playmat[y+1][x] == 0 ) {
                         unadvance_move();
                         play_card(player,player.land_pile[0],y+1,x);
                     }
                 }
+                trigger_card_played(player,played_def);
             } else {
                 new_hand.push(player.hand[i]);
             }
         }
         player.hand = new_hand;
-        _log("old land pile",player.land_pile);
-
         let new_land_pile = [];
         for ( let i = 0; i < player.land_pile.length; i++ ) {
             if ( card && player.land_pile[i] == id ) {
@@ -279,11 +249,11 @@ namespace HistoricalConquest;
                 played_def.x = x;
                 player.played.push(played_def);
                 player.playmat[y][x] = id;
+                trigger_card_played(player,played_def);
             } else {
                 new_land_pile.push(player.land_pile[i]);
             }
         }
-        _log("new land pile",new_land_pile);
         player.land_pile = new_land_pile;
         expand_playmat(player);
         advance_move();
@@ -341,7 +311,6 @@ namespace HistoricalConquest;
             while (player.hand.length < 5) {
                 let c = player.draw_pile.pop();
                 let def = get_card_def(c);
-                _log("Adding: ", player.id,def, type_to_name(def.maintype));
                 if ( def.maintype == window.types.key_values.CARD_LAND ) {
                     player.land_pile.push(c);
                     continue;

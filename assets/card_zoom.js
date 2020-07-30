@@ -63,8 +63,7 @@ function get_card_zoom_holder(src,and_append) {
     });
     clone.on('click',function() {
         d.remove();
-        $('body').trigger($.Event('close_zoom_holder'));
-        
+        trigger_close_zoom_holder(); 
     });
     clone.find('.history-plate').html(get_card_summary(src.attr('card-id')));
     clone.find('.ability-plate').html(get_card_abilities(src.attr('card-id')));
@@ -104,6 +103,21 @@ function maybe_add_abilities_button(d,src,clone,button_row) {
             e.src = src;
             e.clone = clone;
             $('body').trigger(e);
+        });
+        button_row.append(ab);
+}
+function add_discard_button(d,src,clone,button_row) {
+    let def = get_card_def(src.attr('card-id'));
+    let ab = _div(null,'button discard-button');
+        ab.html("Discard");
+        ab.on('click',function () {
+            let e = $.Event('card.discard');
+            e.def = def;
+            e.d = d;
+            e.src = src;
+            e.clone = clone;
+            $('body').trigger(e);
+            trigger_close_zoom_holder();
         });
         button_row.append(ab);
 }
