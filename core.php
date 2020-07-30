@@ -364,6 +364,9 @@ function get_types_for_js() {
     $types = new \stdClass;
     $types->by_prefix = options_by_prefix('');     
     $types->key_values = options_as_array();     
+    foreach ( $types->key_values as $k=>$v ) {
+        $types->{$k} = $v;
+    }
     return $types;
 }
 function named_ability_functions() {

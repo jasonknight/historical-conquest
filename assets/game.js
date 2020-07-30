@@ -118,6 +118,9 @@ namespace HistoricalConquest;
                         td.addClass('discard-pile');
                     } else {
                         // Okay we handle abilities display here
+                        let mhtml = mat_item_to_html(rows_cols[row][col]);
+                        td.html('');
+                        td.append(mhtml);
                     }
                 } 
             }
@@ -275,7 +278,7 @@ namespace HistoricalConquest;
                         play_card(player,player.land_pile[0],y+1,x);
                     }
                 }
-                trigger_card_played(player,played_def);
+                trigger_card_played(player,card_def,played_def);
             } else {
                 new_hand.push(player.hand[i]);
             }
@@ -291,7 +294,7 @@ namespace HistoricalConquest;
                 played_def.x = x;
                 player.played.push(played_def);
                 player.playmat[y][x] = id;
-                trigger_card_played(player,played_def);
+                trigger_card_played(player,card_def,played_def);
             } else {
                 new_land_pile.push(player.land_pile[i]);
             }

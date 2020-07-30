@@ -126,10 +126,10 @@ function convert_to_abilities_widget(d,src,clone) {
     let def = get_card_def(src.attr('card-id'));
     d.find('.card').html('');
     d.find('.card').unbind('click');
+    let h = _div(null,'card-ability-desc');
+    let tbl = $('<table />');
+        h.append(tbl);
     for ( let i = 0; i < def.abilities.length; i++ ) {
-        let h = _div(null,'card-ability-desc');
-        let tbl = $('<table />');
-            h.append(tbl);
         let row = $('<tr />');
             tbl.append(row);
         let a = def.abilities[i];
@@ -144,6 +144,6 @@ function convert_to_abilities_widget(d,src,clone) {
         let col2 = $('<td class="desc" />');
             row.append(col2);
         col2.html(a.description);
-        d.find('.card').append(h);
     }
+    d.find('.card').append(h);
 }

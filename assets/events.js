@@ -20,10 +20,11 @@ function trigger_activate_ability(d,src,clone,a) {
     e.ability = a;
     $('body').trigger(e);
 }
-function trigger_card_played(p,def) {
+function trigger_card_played(p,def,pdef) {
     let e = $.Event('card.played');
     e.player = p;
-    e.card = def;
+    e.card_def = def;
+    e.played_def = pdef;
     $('body').trigger(e);
 }
 function trigger_draw(p) {
@@ -53,5 +54,8 @@ $(function () {
     });
     $('body').on('card.draw',function (e) {
         draw(e.player);
+    });
+    $('body').on('card.played',function (e) {
+        maybe_add_abilities(e.player,e.card_def,e.played_def);
     });
 });
