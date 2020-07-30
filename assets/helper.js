@@ -246,7 +246,30 @@ function get_next_open_row(player,row,col) {
 }
 
 function get_player_morale(player) {
-    return player.morale;
+    let mat = player.abilitymat;
+    let morale = 0;
+    for ( let row = 0; row < mat.length; row++ ) {
+        for ( let col = 0; col < mat[row].length; col++) {
+            let abs = mat[row][col];
+            if ( Array.isArray(abs) ) {
+                for ( let i = 0; i < abs.length; i++ ) {
+                    if ( abs[i].charges == 0 ) {
+                        continue;
+                    }
+                    let a = mat_item_to_ability(abs[i]);
+                    if ( a.apply_to_type != window.types.APPLY_PLAYER) {
+                        continue;
+                    }
+                    if ( a.affects_attribute !== 'morale') {
+                        continue;
+                    }
+                    _log("Adding moral from ability",a);
+                    morale = morale + parseInt(a.affect_amount);
+                }
+            }
+        }
+    }
+    return morale;
 }
 function get_current_round() {
     return integer_to_roman(window.board.round + 1);

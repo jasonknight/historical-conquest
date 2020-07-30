@@ -49,6 +49,19 @@ function always_on_ability(player,cdef,pdef,ability) {
     // it just applies to 
     if  ( ability.apply_to_type == window.types.APPLY_PLAYER ) {
         let mat = ability_to_mat_item(ability);
-        player.abilitymat[pdef.y][pdef.x] = mat;
+        play_ability(player,mat,pdef.y,pdef.x);
     }
+}
+function play_ability(player,mat,row,col) {
+    let abs = player.abilitymat[row][col];
+    if ( ! Array.isArray(abs) ) {
+        abs = [];
+    }
+    for ( let i = 0; i < abs.length; i++ ) {
+        if ( abs[i].id == mat.id ) {
+            return;
+        }
+    }
+    abs.push(mat);
+    player.abilitymat[row][col] = abs;
 }

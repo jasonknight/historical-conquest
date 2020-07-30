@@ -118,9 +118,12 @@ namespace HistoricalConquest;
                         td.addClass('discard-pile');
                     } else {
                         // Okay we handle abilities display here
-                        let mhtml = mat_item_to_html(rows_cols[row][col]);
+                        let abs = rows_cols[row][col];
                         td.html('');
-                        td.append(mhtml);
+                        for ( let i = 0; i < abs.length; i++ ) {
+                            let mhtml = mat_item_to_html(abs[i]);
+                            td.append(mhtml);
+                        }
                     }
                 } 
             }
