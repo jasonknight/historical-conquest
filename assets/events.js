@@ -26,6 +26,14 @@ function trigger_card_played(p,def) {
     e.card = def;
     $('body').trigger(e);
 }
+function trigger_draw(p) {
+    let e = $.Event('card.draw');
+    e.player = p;
+    $('body').trigger(e);
+}
+function trigger_you_cant_do_that(msg) {
+    _log('you cant do: ',msg);
+}
 // Event binding is here
 $(function () {
     $('body').on('card_controls_create',function (e) {
@@ -42,5 +50,8 @@ $(function () {
     });
     $('body').on('card.discard',function (e) {
         discard(get_current_player(),e.def);
+    });
+    $('body').on('card.draw',function (e) {
+        draw(e.player);
     });
 });

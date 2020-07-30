@@ -28,6 +28,7 @@ namespace HistoricalConquest;
         let last_col = cl - 1;
         let row = last_row;
         let col = last_col;
+        _log("setup_hand",player.hand);
         for ( let i = 0; i < 5; i++) {
             if ( !player.hand[i] ) {
                 rows_cols[row][col] = 0;
@@ -170,6 +171,10 @@ namespace HistoricalConquest;
                         td.addClass('land-pile');
                     } else if ( id == 'DRAW_PILE' ) {
                         td.addClass('draw-pile');
+                        td.on('click',function () {
+                            _log('draw player',player);
+                            trigger_draw(player);
+                        });
                     } else if ( id == 'DISCARD_PILE' ) {
                         td.addClass('discard-pile');
                     } else if ( window.carddb[id] ) {
@@ -186,16 +191,51 @@ namespace HistoricalConquest;
     function get_card_def(id) {
         return window.carddb[id];
     }
+    function draw(player) {
+        if ( player.hand.length > 4 ) {
+            trigger_you_cant_do_that('draw a card because ' + player.hand.length);
+            _log(player.hand);
+            return;
+        }
+        if ( player !== get_current_player() ) {
+            trigger_you_cant_do_that("it's not your turn");
+            return;
+        }
+        // making sure the reference is correct and
+        // not a copy
+        player = get_current_player();
+        let run = true;
+        let cap = 10;
+        let i = 0;
+        while ( run ) {
+            i++;
+            let c = player.draw_pile.pop();
+            let def = get_card_def(c);
+            if ( i > cap ) {
+                // TODO: out of cards error?
+                _log('error');
+            }
+            if ( def.maintype == window.types.key_values.CARD_LAND ) {
+                player.land_pile.push(c);
+                continue;
+            }
+            player.hand.push(c);
+            run = false;
+            trigger_refresh();
+        }
+    }
     function discard(player,card_def) {
         if ( player.hand.indexOf(card_def.ext_id) != -1 ) {
             let nh = [];
             for ( let i = 0; i < 5; i++ ) {
                  if ( player.hand[i] == card_def.ext_id ) {
+                     _log('removing',card_def.ext_id);
                      continue;
                  }
                  nh.push(player.hand[i]);
             }
             player.hand = nh;
+            set_current_player(player);
             advance_move();
             trigger_refresh();
             return;
@@ -206,6 +246,7 @@ namespace HistoricalConquest;
             // TODO: Is this always the case? Maybe not.
             player.abilitymat[loc.row][loc.col] = 0;
             advance_move();
+            set_current_player(player);
             trigger_refresh();
             return;
         }
@@ -239,6 +280,7 @@ namespace HistoricalConquest;
                 new_hand.push(player.hand[i]);
             }
         }
+        _log('new_hand',new_hand);
         player.hand = new_hand;
         let new_land_pile = [];
         for ( let i = 0; i < player.land_pile.length; i++ ) {
@@ -315,6 +357,7 @@ namespace HistoricalConquest;
                     player.land_pile.push(c);
                     continue;
                 }
+                _log('appending',c);
                 player.hand.push(c);
             }
         }

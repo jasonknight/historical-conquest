@@ -132,6 +132,9 @@ function current_move() {
 function get_current_player() {
     return window.board.players[window.board.player_pointer];
 }
+function set_current_player(p) {
+   window.board.players[window.board.player_pointer] = p; 
+}
 
 function get_card_summary(id) {
     let def = window.carddb[id];
