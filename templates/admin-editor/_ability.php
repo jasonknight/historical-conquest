@@ -7,7 +7,7 @@ namespace HistoricalConquest;
             <tr>
                 <td colspan="2">
                    <p class="label">Description</p> 
-                    <textarea style="width: 100%;" name="abilities[<?php echo $i; ?>][description]"></textarea>
+                    <textarea class="ability-desc" style="width: 100%;" name="abilities[<?php echo $i; ?>][description]"></textarea>
                 </td>
             </tr>
             <tr> 

@@ -114,32 +114,28 @@ namespace HistoricalConquest;
                 }
             }
             if ( key == 'abilities' ) {
-                if ( !record.abilities.length > 0 ) {
-                    let sel = 'input[name*="abilities"]';
-                    $(sel).val('');
-                    sel = 'textarea[name*="abilities"]';
-                    $(sel).val('');
-                    sel = 'select[name*="abilities"]';
-                    $(sel).val('');
-                    let cnt = 0;
-                    $('tr.ability-row').each(function () {
-                        cnt++;
-                        if ( cnt > 1 )
-                           $(this).remove(); 
-                    });
-                }
+                let sel = 'input[name*="abilities"]';
+                $(sel).val('');
+                sel = 'textarea[name*="abilities"]';
+                $(sel).val('');
+                sel = 'select[name*="abilities"]';
+                $(sel).val('');
+                let cnt = 0;
+                $('tr.ability-row').each(function () {
+                    cnt++;
+                    if ( cnt > 1 )
+                       $(this).remove(); 
+                });
                 for ( let i = 0; i < record.abilities.length; i++ ) {
                     let arows = $('tr.ability-row');
-                    while ( arows.length > 1 ) {
-                        arows.last().remove(); 
-                        arows = $('tr.ability-row')
-                    }
-                    arows = $('tr.ability-row')
                     let row = arows.last();
                     let ability = record.abilities[i];
+                    console.log("Ability",ability);
+                    console.log('row',row);
                     for ( let akey in ability ) {
                         let aval = ability[akey]; 
                         let sel = 'input[name="abilities['+i+'][' + akey + ']"]';
+                        console.log('sel',sel);
                         if ( ['usage_type','ability_type','apply_to_type','apply_to_scope'].indexOf(akey) != -1 ) {
                             for ( let type_key in window.types.key_values ) {
                                 if ( parseInt(window.types.key_values[type_key]) == parseInt(aval) ) {
@@ -149,8 +145,10 @@ namespace HistoricalConquest;
                         }
                         row.find(sel).val(aval);
                         sel = 'select[name="abilities['+i+'][' + akey + ']"]';
+                        console.log('sel',sel);
                         row.find(sel).val(aval);
                         sel = 'textarea[name="abilities['+i+'][' + akey + ']"]';
+                        console.log('sel',sel);
                         row.find(sel).val(aval);
                         row.find('.button').unbind('click');
                         row.find('.button').on('click',function (e) {
@@ -160,6 +158,15 @@ namespace HistoricalConquest;
                     }
                     $('div#edit_card .add-ability').trigger($.Event('click'));
                 } 
+                arows = $('tr.ability-row');
+                if ( arows.length > 1 ) {
+                    arows.each(function () {
+                        desc = $(this).find('.ability-desc'); 
+                        if ( desc.length > 0 && desc.val() == '' ) {
+                            $(this).remove();
+                        }
+                    });
+                }
             }
             $('div#edit_card').find(sel).val(val_to_set);
             $('div#edit_card').find('select[name="card[' + key + ']"]').val(val_to_set);

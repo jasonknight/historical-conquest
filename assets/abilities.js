@@ -45,12 +45,8 @@ function mat_item_to_ability(m) {
 // Here we handle always on abilities, these are usually
 // buffs to an attribut
 function always_on_ability(player,cdef,pdef,ability) {
-    // APPLY_PLAYER means it has no real criteria for application
-    // it just applies to 
-    if  ( ability.apply_to_type == window.types.APPLY_PLAYER ) {
-        let mat = ability_to_mat_item(ability);
-        play_ability(player,mat,pdef.y,pdef.x);
-    }
+    let mat = ability_to_mat_item(ability);
+    play_ability(player,mat,pdef.y,pdef.x);
 }
 function play_ability(player,mat,row,col) {
     let abs = player.abilitymat[row][col];
