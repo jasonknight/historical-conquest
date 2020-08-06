@@ -271,6 +271,9 @@ function get_player_morale(player) {
     }
     return morale;
 }
+function get_land_attr(player,card_id,attr) {
+    
+}
 function get_current_round() {
     return integer_to_roman(window.board.round + 1);
 }

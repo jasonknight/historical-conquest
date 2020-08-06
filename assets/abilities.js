@@ -12,6 +12,10 @@ function maybe_add_abilities(player,card_def,pdef) {
             _log("Always on Ability",a);
             always_on_ability(player,card_def,pdef,a);
         }
+        if ( a.apply_to_scope == window.types.SCOPE_ALWAYS_ON ) {
+            _log("Always on Ability",a);
+            always_on_ability(player,card_def,pdef,a);
+        }
     });  
 }
 function ability_to_mat_item(ability) {

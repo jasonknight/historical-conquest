@@ -41,40 +41,40 @@ namespace HistoricalConquest;
   crossorigin="anonymous"></script>
 
     </head>
+    <?php $cards_full = get_cards(); ?> 
+    <?php $cards_updated = get_not_updated_cards(); ?> 
+    <?php $cards_dup = get_duplicate_cards(); ?> 
+    <?php $cards_without_abilities = get_cards_without_abilities(); ?> 
+    <?php $cards_with_abilities = get_cards_with_abilities(); ?> 
     <body>
         <table class="tab-menu">
             <tr>
                 <td>Deck: <?php echo select(['value' => $_SESSION['deck_filter'], 'id' => 'set_deck_filter', 'options' => get_unique_deck_values()]); ?></td>
-                <td><button class="button" target="cards_full_list">Full List</button></td>
-                <td><button class="button" target="cards_not_updated">Not Updated List</button></td>
-                <td><button class="button" target="cards_duplicated_ids">Duplicated List</button></td>
-                <td><button class="button" target="cards_without_abilities">Without Abilities</button></td>
-                <td><button class="button" target="cards_with_abilities">With Abilities</button></td>
+                <td><button class="button" target="cards_full_list">Full List(<?php echo count($cards_full); ?>)</button></td>
+                <td><button class="button" target="cards_not_updated">Not Updated List(<?php echo count($cards_updated); ?>)</button></td>
+                <td><button class="button" target="cards_duplicated_ids">Duplicated List(<?php echo count($cards_dup); ?>)</button></td>
+                <td><button class="button" target="cards_without_abilities">Without Abilities(<?php echo count($cards_without_abilities); ?>)</button></td>
+                <td><button class="button" target="cards_with_abilities">With Abilities(<?php echo count($cards_with_abilities); ?>)</button></td>
             </tr>
         </table>
         <div id="cards_full_list" class="tab">
             <h2>Full List</h2>
-            <?php $cards_full = get_cards(); ?> 
             <?php $render('admin-editor/_cards-full-list.php',['cards' => $cards_full]); ?> 
         </div>
         <div id="cards_not_updated" class="tab">
             <h2>Not Updated List</h2>
-            <?php $cards_updated = get_not_updated_cards(); ?> 
             <?php $render('admin-editor/_cards-full-list.php',['cards' => $cards_updated]); ?> 
         </div>
         <div id="cards_duplicated_ids" class="tab">
-            <h2>Not Updated List</h2>
-            <?php $cards_dup = get_duplicate_cards(); ?> 
+            <h2>Cards duplicated</h2>
             <?php $render('admin-editor/_cards-full-list.php',['cards' => $cards_dup]); ?> 
         </div>
         <div id="cards_without_abilities" class="tab">
             <h2>Without Abilities</h2>
-            <?php $cards_without_abilities = get_cards_without_abilities(); ?> 
             <?php $render('admin-editor/_cards-full-list.php',['cards' => $cards_without_abilities]); ?> 
         </div>
         <div id="cards_with_abilities" class="tab">
             <h2>With Abilities</h2>
-            <?php $cards_with_abilities = get_cards_with_abilities(); ?> 
             <?php $render('admin-editor/_cards-full-list.php',['cards' => $cards_with_abilities]); ?> 
         </div>
         <div id="edit_card" class="tab">
