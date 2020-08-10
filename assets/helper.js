@@ -272,7 +272,11 @@ function get_player_morale(player) {
     return morale;
 }
 function get_land_attr(player,card_id,attr) {
-    
+    let loc = get_row_col_of_played_card(player,card_id);    
+    let mat = player.playmat;
+    for ( let row = 0; row < mat.length; row++) {
+        
+    }
 }
 function get_current_round() {
     return integer_to_roman(window.board.round + 1);

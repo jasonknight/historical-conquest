@@ -49,6 +49,17 @@ function init() {
             edit_card();
        }
    }
+   add_shortcode('hcgame_admin',__NAMESPACE__ . '\shortcode_hcgame_admin');
+}
+function shortcode_hcgame_admin($attrs) {
+    session_start();
+    if ( get('deck') ) {
+       $_SESSION['deck_filter'] = get('deck');
+    }
+    if ( get('subaction') == 'edit-card' && is_array(post('card')) ) {
+        edit_card();
+    }
+    echo render_template('admin_editor.php');
 }
 function initialize_notices() {
     update_option('hcnotices',[]);
