@@ -1,7 +1,7 @@
 <?php
 namespace HistoricalConquest;
 ?>
-<form method="post" action="?action=historical-conquest-game&admin-editor=1&subaction=edit-card">
+    <form method="post" action="?subaction=edit-card">
     <input type="hidden" name="card[id]" value="0" />
     <table width="100%">
         <tr>
