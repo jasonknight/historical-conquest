@@ -141,6 +141,10 @@ function log($obj) {
   }
   return $this;
 }
+function dbg_notice($msg) {
+    return;
+    add_notice('notice',$msg);
+}
 function add_notice($class,$msg) {
 	$notices = \get_option(__NAMESPACE__ . "_notices",[]);
 	$notices[] = [$class,$msg];

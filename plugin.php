@@ -52,8 +52,83 @@ function init() {
    add_shortcode('hcgame_admin',__NAMESPACE__ . '\shortcode_hcgame_admin');
    add_shortcode('hcgame_admin_card_images',__NAMESPACE__ . '\shortcode_hcgame_admin_card_images');
 }
+function upload_attachment($file,$file_key) {
+    //dbg_notice(__FUNCTION__ . ": file_key=$file_key");
+    require_once( ABSPATH . 'wp-admin/includes/file.php' );
+    require_once( ABSPATH . 'wp-admin/includes/image.php' );
+    $user_id = \get_current_user_id();
+    $errors = $file['error'];
+    $upload_dir = \wp_upload_dir();
+    $final_image_url = '';
+    if ( ! is_array($errors) )
+        $errors = [$errors];
+    foreach (  $errors as $key => $error ) {
+        if ( $error == UPLOAD_ERR_OK ) {
+            $ufile = \wp_handle_upload($file,['test_form' => false]);
+            $type = $file['type'];
+            $name = $file['name'];
+            $name_parts = pathinfo($name);
+            $name = trim(substr($name, 0, -(1 + strlen($name_parts['extension']))));
+            $url = $ufile['url'];
+            $file = $ufile['file'];
+            $title = $name;
+            // Build Attachment
+            $attachment = array(
+              'guid'           => $url,
+              'post_mime_type' => $type,
+              'post_title'     => $title,
+              'post_content'   => "",
+              'post_author' => \get_current_user_id()
+            );
+            // This should never be set as it would then overwrite an existing attachment
+            if(isset($attachment['ID'])) {
+              unset($attachment['ID']);
+            }
+            // Save the attachment metadata
+            $attachment_id = \wp_insert_attachment($attachment, $file);
+
+            // Update user avatar
+            if(!is_wp_error($attachment_id)) {
+                \wp_generate_attachment_metadata($attachment_id,$file);
+                return $attachment_id; 
+            }
+        }
+    }
+    return null;
+}
 function shortcode_hcgame_admin_card_images($attrs) {
+    global $wpdb;
+    if ( files('illustration') ) {
+        $aid = upload_attachment(files('illustration'),'none');
+        if ( $aid ) {
+            \update_post_meta($aid,'_card_ext',post('card_ext'));
+            \update_post_meta($aid,'_card_id',post('card_id'));
+            $sql = $wpdb->prepare("UPDATE `hc_cards` SET illustration = %d WHERE id = %d",$aid,post('card_id')); 
+            $wpdb->query($sql);
+        }
+    }
+    if ( files('background') ) {
+        $aid = upload_attachment(files('background'),'none');
+        if ( $aid ) {
+            \update_post_meta($aid,'_card_ext',post('card_ext'));
+            \update_post_meta($aid,'_card_id',post('card_id'));
+            $sql = $wpdb->prepare("UPDATE `hc_cards` SET background_image = %d WHERE id = %d",$aid,post('card_id')); 
+            $wpdb->query($sql);
+        }
+    }
     echo render_template('admin-editor/card-images.php');
+}
+function get_full_image_url($id) {
+    $image = \image_downsize($id,'full');
+    if ( $image ) 
+        return $image[0];
+    return '';
+}
+function get_thumb_image_url($id) {
+    $image = \image_downsize($id,'thumbnail');
+    if ( $image ) 
+        return $image[0];
+    return '';
 }
 function shortcode_hcgame_admin($attrs) {
     session_start();
