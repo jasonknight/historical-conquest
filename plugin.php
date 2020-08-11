@@ -50,6 +50,10 @@ function init() {
        }
    }
    add_shortcode('hcgame_admin',__NAMESPACE__ . '\shortcode_hcgame_admin');
+   add_shortcode('hcgame_admin_card_images',__NAMESPACE__ . '\shortcode_hcgame_admin_card_images');
+}
+function shortcode_hcgame_admin_card_images($attrs) {
+    echo render_template('admin-editor/card-images.php');
 }
 function shortcode_hcgame_admin($attrs) {
     session_start();

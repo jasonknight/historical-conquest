@@ -232,6 +232,12 @@ function filter_slashes($ar) {
     }
     return $ar;
 }
+function maybe_add_where($sql) {
+    if ( !preg_match('/`hc_cards`/',$sql) ) {
+        return;
+    }
+    return $sql . " AND `deck` IN ('B','C')";
+}
 function filter_cards($cards) {
     foreach ( $cards as $key => &$card ) {
         $card = filter_slashes($card);
@@ -241,12 +247,20 @@ function filter_cards($cards) {
     }
     return $cards;
 }
+function get_cards_without_images() {
+    global $wpdb;
+    $sql = "SELECT * FROM `hc_cards` WHERE illustration IN('','0',NULL)";
+    $sql = maybe_add_where($sql);
+    $cards = $wpdb->get_results($sql,ARRAY_A);
+    return filter_cards($cards);
+}
 function get_cards() {
     global $wpdb;
     $sql = "SELECT * FROM `hc_cards` WHERE 1=1";
     if ( session('deck_filter') && session('deck_filter') != 'N/A') {
         $sql .= $wpdb->prepare(' AND deck = %s',session('deck_filter'));
     }
+    $sql = maybe_add_where($sql);
     $cards = $wpdb->get_results($sql,ARRAY_A);
     foreach ( $cards as &$card ) {
         if ( !is_character_card($card) ) {
@@ -272,6 +286,7 @@ function get_not_updated_cards() {
     if ( session('deck_filter') && session('deck_filter') != 'N/A') {
         $sql .= $wpdb->prepare(' AND deck = %s',session('deck_filter'));
     }
+    $sql = maybe_add_where($sql);
     $cards = $wpdb->get_results($sql,ARRAY_A);
     foreach ( $cards as &$card ) {
         if ( !is_character_card($card) ) {
@@ -284,7 +299,10 @@ function get_not_updated_cards() {
 }
 function get_duplicate_cards() {
     global $wpdb;
-    $cards = $wpdb->get_results("SELECT ext_id,COUNT(ext_id) FROM `hc_cards` GROUP BY ext_id HAVING COUNT(ext_id) > 1",ARRAY_A);
+    $sql = "SELECT ext_id,COUNT(ext_id) FROM `hc_cards` WHERE 1=1";
+    $sql = maybe_add_where($sql);
+    $sql .= "GROUP BY ext_id HAVING COUNT(ext_id) > 1";
+    $cards = $wpdb->get_results( $sql,ARRAY_A);
     if ( ! empty($cards) ) {
         $ext_ids = [];
         foreach ( $cards as $card ) {
@@ -307,8 +325,10 @@ function get_duplicate_cards() {
 }
 function get_cards_without_abilities() {
     global $wpdb;
+    $sql =  "SELECT card_id,COUNT(card_id) FROM `hc_card_abilities`";
+    $sql .= "GROUP BY card_id HAVING COUNT(card_id) > 0";
     $cards = $wpdb->get_results(
-        "SELECT card_id,COUNT(card_id) FROM `hc_card_abilities` GROUP BY card_id HAVING COUNT(card_id) > 0",
+        $sql,
         ARRAY_A
     );
     if ( ! empty($cards) ) {
@@ -317,9 +337,11 @@ function get_cards_without_abilities() {
             $ext_ids[] = $wpdb->prepare('%d',$card['card_id']);
         }
         $sql = "SELECT * FROM `hc_cards` WHERE id NOT IN (".join(',',$ext_ids).")"; 
+        $sql = maybe_add_where($sql);
     }
     if ( empty($cards) ) {
         $sql = "SELECT * FROM `hc_cards` WHERE 1=1";
+        $sql = maybe_add_where($sql);
     }
     if ( session('deck_filter') && session('deck_filter') != 'N/A') {
         $sql .= $wpdb->prepare(' AND deck = %s',session('deck_filter'));
@@ -346,6 +368,7 @@ function get_cards_with_abilities() {
             $ext_ids[] = $wpdb->prepare('%d',$card['card_id']);
         }
         $sql = "SELECT * FROM `hc_cards` WHERE id IN (".join(',',$ext_ids).")"; 
+        $sql = maybe_add_where($sql);
     }
     if ( session('deck_filter') && session('deck_filter') != 'N/A') {
         $sql .= $wpdb->prepare(' AND deck = %s',session('deck_filter'));
