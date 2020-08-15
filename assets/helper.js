@@ -51,7 +51,7 @@ function get_card(id) {
                 let img = $('<img />');
                 img.attr('src',card_def.illustration);
                 img.css({
-                    "width": card.find('.illustration').width() * 0.98,
+                    "max-width": "125px" ,
                     "margin-left": "auto",
                     "margin-right": "auto"
                 });
