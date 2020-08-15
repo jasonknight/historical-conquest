@@ -28,15 +28,20 @@ function _tab_button(id,player) {
 }
 function get_base_table() {
     return [
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
     ];
 }
 function get_card(id) {
-        let card = $($('div.card-template').html()) ;
+        let card = $($('div.card-small-template').html()) ;
         let card_def = window.carddb[id];
         if ( card_def ) {
             card.find('.name-plate').html(card_def.name);
@@ -58,9 +63,9 @@ function get_card(id) {
                 card.find('.illustration').append(img);
             }
             if ( card_def.background_image != '0' ) {
-                card.css({
-                    "background-image": 'url('+card_def.background_image+')',
-                });
+                //card.css({
+                //    "background-image": 'url('+card_def.background_image+')',
+                //});
             }
         }
         card.attr('card-id',id);

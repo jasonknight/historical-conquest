@@ -91,35 +91,36 @@ div.card table {
     height: 100%;
 }
 div.card td.illustration {
-    border: 2px solid black;
     width: 25%;
+    text-align: center;
+}
+div.small-card td.illustration {
+    width: 100%;
 }
 div.card td.right-column {
     width: 75%;
 }
 div.card td.name-plate {
-    border: 2px solid black;
     width: 80%;
     height: 3vh;
+    text-align: center;
+}
+div.small-card td.name-plate {
+    width: 100%;
 }
 div.card td.date-category {
     width: 20%;
-    border: 2px solid black;
 }
 div.card td.history-plate {
     width: 100%;
-    border: 2px solid black;
 }
 div.card td.ability-plate {
     width: 100%;
-    border: 2px solid black;
 }
 div.card td.reference {
-    border: 2px solid black;
     width: 50%;
 }
 div.card td.str-attack-def {
-    border: 2px solid black;
     width: 50%;
 }
 div.template {
