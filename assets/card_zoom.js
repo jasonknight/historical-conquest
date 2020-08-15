@@ -65,7 +65,7 @@ function get_card_zoom_holder(src,and_append) {
         d.remove();
         trigger_close_zoom_holder(); 
     });
-    clone.find('.illustration').find('img').css({"width", (clone.width() * 0.25) + 'px'});
+    clone.find('.illustration').find('img').css({"width": (clone.width() * 0.25) + 'px'});
     clone.find('.history-plate').html(get_card_summary(src.attr('card-id')));
     clone.find('.ability-plate').html(get_card_abilities(src.attr('card-id')));
     clone.find('.date-category').html(get_card_year(src.attr('card-id')));
