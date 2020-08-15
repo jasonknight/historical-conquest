@@ -249,10 +249,10 @@ function filter_cards($cards) {
             $card['abilities'] = filter_slashes($card['abilities']);
         }
         if ( !empty($card['illustration']) && $card['illustration'] !== '0' ) {
-           $card['illustration'] = get_thumb_image_url($card['illustration']); 
+           $card['illustration'] = get_full_image_url($card['illustration']); 
         }
         if ( !empty($card['background_image']) && $card['background_image'] !== '0' ) {
-           $card['background_image'] = get_medium_image_url($card['background_image']); 
+           $card['background_image'] = get_full_image_url($card['background_image']); 
         }
     }
     return $cards;

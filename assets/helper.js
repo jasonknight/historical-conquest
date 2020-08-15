@@ -59,7 +59,7 @@ function get_card(id) {
             }
             if ( card_def.background_image != '0' ) {
                 card.css({
-                    "background-image": card_def.background_image,
+                    "background-image": 'url('+card_def.background_image+')',
                 });
             }
         }
