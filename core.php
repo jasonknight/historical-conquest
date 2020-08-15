@@ -257,6 +257,12 @@ function filter_cards($cards) {
     }
     return $cards;
 }
+function get_full_image_url($id) {
+    $image = \image_downsize($id,'full');
+    if ( $image ) 
+        return $image[0];
+    return '';
+}
 function get_thumb_image_url($id) {
     $image = \image_downsize($id,'thumbnail');
     if ( $image ) 

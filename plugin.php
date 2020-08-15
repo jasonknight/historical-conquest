@@ -118,18 +118,7 @@ function shortcode_hcgame_admin_card_images($attrs) {
     }
     echo render_template('admin-editor/card-images.php');
 }
-function get_full_image_url($id) {
-    $image = \image_downsize($id,'full');
-    if ( $image ) 
-        return $image[0];
-    return '';
-}
-function get_thumb_image_url($id) {
-    $image = \image_downsize($id,'thumbnail');
-    if ( $image ) 
-        return $image[0];
-    return '';
-}
+
 function shortcode_hcgame_admin($attrs) {
     session_start();
     if ( get('deck') ) {
