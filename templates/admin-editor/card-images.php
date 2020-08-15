@@ -14,7 +14,7 @@
                 <?php 
                     $iat = $card['illustration']; 
                     if ( !empty($iat) && $iat != '0' ) {
-                        ?><img src="<?php echo get_thumb_image_url($iat); ?>" /><?php
+                        ?><img src="<?php echo $card['illustration']; ?>" /><?php
                     }
                     $iat = null;
                 ?>
@@ -24,7 +24,7 @@
                 <?php 
                     $bat = $card['background_image']; 
                     if ( !empty($bat) && $bat != '0' ) {
-                        ?><img src="<?php echo get_thumb_image_url($bat); ?>" /><?php
+                        ?><img src="<?php echo $card['background_image']; ?>" /><?php
                     }
                     $bat = null;
                 ?>

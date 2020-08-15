@@ -17,7 +17,9 @@
             window.popup_layer = 3; 
             window.popup_layer2 = 4; 
             window.alert_layer = 5;
+            // game is here
             <?php $asset('game.js'); ?>
+            // game is here
         </script>
     </head>
     <body>
