@@ -28,23 +28,29 @@ function _tab_button(id,player) {
 }
 function get_base_table() {
     return [
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
     ];
 }
-function get_card(id) {
-        let card = $($('div.card-small-template').html()) ;
+function get_card(id,big) {
+        let card = null;
+        if ( typeof big != 'undefined' && big == true) {
+            card = $($('div.card-template').html()) ;
+        } else {
+            card = $($('div.card-small-template').html()) ;
+        }
         let card_def = window.carddb[id];
         if ( card_def ) {
-            card.find('.name-plate').html(card_def.name);
+            let def = $('<p />');
+            def.html(card_def.name);
+            
+            card.find('.name-plate').html(def);
             card.addClass('card-type-' + type_to_css_class(card_def.maintype));
             if ( type_to_css_class(card_def.maintype).match(/explorer-/) ) {
                 card.addClass('card-type-explorer');
@@ -56,7 +62,7 @@ function get_card(id) {
                 let img = $('<img />');
                 img.attr('src',card_def.illustration);
                 img.css({
-                    "width": (get_card_column_width() * 0.25) + 'px' ,
+                    "height": ($('td.playmat-column:first').height() * 0.60) + 'px',
                     "margin-left": "auto",
                     "margin-right": "auto"
                 });
@@ -70,7 +76,7 @@ function get_card(id) {
         }
         card.attr('card-id',id);
         card.css({
-            "width": get_card_column_width() + 'px',
+            "width": (get_card_column_width() * 0.50) + 'px',
             "height": get_card_column_height() + 'px',
         });
         card.on('click',function () {

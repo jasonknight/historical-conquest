@@ -108,6 +108,12 @@ div.card td.name-plate {
 div.small-card td.name-plate {
     width: 100%;
 }
+div.small-card td.name-plate p {
+    overflow: hidden;
+    font-size: 70%;
+    text-align: center;
+    height: 13px;
+}
 div.card td.date-category {
     width: 20%;
 }
