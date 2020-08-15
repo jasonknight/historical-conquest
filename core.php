@@ -248,8 +248,26 @@ function filter_cards($cards) {
         if ( isset($card['abilities']) && is_array($card['abilities']) ) {
             $card['abilities'] = filter_slashes($card['abilities']);
         }
+        if ( !empty($card['illustration']) && $card['illustration'] !== '0' ) {
+           $card['illustration'] = get_thumb_image_url($card['illustration']); 
+        }
+        if ( !empty($card['background_image']) && $card['background_image'] !== '0' ) {
+           $card['background_image'] = get_medium_image_url($card['background_image']); 
+        }
     }
     return $cards;
+}
+function get_thumb_image_url($id) {
+    $image = \image_downsize($id,'thumbnail');
+    if ( $image ) 
+        return $image[0];
+    return '';
+}
+function get_medium_image_url($id) {
+    $image = \image_downsize($id,'medium');
+    if ( $image ) 
+        return $image[0];
+    return '';
 }
 function get_cards_without_images() {
     global $wpdb;

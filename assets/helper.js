@@ -47,6 +47,20 @@ function get_card(id) {
             if ( is_character(card_def.maintype) ) {
                 card.addClass('card-type-character');
             }
+            if ( card_def.illustration != '0' ) {
+                let img = $('<img />');
+                img.attr('src',card_def.illustration);
+                img.css({
+                    "width": "98%",
+                    "margin-left": "auto",
+                    "margin-right": "auto"
+                });
+            }
+            if ( card_def.background_image != '0' ) {
+                card.css({
+                    "backgroun-image": card_def.background_image,
+                });
+            }
         }
         card.attr('card-id',id);
         card.css({
