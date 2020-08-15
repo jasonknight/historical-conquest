@@ -55,10 +55,11 @@ function get_card(id) {
                     "margin-left": "auto",
                     "margin-right": "auto"
                 });
+                card.find('.illustration').append(img);
             }
             if ( card_def.background_image != '0' ) {
                 card.css({
-                    "backgroun-image": card_def.background_image,
+                    "background-image": card_def.background_image,
                 });
             }
         }
