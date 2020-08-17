@@ -1,0 +1,326 @@
+id	deck	name	nationality	ethnicity	religion	gender
+ARRR401	1	Celtic Tribes	British	Celtic	Paganism	female/male
+CORR401	1	Caesar Augustus	Roman		Roman	male
+CORR402	1	Marcus Lepiduss	Roman		Roman	male
+MLRR401	1	Fabius Maximus	Roman			male
+PIRR401	1	Cilician Pirates	Mediterranean			male
+POE001	1	Gnaeus Pompeius Magnus	Roman			male
+WAE002	1	Roman Centurion	Roman			male
+WAE003	1	Sparticus	Roman			male
+ARRW401	2	Patriot Militia	American			male
+ARRW402	2	British Regulars	British			male
+ARRW403	2	Minute Men	American			male
+LERW401	2	Captain Parker	American			male
+LERW402	2	Dr. Joseph Warren	American			male
+LERW403	2	Lieutenant Colonel Francis Smith	British			male
+LERW404	2	Brigadier General Hugh Percy.	British			male
+LERW405	2	James Barrett	American			male
+LERW406	2	King George	British			male
+LERW407	2	Major John Pitcairn 	British			male
+LERW408	2	Lieutenant General Thomas Gage	British			male
+SYRW401	2	Margaret Kemble Gage	British			female
+WARW401	2	Robert Newman and Captain John Pulling	American			male
+ARW2401	3	442nd Regimental Combat Team	American	Japanese		male
+ARW2402	3	Armia Krajowa or Home Army	Polish			male
+ARW2403	3	German-Italian Troop Offensive (Pact of Steel)	German/Italian			male
+ARW2404	3	British SAS	British			male
+LEW2401	3	Dwight Eisenhower	American			male
+LEW2402	3	General George S. Patton	American			male
+LEW2403	3	Major General John P. Lucas 	American			male
+LEW2404	3	William Knudsen	American			male
+MAW2401	3	Poland's Enigma codebreakers	Polish			male
+MUW2401	3	Billy Millin	Scottish			male
+WAW2401	3	Sniper Vasily Zaytsev	Russian			male
+ARCW401	4	Army of the Confederate States	American			male
+ARCW402	4	Union Army	American			male
+LECW401	4	Brig. Gen. P. G. T. Beauregard	American			male
+LECW402	4	David E. Twiggs	American			male
+LECW403	4	Jefferson Davis	American			male
+LECW404	4	Maj. Robert Anderson	American			male
+LECW405	4	President James Buchanan 	American			male
+ARWW401	5	The Cowboys	American			male
+ARWW402	5	US Marshalls	American			male
+LAWW401	5	Doc Holliday	American			male
+LAWW402	5	Wyatt Earp 	American			male
+LAWW403	5	Bat Masterson 	American			male
+LAWW404	5	Virgil Earp	American			male
+LEWW401	5	Captain Joseph H. Hurst	American			male
+OUWW401	5	Mary Katherine Horony Cummings	Hungarian			female
+OUWW402	5	Johnny Ringo 	American			male
+OUWW403	5	William Brocius	American			male
+OUWW404	5	Ike Clanton	American			male
+OUWW405	5	Frank and Tom McLaury	American			male
+ASW1401	6	Gavrilo Princip	Bosnian			male
+LEW1401	6	Kaiser Wilhelm II	German			male
+LEW1402	6	John J. Pershing	American			male
+LEW1403	6	Mustafa Kemal Atatürk	Greek, Turkey			male
+LEW1404	6	Gen. William Mitchell	French, American			male
+WAW1401	6	Eddie Rickenbacker	American			male
+WAW1402	6	Manfred von Richthofen	Polish, German			male
+WAW1403	6	Billy Bishop	American			male
+WAW1404	6	Frederick Libby	American			male
+WAW1405	6	Douglas Campbell	American			male
+710000	7	Peter the Hermit	French		Christian, Catholic	male
+710001	7	Pope Urban II	French		Christian, Catholic	male
+BU4081	8	Cornelius Vanderbilt	American		Christian	male
+BU4082	8	Samuel Spencer	American		Christian	male
+BU4083	8	Leland Stanford	American		Christian	male
+BU4084	8	Tom Scott	American		Christian	male
+BU4085	8	Erastus Corning	American		Christian	male
+BU4086	8	Collis Potter Huntington	American		Christian	male
+BU4087	8	James J. Hill	Canadian, American			male
+BU4088	8	Charles M. Schwab	American		Christian, Catholic	male
+IN4081	8	Sir Henry Bessemer	British			male
+IN4082	8	Henry Ford	American			male
+IN4083	8	William Kelly	American			male
+IN4084	8	Nikolaus Otto	German			male
+IN4085	8	Cyrus McCormick	American			male
+IN4086	8	Robert H. Goddard	American			male
+IN4087	8	 Francis E. & Freelan O. Stanley	American			male
+AU4091	9	Miguel de Cervantes	Spanish		Christian, Catholic	male
+CO4091	9	Suleiman the Magnificent	Turkish		Islam, Sunni	male
+LE4091	9	Mary I of England	British			female
+SC4091	9	Paracelsus	Swedish			male
+SC4092	9	Johannes Kepler	German			male
+SC4093	9	Francis Bacon	British			male
+SC4094	9	Nicolaus Copernicus	Polish			male
+SP4091	9	Ignatius Loyola	Spain		Christian	male
+SP4092	9	Thomas More	British		Christian, Catholic	male
+AC4101	A	Frederick Douglass	American	Black	Christian	male
+AC4102	A	Susan B. Anthony	American		Christian	female
+AI4101	A	Leonardo da Vinci	Italian		Christian	female
+AR4101	A	English Army	British			male
+AR4102	A	Mongolian Army (Cover)	Mongolian			male
+AR4103	A	Steel Workers	American			male
+AR4104	A	Viet Minh Guerrillas	Vietnamese			male
+AT4101	A	Jesse Owens	American	black	Christian	male
+AU4101	A	C.S. Lewis	American		Christian	male
+AU4102	A	Homer	Greek		Pagan	male
+BU4101	A	Madam CJ Walker	American	black	Christian	female
+CO4101	A	Charlemagne	Frankish		Christian, Catholic	male
+CO4102	A	Eric Bloodaxe	Norweign		Paganism	male
+CO4103	A	Timur the Lame'	Uzbekistani		Islam, Sunni	male
+EC4101	A	Adam Smith	Scottish			male
+EX4101	A	Aud the Deep-Minded	Norwegian			female
+EX4102	A	Danish King Godfred	Danish			male
+EX4103	A	Erik Thorvaldsson	Norwegian			male
+EX4104	A	Francisco Pizarro	Spanish			male
+EX4105	A	Lewis and Clark	American			male
+IN4101	A	Nikola Tesla	Croatian, American			male
+LE4101	A	Abraham Lincoln	American			male
+LE4102	A	David Crockett	American			male
+LE4103	A	Geronimo	American	native_american		male
+LE4104	A	Khutulun	Mongolian			female
+MU4101	A	John Philip Sousa	American			male
+PH4101	A	Epicurus	Greek			male
+PI4101	A	Anne Bonny	Irish			female
+PO4101	A	Hiram Rhodes Revels	American	Black		male
+SC4101	A	Benjamin Banneker	American	Black		male
+SC4102	A	Benjamin Franklin	American			male
+SP4101	A	John Calvin	French		Christian	male
+SY4101	A	Mary Elizabeth Bowser	American	Black	Christian	female
+WA4101	A	Prince Estabrook	American	Black		male
+AC4201	B	Eleanor Roosevelt	American		Christian	female
+AC4202	B	Jane Addams	American		Christian	female
+AI4201	B	Michelangelo Buonarroti	Italian		Spiritualism	male
+AR4201	B	African Tribal Warriors	Mali	Black		male
+AR4202	B	Tlingit Warriors	American	native_american		male
+AR4203	B	Spanish Conquistadors	Spanish			male
+AR4204	B	Spanish Armada	Spanish			male
+AS4201	B	Grigori Yefimovich Rasputin	Russian			male
+AT4201	B	Eric Liddell	American		Christian	male
+AU4201	B	Samuel L Clemens	American		Christian	male
+AU4202	B	Satomura Joha	Japanese			male
+BU4201	B	George Westinghouse	American		Christian	male
+C04201	B	Attila the Hun	Hungarian			male
+CO4202	B	Gaius Julius Caesar	Roman		Roman	male
+CO4203	B	Napoleon Bonaparte	French		Christian, Catholic	male
+EC4201	B	Pythagoras of Samos	Greek		Pythagorean	male
+EX4201	B	Captain Robert Scott	British		Christian	male
+EX4202	B	Ernest Shackleton	Irish		Christian	male
+EX4203	B	Ferdinand Magellan	Portugese		Christian	male
+EX4204	B	Leif Ericson	Icelandic		Christian	male
+EX4205	B	Mansa Musa	Malian		Islam	male
+IN4201	B	Alexander Graham Bell	Scottish, Canadian		Agnostic	male
+IN4202	B	Thomas Crapper	British			male
+LE4201	B	Juliette Gordon Low	American		Christian	female
+LE4202	B	Miyamoto Musashi	Japanese		Buddhist	male
+LE4203	B	Pancho Villa	American	native_american		male
+LE4204	B	Sitting Bull	American	native_american		male
+MU2001	B	Ludwig van Beethoven	German		Christian, Catholic	male
+OU3003	B	Ernesto Che Guevara	Argentine		Marxism	male
+PH3001	B	Aristotle	Greek		Neoplatonism	male
+PO3002	B	Wentworth Cheswell	American	Black	Christian	male
+SC3005	B	Galileo Galilei	Italian		Christian, Catholic	male
+SP3004	B	Mohandas Gandhi	Indian		Hindu	male
+WA3004	B	Trung Sisters	Vietnamese		Buddhist	female
+AC4301	C	Florence Nightingale	Italian		Christian	female
+AC4302	C	Isabella Baumfree	American	Black	Christian	female
+AI4301	C	Claude Monet	France		Atheist	male
+AR4301	C	Chinese Warriors	Chinese			male
+AR4302	C	Samurai Warriors	Japanese			male
+AR4303	C	Tuskegee Airmen	American	Black		male
+AR4304	C	The Persian Immortals	Persian	Arab		male
+AT4301	C	Akashi Shiganosuke	Japanese		Buddhist	male
+AU4301	C	Sir Walter Scott	Scottish		Christian	male
+AU4302	C	William Shakespeare	British		Christian, Catholic	male
+BU4301	C	Andrew Carnegie	Scottish, American		Christian	male
+CO4301	C	Alexander the Great	Greek		Greek polytheism	male
+CO4302	C	King Louis XIV	French		Christian, Catholic	male
+CO4303	C	Pharaoh Ramses II	Egyptian		Maat	male
+EC4301	C	David Ricardo	British		Jewish	male
+EX4301	C	Amelia Earhart	American		Christian	female
+EX4302	C	George Bass	British			male
+EX4303	C	John Cabot	Italian		Christian	male
+EX4304	C	Vasco Núñez de Balboa	Spanish		Christian, Catholic	male
+EX4305	C	Yuri Gagarin	Russian		Russian Orthodox	male
+IN4301	C	Johannes Gutenberg	German		Christian	male
+IN4302	C	Lewis Latimer	American		Christian	male
+LE4301	C	James Madison	American		Christian	male
+LE4302	C	King Ferdinand and Queen Isabella	Portugese		Christian, Catholic	female/male
+LE4303	C	Queen Ahhotep I	Egyptian		Egyptian religion	female
+LE4304	C	Theodore Roosevelt	American		Christian	male
+MU4301	C	Wolfgang Amadeus Mozart	German		Christian, Catholic	male
+OU4301	C	Lester Gillis	American			male
+PH4301	C	Socrates	Greek		Monotheist	male
+PO4301	C	Aaron Burr	American		Christian	male
+SC4301	C	Charles Robert Darwin	British		Agnostic	male
+SP4301	C	Martin Luther	German		Christian	male
+SY4301	C	James Armistead	American	Black	Christian	male
+WA4301	C	Peter Salem (Cover)	American	Black		male
+AC4401	D	Frances Ellen Watkins Harper	American	Black	Christian	male
+AC4402	D	Pocahontas	American	Native American	Christian	female
+AI4401	D	Pablo Picasso	Spanish		Spiritualism	male
+AR4401	D	The Mamelukes	Ottoman	Arab	Islam	male
+AR4402	D	Janissary	Turkish	Arab	Islam	male
+AR4403	D	The Billmen	French			male
+AR4404	D	The Knights Templar	Israeli		Christian	male
+AT4401	D	George Herman Ruth, Jr	American		Christian, Catholic	male
+AU4401	D	James Weldon Johnson	American	black	Christian	male
+AU4402	D	Washington Irving	American		Christian	male
+BU4401	D	J.P. Morgan	American		Christian	male
+CO4401	D	Hernán Cortés	Spanish			male
+CO4402	D	Nebuchadnezzar II	Babylonian		Babylonian polytheism	male
+CO4403	D	William the Conqueror	French		Christian, Catholic	male
+EC4401	D	Thales of Miletus	Turkish		Monism	male
+EX4401	D	Amerigo Vespucci	Italian			male
+EX4402	D	Charles Albanel	French			male
+EX4403	D	Christopher Columbus	Italian			male
+EX4404	D	Diego de Almagro	Spanish			male
+EX4405	D	Dr. David Livingstone 	Scottish			male
+IN4401	D	Hedy Lamarr	Austrian, American			male
+IN4402	D	Thomas Edison	American			male
+LE4401	D	King Henry VIII	British			male
+LE4402	D	King Kamehameha I	American	native_american		male
+LE4403	D	Robert Baden Powell	British			male
+LE4404	D	Winston Churchill	British			male
+MU4401	D	Claudio Monteverdi	Italian			male
+PH4401	D	Plato	Greek			male
+PI4401	D	Sir Francis Drake	British			male
+PO4401	D	Joseph Hayne Rainey	American	Black		male
+SC4401	D	Georges Lemaître	Belgian			male
+SP3007	D	Pope Gregory	Italian		Catholic	male
+SY4401	D	Charles J. Guiteau	American			male
+WA4401	D	Gladiatrix	Roman			male
+AC4501	E	Ida Bell Wells-Barnett	American	Black	Christian	female
+AC4502	E	Muhammad Ali Jinnah	Hindu	Arab	Muslim	male
+AI4501	E	Rembrandt	Dutch		Christian	male
+AR4501	E	Amazon Women Warriors	Greek			female
+AR4502	E	Cherokee Warriors	American	native_american		male
+AR4503	E	French Army	French			male
+AR4504	E	The Great Viking Army	Scandinavian	Viking		male
+AS4501	E	John Wilkes Booth	American			male
+AT4501	E	Chuck Cooper	American	black	Christian	male
+AU4501	E	Booker T. Washington	American	black	Christian	male
+AU4502	E	Louisa May Alcott	American		Christian	female
+BU4501	E	William Penn	British		Christian	male
+CO4501	E	Adolf Hitler	Austrian, German		Christian, Catholic	male
+CO4502	E	Genghis Khan	Mongolian		Buddhist	male
+CO4503	E	Ivan the Terrible	Russian		Russian Orthodox	male
+EC4501	E	Karl Marx	German		Marxism	male
+EX4501	E	Charles Lindbergh	American			male
+EX4502	E	Gaspar and Miguel Corte-Real	Portugese			male
+EX4503	E	Jean Francois de Galaup Laperouse	French			male
+EX4504	E	Percy Fawcett	British			male
+EX4505	E	Gus Grissom	American			male
+IN4501	E	Philo Farnsworth	American			male
+IN4502	E	Wright Brothers	American			male
+LE4501	E	Ho Chi Minh	Vietnamese			male
+LE4502	E	King Tutankhamun	Egyptian			male
+LE4503	E	Paul Revere	American			male
+LE4504	E	Robert E. Lee	American			male
+MU3004	E	Marian Anderson	American			female
+PH3007	E	Zeno of Citium	Greek		Stoicism	male
+PI3002	E	Jean Fleury (Florin)	French			male
+PO2002	E	Octaviano Ambrosio Larrazolo	Mexican			male
+SC2001	E	Albert Einstein	German, American			male
+SP3002	E	Joseph Smith Jr.	American		Christian	male
+WA4501	E	Boudicea	British	Celtic		female
+AC4601	F	Harriet Tubman	American	Black	Christian	female
+AC4602	F	Tokyo Rose	Japanese		Christian	female
+AI4601	F	Raffaello Sanzio da Urbino	Italian		Christian, Catholic	male
+AR4601	F	Apache	American	native_american		male
+AR4602	F	French Musketeers	French			male
+AR4603	F	Ming Warriors	Chinese			male
+AR4604	F	Nicaragua Contras	Nicaraguan			male
+AT4601	F	Babe Didrikson Zaharias	American			female
+AU4601	F	Brothers Grimm	German		Christian	male
+AU4602	F	Edgar Allen Poe	American		Christian	male
+BU4601	F	"Frederic ""The Ice King"" Tudor"	American		Christian	male
+CO3015	F	Ashoka The Great	Indian		Buddhist	male
+CO3016	F	Mao Tse-Tung	Chinese		Buddhist	male
+CO3017	F	Vlad the III, Prince of Wallachia	Romanian		Christian, Catholic	male
+EC4601	F	Friedrich Hayek	Austrian, British			male
+EX4601	F	Joshua Slocum	Canadian			male
+EX4602	F	Pedro Alvares Cabral	Portugese			male
+EX4603	F	Sir John Franklin and Francis Crozier	Irish, British			male
+EX4604	F	Sir John Hawkins	British			male
+EX4605	F	Laika the Dog	Russian			animal
+IN4601	F	Eli Whitney	American			male
+IN4602	F	Ferdinand, Graf von Zeppelin	German			male
+LE4601	F	Emperor Constatine	Roman			male
+LE4601	F	Allan Pinkerton	Scottish, American			male
+LE4602	F	Franklin D. Roosevelt	American		Christian	male
+LE4603	F	Margaret Thatcher	British		Christian	female
+LE4604	F	Tsar Nicholas II	Russian			male
+MU4601	F	George Frederick Handel	German, British			male
+PH4601	F	Confucius	China			male
+PI4601	F	Lope de Aguirre	Spain			male
+PO4601	F	Romualdo Pacheco	American	Hispanic		male
+SC4601	F	Otto Hahn	German			male
+SP4601	F	Lemuel Haynes	American	Black	Christian	male
+SY4601	F	Sir William Stephenson	Canadian			male
+WA3006	F	Jason Cunningham	American			male
+AC4701	G	Irish Volunteers	Irish		Christian	male
+AI4701	G	Sandro Botticelli	Italian		Christian	male
+AR4701	G	Cossack Warriors	Russian		Christian	male
+AR4702	G	Kamakura Shogun Army	Japanese		Shinbutsu-shūgō	male
+AR4703	G	Māori Warriors	New Zealand			male
+AR4704	G	Soviet Red Army	Russian			male
+AS4701	G	Nathuram Godse	Indian		Hindu	male
+AT4701	G	Jim Thorpe	American		Christian, Catholic	male
+AU4701	G	Bram Stoker	Irish		Christian, Catholic	male
+AU4702	G	Robert Burns	Scottish		Christian	male
+BU4701	G	Mayer Rothschild	German		Jewish	male
+CO4701	G	Hannibal	Tunisian			male
+CO4702	G	Qin Shi Huang	Chinese		Confucianism	male
+CO4703	G	Xerxes	Achaemenid		Zoroastrianism, Xerxes	male
+CO4704	G	Caesar Augustus Germanicus	Roman		Roman	male
+EX4701	G	Alan B. Shepard	American			male
+EX4702	G	Bessie Coleman	American	Black		female
+EX4703	G	Sacagawea	American	native_american		female
+EX4704	G	Xuanzang	Chinese			male
+IN4701	G	William B. Kouwenhoven	American			male
+IN4702	G	Louis Braille	French			male
+LE4701	G	Felix Dzerzhinsky	Russian			male
+LE4702	G	Oliver Cromwell	British			male
+LE4703	G	Joseph Stalin	Georgian, Russian			male
+LE4704	G	Peter the Great	Russian			male
+MA4701	G	Emmy Noether	German, American			male
+MU4701	G	Pyotr Ilyich Tchaikovsky	Russian			male
+OU4701	G	Guy Fawkes	British			male
+PH4701	G	Niccolò Machiavelli	Italian			male
+PO4701	G	Maximilien Robespierre	French			male
+SC4701	G	Guglielmo Marconi	Italian			male
+SP4701	G	Maimonides	Spanish, Egyptian		Jewish	male
+WA4701	G	Simo Häyhä	Finish		Christian	male

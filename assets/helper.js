@@ -61,8 +61,12 @@ function get_card(id,big) {
             if ( card_def.illustration != '0' ) {
                 let img = $('<img />');
                 img.attr('src',card_def.illustration);
+                let _h = ($('td.playmat-column:first').height() * 0.60);
+                if ( big ) {
+                    _h = ($('td.playmat-column:first').width() * 0.80)
+                }
                 img.css({
-                    "height": ($('td.playmat-column:first').height() * 0.60) + 'px',
+                    "height": (_h) + 'px',
                     "margin-left": "auto",
                     "margin-right": "auto"
                 });
@@ -126,11 +130,52 @@ function can_play(card_element) {
     let td = card_element.parent();
     let p = get_current_player();
     let last_row = p.playmat.length - 1;
+    // i.e. this is in the players "hand"
     if ( td.attr('y') == last_row ) {
         return true;
     }
     return false;
 }
+function can_play_to(player,card_id,row,col,notices) {
+    let def = get_card_def(card_id);
+    let mat = player.playmat;
+    if ( mat[row][col] != 0 ) {
+        return false;
+    }
+    let tname = type_to_name(def.maintype);
+    if ( tname.match(/CHARACTER/) || tname.match(/ARMY/) ) {
+        // Each land has a carry_capacity
+        let cap = get_carray_capacity_of_col(player,col);
+        if ( cap <= 0 ) {
+            notices.push("That land is at capacity for character and army cards.");
+            return false;
+        }
+    }
+}
+function notice(msg) {
+    window.notices.push(msg);
+}
+function add_notices(notices) {
+    for ( let i = 0; i < notices.length; i++ ) {
+        window.notices.push(notices[i]);
+    }
+}
+function get_carray_capacity_of_col(player,col) {
+    // TODO: Need to calculate carry capacity, and
+    // maybe take into account abilities
+    let mat = player.mat;
+    let total = 4;
+    for ( let row = 0; row < mat.length - 2; row++) {
+        let cid = mat[row][col];
+        let def = get_card_def(cid);
+        let tname = type_to_name(def.maintype);
+        if ( tname.match(/CHARACTER/) || tname.match(/ARMY/) ) {
+            total--;
+        }
+    }
+    return total;
+}
+
 function next_player() {
     window.board.player_pointer++;
     if ( window.board.player_pointer >= window.board.players.length ) {

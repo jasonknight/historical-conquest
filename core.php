@@ -197,9 +197,16 @@ function register_widgets($shortcode=true) {
         }
     }
 }
-\add_action('widgets_init',function () {
-        register_widgets();        
-});
+if ( function_exists('\add_action') ) {
+    \add_action('widgets_init',function () {
+            register_widgets();        
+    });
+}
+function clean_whitespace($str) {
+    $str = str_replace("\xc2\xa0"," ",$str);
+    $str = trim($str);
+    return $str;
+}
 function is_character_card($card) {
     if ( is_array($card) ) {
         $str = type_to_name($card['maintype']);

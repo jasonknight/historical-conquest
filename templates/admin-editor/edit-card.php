@@ -54,7 +54,7 @@ namespace HistoricalConquest;
                     <?php } ?>
                 </select>
                 <p class="label">Continent</p>
-                <select name="card[religion]">
+                <select name="card[continent]">
                     <?php foreach (options_by_prefix('CONTINENT') as $opt ) { ?>
                         <option><?php echo $opt; ?></option>
                     <?php } ?>

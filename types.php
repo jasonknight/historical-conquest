@@ -100,6 +100,11 @@ define('ETH_ASIAN',95);
 define('ETH_IDIGENOUS',96);
 define('ETH_JEWISH',97);
 define('USAGE_ONCE',98);
+define('RELIGION_PAGAN',99);
+define('RELIGION_AGNOSTIC',100);
+define('RELIGION_TAOIST',101);
+define('RELIGION_SHINTO',102);
+define('RELIGION_ZOROASTRIAN',103);
 function type_to_name($val) { 
 	 if ( $val == CARD_LAND ) { return 'CARD_LAND'; }
 	 if ( $val == CARD_CHARACTER_ACTIVIST ) { return 'CARD_CHARACTER_ACTIVIST'; }
@@ -177,6 +182,11 @@ function type_to_name($val) {
 	 if ( $val == RELIGION_HINDU ) { return 'RELIGION_HINDU'; }
 	 if ( $val == RELIGION_ATHEIST ) { return 'RELIGION_ATHEIST'; }
 	 if ( $val == RELIGION_JEWISH ) { return 'RELIGION_JEWISH'; }
+	 if ( $val == RELIGION_SHINTO ) { return 'RELIGION_SHINTO'; }
+	 if ( $val == RELIGION_AGNOSTIC ) { return 'RELIGION_AGNOSTIC'; }
+	 if ( $val == RELIGION_PAGAN ) { return 'RELIGION_PAGAN'; }
+	 if ( $val == RELIGION_TAOIST ) { return 'RELIGION_TAOIST'; }
+	 if ( $val == RELIGION_ZOROASTRIAN ) { return 'RELIGION_ZOROASTRIAN'; }
 	 if ( $val == CONTINENT_NORTH_AMERICA ) { return 'CONTINENT_NORTH_AMERICA'; }
 	 if ( $val == CONTINENT_ASIA ) { return 'CONTINENT_ASIA'; }
 	 if ( $val == CONTINENT_EUROPE ) { return 'CONTINENT_EUROPE'; }
@@ -274,6 +284,11 @@ function name_to_type($val) {
 	 if ( $val == 'RELIGION_HINDU' ) { return RELIGION_HINDU; }
 	 if ( $val == 'RELIGION_ATHEIST' ) { return RELIGION_ATHEIST; }
 	 if ( $val == 'RELIGION_JEWISH' ) { return RELIGION_JEWISH; }
+     if ( $val == 'RELIGION_SHINTO' ) { return RELIGION_SHINTO; }
+	 if ( $val == 'RELIGION_AGNOSTIC' ) { return RELIGION_AGNOSTIC; }
+	 if ( $val == 'RELIGION_PAGAN' ) { return RELIGION_PAGAN; }
+	 if ( $val == 'RELIGION_TAOIST' ) { return RELIGION_TAOIST; }
+	 if ( $val == 'RELIGION_ZOROASTRIAN' ) { return RELIGION_ZOROASTRIAN; }
 	 if ( $val == 'CONTINENT_NORTH_AMERICA' ) { return CONTINENT_NORTH_AMERICA; }
 	 if ( $val == 'CONTINENT_ASIA' ) { return CONTINENT_ASIA; }
 	 if ( $val == 'CONTINENT_EUROPE' ) { return CONTINENT_EUROPE; }
@@ -389,6 +404,11 @@ function options_by_prefix($pref) {
     8 => 'RELIGION_HINDU',
     9 => 'RELIGION_ATHEIST',
     10 => 'RELIGION_JEWISH',
+    11 => 'RELIGION_PAGAN',
+    12 => 'RELIGION_SHINTO',
+    13 => 'RELIGION_TAOIST',
+    14 => 'RELIGION_AGNOSTIC',
+    15 => 'RELIGION_ZOROASTRIAN',
   ),
   'CONTINENT' => 
   array (
@@ -499,6 +519,11 @@ function options_as_array() {
 	$defs['RELIGION_HINDU'] = RELIGION_HINDU;
 	$defs['RELIGION_ATHEIST'] = RELIGION_ATHEIST;
 	$defs['RELIGION_JEWISH'] = RELIGION_JEWISH;
+	$defs['RELIGION_SHINTO'] = RELIGION_SHINTO;
+	$defs['RELIGION_AGNOSTIC'] = RELIGION_AGNOSTIC;
+	$defs['RELIGION_PAGAN'] = RELIGION_PAGAN;
+	$defs['RELIGION_ZOROASTRIAN'] = RELIGION_ZOROASTRIAN;
+	$defs['RELIGION_TAOIST'] = RELIGION_TAOIST;
 	$defs['CONTINENT_NORTH_AMERICA'] = CONTINENT_NORTH_AMERICA;
 	$defs['CONTINENT_ASIA'] = CONTINENT_ASIA;
 	$defs['CONTINENT_EUROPE'] = CONTINENT_EUROPE;

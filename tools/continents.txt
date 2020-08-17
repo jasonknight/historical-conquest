@@ -58,7 +58,8 @@ Asia,Bahrain
 Asia,Bangladesh
 Asia,Bhutan
 Asia,Brunei
-Asia,Burma (Myanmar)
+Asia,Burma
+Asia,Myanmar
 Asia,Cambodia
 Asia,China
 Asia,East Timor
@@ -70,8 +71,8 @@ Asia,Israel
 Asia,Japan
 Asia,Jordan
 Asia,Kazakhstan
-Asia,"Korea, North"
-Asia,"Korea, South"
+Asia,North Korea
+Asia,South Korea
 Asia,Kuwait
 Asia,Kyrgyzstan
 Asia,Laos

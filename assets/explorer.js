@@ -119,7 +119,8 @@ function convert_to_destination_widget(d,src,clone,origin_holder,destinations) {
                 unadvance_move();
                 play_card(player,card_to_play,nrow,dest.col);
             }
-            advance_move();
+            // Explorer transport does not count as a move.
+            unadvance_move();
             trigger_refresh();
             trigger_close_zoom_holder();
         });

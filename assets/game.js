@@ -67,14 +67,14 @@ namespace HistoricalConquest;
         cont.html(end);
         w = panels.main.width() / 10;
         cont.css({
-            width: w,
+            width: w * 0.97,
         });
         bar.append(cont);
         cont = _div(null,'morale-display'); 
         cont.html(get_current_round());
         w = panels.main.width() / 10;
         cont.css({
-            width: w,
+            width: w * 0.97,
         });
         bar.append(cont);
         target.append(bar);

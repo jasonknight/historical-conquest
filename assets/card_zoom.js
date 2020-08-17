@@ -22,13 +22,13 @@ function get_card_zoom_holder(src,and_append) {
     if ( and_append ) {
         $('body').append(d);
     }
-    let clone = src.clone();
+    let clone = get_card(src.attr('card-id'),true);
     let _left = src.offset().left;
     let _top = src.offset().top;
-    let _w = src.width() * 2;
-    let _h = src.height() * 2;
-    let _pleft = _left - src.width() / 2;
-    let _ptop = _top - (src.height() / 2) - 50;
+    let _w = src.width() * 4.2;
+    let _h = src.height() * 2.7;
+    let _pleft = _left - clone.width() / 2;
+    let _ptop = _top - (clone.height() / 2) - 50;
     let cap = 0;
     while ( _pleft + _w >= $(window).width() ) {
         _pleft = _pleft - 50;
@@ -92,9 +92,7 @@ function maybe_add_abilities_button(d,src,clone,button_row) {
     if ( ! def.abilities || def.abilities.length == 0 ) {
         return;
     }
-    if ( get_current_player().hand.indexOf(src.attr('card-id')) != -1 ) {
-        return;
-    }
+    
     let ab = _div(null,'button abilities-button');
         ab.html("Abilities");
         ab.on('click',function () {

@@ -9,6 +9,7 @@
   crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/wp-content/plugins/historical-conquest/assets/style.css?<?php echo time(); ?>" />
         <script type="text/javascript">
+            window.notices = [];
             window.types = <?php echo json_encode(get_types_for_js()); ?>;
             window.board = <?php echo include(dirname(__DIR__) . '/tools/generate_player.php');?>;
             window.carddb = <?php echo json_encode(get_carddb(),JSON_PRETTY_PRINT); ?>;
