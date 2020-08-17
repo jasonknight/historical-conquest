@@ -134,7 +134,12 @@ function convert_to_abilities_widget(d,src,clone) {
         let a = def.abilities[i];
         let col1 = $('<td class="is-active" />');
         let btn = _div(null,'button activate-ability');
-            btn.html("Activate");
+            if ( a.apply_to_scope == window.types.SCOPE_ALWAYS) {
+                btn.html("Always");
+                btn.attr('disabled',true);
+            } else {
+                btn.html("Always");
+            }
             btn.on('click',function () {
                 trigger_activate_ability(d,src,clone,a);
             });

@@ -65,6 +65,15 @@ function get_card(id,big) {
                 if ( big ) {
                     _h = ($('td.playmat-column:first').width() * 0.80)
                 }
+                let checker = function () {
+                    if ( !img || ! img.length > 0 )
+                        return;
+                    if ( img.height() > card.height() ) {
+                        img.css({ "height": (img.height() * 0.95) + 'px'});
+                        setTimeout(checker,45);
+                    }
+                };
+                setTimeout(checker,45);
                 img.css({
                     "height": (_h) + 'px',
                     "margin-left": "auto",
