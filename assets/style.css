@@ -64,6 +64,8 @@ div.card td {
 }
 div.card p {
     margin: 0px;
+    overflow: hidden;
+    height: 87%;
 }
 div.card-type-land {
     background-color: lawngreen;

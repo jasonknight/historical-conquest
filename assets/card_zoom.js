@@ -13,7 +13,8 @@ function add_card_controls(d,src,clone) {
     button_row.css({
         position: 'absolute',
         left: d.offset().left,
-        top: d.offset().top + d.height() + 5
+        top: d.offset().top + d.height() + 5,
+        'z-index': window.popup_layer2,
     });
 } 
 function get_card_zoom_holder(src,and_append) {
@@ -96,6 +97,7 @@ function maybe_add_abilities_button(d,src,clone,button_row) {
     let ab = _div(null,'button abilities-button');
         ab.html("Abilities");
         ab.on('click',function () {
+            console.log("ab.on click");
             let e = $.Event('card_zoom_show_abilities');
             e.def = def;
             e.d = d;
@@ -134,15 +136,25 @@ function convert_to_abilities_widget(d,src,clone) {
         let a = def.abilities[i];
         let col1 = $('<td class="is-active" />');
         let btn = _div(null,'button activate-ability');
-            if ( a.apply_to_scope == window.types.SCOPE_ALWAYS) {
+            if ( a.apply_to_scope == window.types.SCOPE_ALWAYS_ON) {
                 btn.html("Always");
+                btn.addClass('ability-always');
                 btn.attr('disabled',true);
+            } else if ( a.apply_to_scope == window.types.SCOPE_ANYTIME) {
+                btn.html("Activate");
+                btn.on('click',function () {
+                    trigger_activate_ability(d,src,clone,a);
+                });
+            } else if ( a.apply_to_scope == window.types.SCOPE_TURN) {
+                btn.html("Turn");
+            } else if ( a.apply_to_scope == window.types.SCOPE_ATTACK) {
+                btn.html("Attack");
+            } else if ( a.apply_to_scope == window.types.SCOPE_DEFENSE) {
+                btn.html("Defense");
             } else {
-                btn.html("Always");
+                btn.html("Activate");
             }
-            btn.on('click',function () {
-                trigger_activate_ability(d,src,clone,a);
-            });
+            
             col1.append(btn);
             row.append(col1);
         let col2 = $('<td class="desc" />');

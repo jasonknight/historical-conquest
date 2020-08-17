@@ -69,7 +69,7 @@ function get_card(id,big) {
                     if ( !img || ! img.length > 0 )
                         return;
                     if ( img.height() > card.height() ) {
-                        img.css({ "height": (img.height() * 0.95) + 'px'});
+                        img.css({ "height": (img.height() * 0.90) + 'px'});
                         setTimeout(checker,45);
                     }
                 };
