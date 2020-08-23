@@ -1,6 +1,7 @@
 <?php
     namespace HistoricalConquest;
 ?>
+<!DOCTYPE HTML>
 <html>
     <head>
         <script
@@ -13,11 +14,13 @@
             window.types = <?php echo json_encode(get_types_for_js()); ?>;
             window.board = <?php echo include(dirname(__DIR__) . '/tools/generate_player.php');?>;
             window.carddb = <?php echo json_encode(get_carddb(),JSON_PRETTY_PRINT); ?>;
-            window.card_layer = 1;
-            window.overlay_layer = 2;
-            window.popup_layer = 3; 
-            window.popup_layer2 = 4; 
-            window.alert_layer = 5;
+            window.layers = {
+                card: 1,
+                overlay: 2,
+                popup: 3,
+                popup2: 4,
+                alert: 5 
+            };
             // game is here
             <?php $asset('game.js'); ?>
             // game is here

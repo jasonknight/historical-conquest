@@ -31,6 +31,8 @@ function mat_item_to_html(mat) {
     bits.push( 'id:' + mat.id );
     bits.push( 'charges:' + mat.charges );
     bits.push( 'desc:' + a.description );
+    bits.push( 'TypeCriterion:' + a.apply_to_card_types );
+    bits.push( 'IDCriterion:' + a.apply_to_ext_ids );
     d.html(bits.join(',<br />'));
     return d;
 }

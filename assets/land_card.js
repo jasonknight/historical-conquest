@@ -30,7 +30,7 @@ function maybe_add_str_def_display(d,src,clone) {
             position: 'absolute',
             left: (d.offset().left + d.width()) - 100,
             top: d.offset().top - def_div.height(),
-            'z-index': window.popup_layer,
+            'z-index': window.layers.popup,
         });
     }
 }

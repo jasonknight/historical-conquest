@@ -38,6 +38,7 @@ function trigger_you_cant_do_that(msg) {
 // Event binding is here
 $(function () {
     $('body').on('card_controls_create',function (e) {
+        maybe_add_attack_controls(e.d,e.src,e.clone,e.button_row);
         maybe_add_explorer_controls(e.d,e.src,e.clone,e.button_row);
         maybe_add_abilities_button(e.d,e.src,e.clone,e.button_row);
         add_discard_button(e.d,e.src,e.clone,e.button_row);
@@ -57,5 +58,9 @@ $(function () {
     });
     $('body').on('card.played',function (e) {
         maybe_add_abilities(e.player,e.card_def,e.played_def);
+    });
+    $('body').on('card_zoom.show_attack_options',function (e) {
+        _log('in body.on(card_zoom.show_attack_options)');
+        show_attack_options(get_current_player(),e.d,e.src);
     });
 });

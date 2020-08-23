@@ -14,7 +14,7 @@ function add_card_controls(d,src,clone) {
         position: 'absolute',
         left: d.offset().left,
         top: d.offset().top + d.height() + 5,
-        'z-index': window.popup_layer2,
+        'z-index': window.layers.popup2,
     });
 } 
 function get_card_zoom_holder(src,and_append) {
@@ -56,7 +56,7 @@ function get_card_zoom_holder(src,and_append) {
         "top": _ptop,
         "width": _w,
         "height": _h,
-        "z-index": window.popup_layer,
+        "z-index": window.layers.popup,
     });
     clone.css({
         "width": _w * 0.98,

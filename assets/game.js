@@ -14,6 +14,7 @@ namespace HistoricalConquest;
     <?php $asset('explorer.js'); ?>
     <?php $asset('land_card.js'); ?>
     <?php $asset('abilities.js'); ?>
+    <?php $asset('attack.js'); ?>
     
     <?php echo get_type_conversion_js(); ?> 
     _log("Logging","is","on");

@@ -327,7 +327,7 @@ function get_next_open_row(player,row,col) {
 
 function get_player_morale(player) {
     let mat = player.abilitymat;
-    let morale = 0;
+    let morale = 800;
     for ( let row = 0; row < mat.length; row++ ) {
         for ( let col = 0; col < mat[row].length; col++) {
             let abs = mat[row][col];
@@ -394,54 +394,74 @@ function get_row_col_of_played_card(player,id) {
     return {};
 }
 function unhighlight_playable_squares() { 
-        $('table.grid td.highlight-square').unbind('click');
-        $('table.grid td.highlight-square').removeClass('highlight-square');
-    }
-    function highlight_playable_squares_for(card) {
-        let p = get_current_player();    
-        let mat = p.playmat;
-        let last_row = mat.length - 1;
-        let last_col = mat[0].length - 1;
-        // For regular cards
-        let playable_squares = [];
-        for ( let y = 0; y <= last_row - 2; y++ ) {
-            for ( let x = 0; x <= last_col - 2; x++ ) {
-               if ( mat[last_row-1][x] != 0  && mat[y][x] == 0) {
-                    playable_squares.push([y,x]);
-               }
-            }
-        }
-        if ( card.hasClass('card-type-explorer') ) {
-            let y = last_row - 2;
-            for ( let x = 0; x <= last_col - 2; x++ ) {
-               if ( mat[y+1][x] == 0 && mat[y+1][x+1] != 0 && mat[y][x] == 0 ) {
-                    playable_squares.push([y,x]);
-               }
-            }
-        }
-        for ( let i = 0; i < playable_squares.length; i++ ) {
-            let pos = playable_squares[i];
-            $('table.grid td[yx="' + pos.join(',') + '"]').addClass('highlight-square');
+    $('table.grid td.highlight-square').unbind('click');
+    $('table.grid td.highlight-square').removeClass('highlight-square');
+}
+function highlight_playable_squares_for(card) {
+    let p = get_current_player();    
+    let mat = p.playmat;
+    let last_row = mat.length - 1;
+    let last_col = mat[0].length - 1;
+    // For regular cards
+    let playable_squares = [];
+    for ( let y = 0; y <= last_row - 2; y++ ) {
+        for ( let x = 0; x <= last_col - 2; x++ ) {
+           if ( mat[last_row-1][x] != 0  && mat[y][x] == 0) {
+                playable_squares.push([y,x]);
+           }
         }
     }
+    if ( card.hasClass('card-type-explorer') ) {
+        let y = last_row - 2;
+        for ( let x = 0; x <= last_col - 2; x++ ) {
+           if ( mat[y+1][x] == 0 && mat[y+1][x+1] != 0 && mat[y][x] == 0 ) {
+                playable_squares.push([y,x]);
+           }
+        }
+    }
+    for ( let i = 0; i < playable_squares.length; i++ ) {
+        let pos = playable_squares[i];
+        $('table.grid td[yx="' + pos.join(',') + '"]').addClass('highlight-square');
+    }
+}
 
-   
-    
-    function contains_card_type(lst,t,s1) {
-        for ( let i = 0; i < lst.length; i++ ) {
-            if ( t && s1 ) {
-                if ( window.carddb[lst[i]] && window.carddb[lst[i]].maintype == t) {
-                    return true;
-                }
-            } else if (t) {
-                if ( window.carddb[lst[i]] && window.carddb[lst[i]].maintype == t ) {
-                    return true;
-                }
-            } else if (s1) {
-                if ( window.carddb[lst[i]] && window.carddb[lst[i]].subtype1 == s1 ) {
-                    return true;
-                }
+
+
+function contains_card_type(lst,t,s1) {
+    for ( let i = 0; i < lst.length; i++ ) {
+        if ( t && s1 ) {
+            if ( window.carddb[lst[i]] && window.carddb[lst[i]].maintype == t) {
+                return true;
+            }
+        } else if (t) {
+            if ( window.carddb[lst[i]] && window.carddb[lst[i]].maintype == t ) {
+                return true;
+            }
+        } else if (s1) {
+            if ( window.carddb[lst[i]] && window.carddb[lst[i]].subtype1 == s1 ) {
+                return true;
             }
         }
-        return false;
     }
+    return false;
+}
+
+function create_dialog(id) {
+    let d = $('<div class="dialog" id=' + id + '></div>');
+    $('body').append(d);
+    let body = {};
+    body.width = $(window).width();
+    body.height = $(window).height();
+    _log("body",body);
+    d.css({
+        "width": (body.width * 0.80) + 'px',
+        "height": (body.height * 0.80) + 'px',
+        "left": (body.width * 0.10) + 'px',
+        "top": (body.height * 0.10) + 'px',
+        "position": "absolute",
+        "z-index": window.layers.popup,
+    });
+    d.show();
+    trigger_close_zoom_holder();
+    return d;
+}
