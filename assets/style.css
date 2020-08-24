@@ -191,8 +191,15 @@ div.morale-bar .morale-display {
 div.morale-bar .morale-display-current {
     background-color: red;
 }
-div.dialog {
+div.dialog,div.xbtn {
     background: #333;
     color: white;
     border: 2px solid grey;
+}
+div.xbtn {
+    border-bottom: none;
+    border-radius: 5px; 
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    cursor: pointer;
 }

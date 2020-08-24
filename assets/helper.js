@@ -454,14 +454,34 @@ function create_dialog(id) {
     body.height = $(window).height();
     _log("body",body);
     d.css({
-        "width": (body.width * 0.80) + 'px',
-        "height": (body.height * 0.80) + 'px',
-        "left": (body.width * 0.10) + 'px',
-        "top": (body.height * 0.10) + 'px',
+        "width": (body.width * 0.60) + 'px',
+        "height": (body.height * 0.60) + 'px',
+        "left": (body.width * 0.20) + 'px',
+        "top": (body.height * 0.20) + 'px',
         "position": "absolute",
         "z-index": window.layers.popup,
     });
     d.show();
+    let xbtn = $('<div class="xbtn">X</div>');
+        $('body').append(xbtn);
+        xbtn.hide();
+        xbtn.on('click',function () {
+            trigger_close_dialog($(this),d);
+        });
+        setInterval(function () { 
+            xbtn.show();
+            let off = d.offset();
+            console.log('off',off,d.width(),xbtn.width());
+            xbtn.css({
+               "padding-left": "10px",
+               "padding-top": "3px",
+               "padding-right": "10px",
+               "position":"absolute",
+               "left": (d.width() + off.left - xbtn.outerWidth() + 4)+ 'px',
+               "top": (body.height * 0.20 - xbtn.outerHeight() + 2) + 'px',
+                "z-index": window.layers.popup2,
+            });
+        },220);
     trigger_close_zoom_holder();
     return d;
 }

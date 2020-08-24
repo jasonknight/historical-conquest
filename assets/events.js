@@ -1,3 +1,9 @@
+function trigger_close_dialog(sender,dialog) {
+    let e = $.Event('dialog.close');
+    e.dialog = dialog;
+    e.sender = sender;
+    $('body').trigger(e);
+}
 function trigger_refresh() {
     $('body').trigger($.Event('refresh_board'));
 }
@@ -62,5 +68,9 @@ $(function () {
     $('body').on('card_zoom.show_attack_options',function (e) {
         _log('in body.on(card_zoom.show_attack_options)');
         show_attack_options(get_current_player(),e.d,e.src);
+    });
+    $('body').on('dialog.close', function (e) {
+        e.dialog.remove();
+        e.sender.remove();
     });
 });
