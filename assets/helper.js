@@ -471,7 +471,6 @@ function create_dialog(id) {
         setInterval(function () { 
             xbtn.show();
             let off = d.offset();
-            console.log('off',off,d.width(),xbtn.width());
             xbtn.css({
                "padding-left": "10px",
                "padding-top": "3px",
