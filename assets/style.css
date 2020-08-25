@@ -203,3 +203,14 @@ div.xbtn {
     border-bottom-right-radius: 0;
     cursor: pointer;
 }
+table.attack-table {
+    width: 90%;
+    height: 90%;
+}
+table.attack-table td {
+    vertical-align: middle;
+}
+table.attack-table h2 {
+    text-align: center;
+    font-size: 90%;
+}
