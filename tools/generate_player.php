@@ -38,38 +38,66 @@ foreach ( $cards as $card ) {
     $final_cards[ $card->ext_id ] = $card;
 }
 $players = [];
+$board_a = file(__DIR__ . '/boards/AttackBoard_1_player_a.csv');
+$board_a = array_map(function ($l) { return array_map('trim',explode("\t",$l)); },$board_a);
+$board_b = file(__DIR__ . '/boards/AttackBoard_1_player_b.csv');
+$board_b = array_map(function ($l) { return array_map('trim',explode("\t",$l)); },$board_b);
+function get_land_pile_from_board($b) {
+    $col = 8;
+    $cards = [];
+    for ( $row = 1; $row < 20; $row++ ) {
+        if (!empty($b[$row][$col]) ) {
+            $cards[] = $b[$row][$col];
+        }
+    }
+    return $cards;
+}
+function get_draw_pile_from_board($b) {
+    $col = 9;
+    $cards = [];
+    for ( $row = 1; $row < 20; $row++ ) {
+        if ( !empty($b[$row][$col]) ) {
+            $cards[] = $b[$row][$col];
+        }
+    }
+    return $cards;
+}
+function get_hand_from_board($b) {
+    $row = 8;
+    $cards = [];
+    for ( $col = 0; $col < 8; $col++ ) {
+        if ( !empty($b[$row][$col]) ) {
+            $cards[] = $b[$row][$col];
+        }
+    }
+    return $cards;
+}
+function populate_grid_from_board($b,$g) {
+    for ( $row = 1; $row < 9; $row++ ) {
+        for ( $col = 0; $col < 8; $col++ ) {
+             if ( !empty($b[$row][$col]) ) {
+                $g[$row-1][$col] = $b[$row][$col];
+             }   
+        }
+    }
+    return $g;
+}
+$boards = [$board_a,$board_b];
 for ( $i = 1; $i < 3; $i++ ) {
     $player = new \stdClass;
     $player->name = "Player" . $i;
     $player->id = $i;
     $player->morale = 0;
     $player->transport = [];
-    $player->hand = [
-        get_random_explorer(get_cards_with_abilities()), 
-        get_random_army(get_cards_with_abilities()), 
-        get_random_character(get_cards_with_abilities()), 
-    ];
+    $b = $boards[$i-1];
+    $player->hand = get_hand_from_board($b);
     $player->discard_pile = [];
-    $player->land_pile = [];
-    $player->draw_pile = [];
-    $possible_cards = array_keys($final_cards);
-    $land_count = 0;
-    while ( count($player->draw_pile) < 50 ) {
-        $id = $possible_cards[rand(0,count($possible_cards) - 1)];
-        if ( $final_cards[$id]->maintype != CARD_LAND && $land_count < 7 ) {
-            if ( rand(0,100) < 60 ) 
-               continue; 
-        }
-        if ( $final_cards[$id]->maintype == CARD_LAND && $land_count > 12)
-            continue;
-        if ( $final_cards[$id]->maintype == CARD_LAND)
-            $land_count++;
-        $player->draw_pile[] = (string)$id;
-
-    }
-    $player->land_count = $land_count;
+    $player->land_pile = get_land_pile_from_board($b);
+    $player->draw_pile = get_draw_pile_from_board($b);; 
+    $player->land_count = count($player->land_pile);
     $player->played = [];
     $player->playmat = get_base_table();
+    $player->playmat = populate_grid_from_board($b,$player->playmat); 
     $player->abilitymat = get_base_table();
     $player->damagemat = get_base_table();
     array_push($players,$player);

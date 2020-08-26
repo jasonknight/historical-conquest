@@ -115,6 +115,7 @@ function convert_to_destination_widget(d,src,clone,origin_holder,destinations) {
                 }
                 player.hand.push(card_to_play);
                 let old_dest = get_row_col_for(player,card_to_play);
+                player.abilitymat[old_dest.row][old_dest.col] = 0;
                 player.playmat[old_dest.row][old_dest.col] = 0;
                 unadvance_move();
                 play_card(player,card_to_play,nrow,dest.col);

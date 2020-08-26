@@ -12,6 +12,10 @@ function maybe_add_attack_controls(d,src,clone,button_row) {
         _log("can't attack from the hand")
         return;
     }
+    if ( ! type_to_name(def.maintype).match(/LAND/) && !type_to_name(def.maintype).match(/EXPLORER/) ) {
+        _log("attack controls just for explorer and land");
+        return;
+    }
     let ab = _div(null,'button attack-button');
         ab.html("Attack");
         ab.on('click',function () {
@@ -31,6 +35,7 @@ function show_attack_options(player,d,src) {
     let src_card_def = get_card_def(src.attr('card-id'));
     let land_card = get_attacking_land(player,src);
     let land_card_display = get_card(land_card.ext_id);
+        land_card_display.unbind('click');
     let div = $('<div />');
     let heading = $('<h2 />');
         div.append(heading);
@@ -77,6 +82,10 @@ function show_attack_options(player,d,src) {
                     continue;
                 }
                 en.card_display = get_card(en.card_id);
+                en.card_display.unbind('click');
+                en.card_display.on('click',function () {
+                    trigger_attack(player,op.player,src.attr('card-id'),land_card_display.attr('card-id'),en.card_id);
+                });
                 op.attackables.push(en);
             }
         }
@@ -101,4 +110,45 @@ function get_attacking_land(p,src) {
     let rc = get_row_col_for(p,card_id);
     let land_id = p.playmat[p.playmat.length -2][rc.col];
     return get_card_def(land_id);
+}
+function handle_attack(e) {
+    _log("ATTACK!",e.attacking_player);
+    let src_card_def = get_card_def(e.attack_source);
+    let attacking_land_def = get_card_def(e.attacking_land);
+    let defending_land_def = get_card_def(e.defending_land);
+
+    // Step 1, we need to know the attack points of p1
+    let cards_involved = get_attack_cards_involved(e.attacking_player,e.attack_source);
+    if ( cards_involved.length == 0 ) {
+        alert("There are no cards involved in the attack!");
+        return;
+    }
+    // Calculate the Attack
+    let defs = cards_involved.map(function (id) {
+        return get_card_def(id);
+    });
+    _log("defs:",defs);
+    let attack = 0;
+    defs.forEach(function (def) {
+        // Note, we call it strength as an attr on the
+        // card, but attack as an attr modifier
+        attack = attack + parseInt(def.strength);
+    });
+    _log("Cards Involved",cards_involved,defs,"Attack: " + attack);
+}
+function get_attack_cards_involved(p,src_id) {
+    let rc = get_row_col_for(p,src_id);
+    let mat = p.playmat;
+    let cards = [];
+    for ( let row = 0; row < mat.length - 1; row++ ) {
+        for ( let col = 0; col < mat[row].length; col++ ) {
+            // TODO: maybe implicate event cards?
+            // which is why we're doing a full pass and not
+            // just the column
+            if ( col == rc.col && mat[row][col] != 0 ) {
+               cards.push(mat[row][col]); 
+            }
+        }
+    }
+    return cards;
 }

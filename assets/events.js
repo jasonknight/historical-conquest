@@ -1,3 +1,12 @@
+function trigger_attack(p1,p2,src_id,card1,card2) {
+    let e = $.Event('attack');
+    e.attacking_player = p1;
+    e.defending_player = p2;
+    e.attack_source = src_id;
+    e.attacking_land = card1;
+    e.defending_land = card2;
+    $('body').trigger(e);
+}
 function trigger_close_dialog(sender,dialog) {
     let e = $.Event('dialog.close');
     e.dialog = dialog;
@@ -72,5 +81,8 @@ $(function () {
     $('body').on('dialog.close', function (e) {
         e.dialog.remove();
         e.sender.remove();
+    });
+    $('body').on('attack',function (e) {
+        handle_attack(e);
     });
 });

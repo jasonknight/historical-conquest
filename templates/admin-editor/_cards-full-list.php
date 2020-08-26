@@ -1,3 +1,6 @@
+<?php
+namespace HistoricalConquest;
+?>
 <table width="100%">
     <?php 
         $headers = array_keys($cards[0]);
@@ -13,7 +16,13 @@
     <?php foreach ( $cards as $card ) { ?>
     <tr class="card-entry-row" card-ext-id="<?php echo $card['ext_id'];?>" card-id="<?php echo $card['id']; ?>">
             <?php foreach ( $headers as $h ) { ?>
-                <td valign="top" class="<?php echo $h; ?>"><p class="<?php echo $h; ?>"><?php echo $card[$h]; ?></p></td>
+                <?php 
+                    $val = $card[$h];
+                    if ( $h == 'maintype' ) {
+                        $val = type_to_name($val);
+                    }
+                ?>
+                <td valign="top" class="<?php echo $h; ?>"><p class="<?php echo $h; ?>"><?php echo $val; ?></p></td>
             <?php } ?>
         </tr>
     <?php } ?>
