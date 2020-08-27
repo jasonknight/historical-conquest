@@ -99,6 +99,27 @@ for ( $i = 1; $i < 3; $i++ ) {
     $player->playmat = get_base_table();
     $player->playmat = populate_grid_from_board($b,$player->playmat); 
     $player->abilitymat = get_base_table();
+    for ( $row = 0; $row < count($player->playmat); $row++) {
+        for ( $col = 0; $col < count($player->playmat[$row]); $col++ ) {
+            $at = $player->playmat[$row][$col];
+            if ( $at === 0 ) {
+                continue;
+            }
+            $sql = "SELECT * FROM `hc_card_abilities` WHERE card_id IN (SELECT id FROM `hc_cards` WHERE ext_id = '{$at}')";
+            $abilities = $wpdb->get_results($sql);
+            if ( ! empty($abilities) ) {
+                foreach ( $abilities as $ab ) {
+                    $matitem = new \stdClass;
+                    $matitem->id = $ab->id;
+                    $matitem->charges = $ab->charges;
+                    if ( ! is_array($player->abilitymat[$row][$col]) ) {
+                        $player->abilitymat[$row][$col] = [];
+                    }
+                    array_push($player->abilitymat[$row][$col],$matitem);
+                }
+            }
+        }
+    }
     $player->damagemat = get_base_table();
     array_push($players,$player);
 }
