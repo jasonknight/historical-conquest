@@ -38,7 +38,9 @@ function get_base_table() {
         [0,0,0,0,0,0,0,0],
     ];
 }
-function get_card(id,big) {
+// note id here is ext_id
+function get_card(ext_id,big) {
+        let id = ext_id;
         let card = null;
         if ( typeof big != 'undefined' && big == true) {
             card = $($('div.card-template').html()) ;
@@ -450,9 +452,9 @@ function create_dialog(id) {
     let d = $('<div class="dialog" id=' + id + '></div>');
     $('body').append(d);
     let body = {};
+
     body.width = $(window).width();
     body.height = $(window).height();
-    _log("body",body);
     d.css({
         "width": (body.width * 0.60) + 'px',
         "height": (body.height * 0.60) + 'px',
@@ -463,24 +465,61 @@ function create_dialog(id) {
     });
     d.show();
     let xbtn = $('<div class="xbtn">X</div>');
-        $('body').append(xbtn);
+        d.append(xbtn);
         xbtn.hide();
         xbtn.on('click',function () {
             trigger_close_dialog($(this),d);
         });
-        setInterval(function () { 
+        let off = d.offset();
+        create_adjuster(function () { 
             xbtn.show();
-            let off = d.offset();
             xbtn.css({
                "padding-left": "10px",
                "padding-top": "3px",
                "padding-right": "10px",
-               "position":"absolute",
-               "left": (d.width() + off.left - xbtn.outerWidth() + 4)+ 'px',
-               "top": (body.height * 0.20 - xbtn.outerHeight() + 2) + 'px',
+               "position":"relative",
+                "width": "30px",
+               "left": (d.width() - xbtn.outerWidth() + 2)+ 'px',
+               "top": (-1 * xbtn.outerHeight()) + 'px',
                 "z-index": window.layers.popup2,
             });
-        },220);
+        },120,200);
     trigger_close_zoom_holder();
+    d.append('<div class="dialog-body" />');
     return d;
+}
+function get_generic_button(txt) {
+    let btn = $('<div class="generic-button"></div>');
+    btn.html(txt);
+    return btn;
+}
+function place_button(on,btn,horiz,vert) {
+    let off = on.offset();
+    create_adjuster(function () {
+        btn.css({"width": on.outerWidth() * 0.10 + "px"});
+        btn.css({
+            "position": "relative",
+            "z-index": window.layers.popup2,
+        });
+        if ( horiz == 'center' ) {
+           let left = (on.outerWidth() / 2 ) - (btn.outerWidth() / 2);
+           btn.css({"left": left + "px"}); 
+        }
+        if ( vert == 'bottom' ) {
+            let top = on.outerHeight() - (btn.height() + 1 );
+            btn.css({"top": top + "px"}); 
+        }
+    },120,200);
+}
+function create_adjuster(fn,delay,init_delay) {
+    let adjustments = 0;
+    let adjuster = function () {
+        if ( adjustments > 5 ) {
+            return;
+        }
+        fn();
+        adjustments++;
+        setTimeout(adjuster,delay);
+    }
+    setTimeout(adjuster,init_delay);
 }

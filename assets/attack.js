@@ -33,31 +33,13 @@ function show_attack_options(player,d,src) {
     _log('in show_attack_options');
     let dialog = create_dialog('attack_options');
     let src_card_def = get_card_def(src.attr('card-id'));
-    let land_card = get_attacking_land(player,src);
+    let land_card = get_attacking_land_def(player,src);
     let land_card_display = get_card(land_card.ext_id);
-        land_card_display.unbind('click');
-    let div = $('<div />');
-    let heading = $('<h2 />');
-        div.append(heading);
-    heading.html(player.name);
-    let table = $('<table align="center" class="attack-table"></table>');
-    let row = $('<tr />');
-    let hrow = row.clone();
+    let table = $('<table class="attack-table" />'); 
+    let hrow = $('<tr />');
+        hrow.append('<h2>Choose a land to attack</h2>');
     table.append(hrow);
-    hrow.append($('<td colspan="3" class="table-heading"><h2>Choose a land to attack</h2></td>'));
-    hrow.css({"height": "50px"});
-    let lcol = $('<td />');
-    let mcol = $('<td />');
-        mcol.append('<p class="land-vs">VS</p>');
-    let rcol = lcol.clone();
-    row.append(lcol)
-    row.append(mcol)
-    row.append(rcol);
-    table.append(row);
-    lcol.append(div) 
-    div.append(land_card_display);
-    dialog.append(table);
-
+    dialog.find('.dialog-body').append(table);
     // Get enemy lands
     let attackables = [];
     $.each(window.board.players,function () {
@@ -84,6 +66,7 @@ function show_attack_options(player,d,src) {
                 en.card_display = get_card(en.card_id);
                 en.card_display.unbind('click');
                 en.card_display.on('click',function () {
+                    trigger_close_dialog($(this),dialog);
                     trigger_attack(player,op.player,src.attr('card-id'),land_card_display.attr('card-id'),en.card_id);
                 });
                 op.attackables.push(en);
@@ -96,20 +79,38 @@ function show_attack_options(player,d,src) {
         let div = $('<div />');
         let heading = $('<h2 />');
         heading.html(this.player.name);
-        div.append(heading);
         $.each(op.attackables,function () {
-            let cdiv = $('<div style="margin-bottom: 20px;"></div>');
+            let cdiv = $('<div style="float: left;margin-bottom: 10px;margin-right: 10px;"></div>');
             cdiv.append(this.card_display);
             div.append(cdiv);
         });
-        rcol.append(div);
+        let row = $('<tr />');
+        let col = $('<td />');
+            col.append(heading);
+        row.append(col);
+        table.append(row);
+        row = $('<tr />');
+        col = $('<td />');
+        row.append(col);
+        col.append(div);
+        table.append(row);
     });
 }
-function get_attacking_land(p,src) {
+function get_attacking_land_def(p,src) {
     let card_id = src.attr('card-id');
     let rc = get_row_col_for(p,card_id);
     let land_id = p.playmat[p.playmat.length -2][rc.col];
     return get_card_def(land_id);
+}
+function show_attack_dialog(attacker,defender,src_ext_id,attacker_land_ext_id,defender_land_ext_id) {
+    let dialog = create_dialog('attack_dialog');
+    dialog.attr('current-round',0);
+    let attacking_land_display = get_card(attacker_land_ext_id,false);
+    let defending_land_display = get_card(defender_land_ext_id,false);
+    let attack_button = get_generic_button("Attack");
+        attack_button.addClass('initiate-attack-button');
+    dialog.append(attack_button);
+    place_button(dialog,attack_button,'center','bottom');
 }
 function handle_attack(e) {
     _log("ATTACK!",e.attacking_player);
@@ -134,7 +135,46 @@ function handle_attack(e) {
         // card, but attack as an attr modifier
         attack = attack + parseInt(def.strength);
     });
+    let abilities_involved = get_attack_abilities_involved(e.attacking_player,e.attack_source);
+    _log('abilities_involved=', abilities_involved);
+    abilities_involved.forEach(function (a) {
+        if ( ['strength','attack'].indexOf(a.affects_attribute) != -1 ) {
+            _log('attack','ability=' + a.id, a.affects_attribute + '=' + a.affect_amount);
+            // TODO: Some abilities only apply on the first round
+            attack += parseInt(a.affect_amount);
+        }
+    });
     _log("Cards Involved",cards_involved,defs,"Attack: " + attack);
+}
+
+function get_attack_abilities_involved(p,src_id) {
+    let rc = get_row_col_for(p,src_id);
+    let mat = p.abilitymat;
+    let abs = [];
+    for ( let row = 0; row < mat.length - 1; row++ ) {
+        for ( let col = 0; col < mat[row].length; col++ ) {
+            // TODO: maybe implicate event cards?
+            // which is why we're doing a full pass and not
+            // just the column
+            if ( !Array.isArray(mat[row][col]) ) {
+                continue;
+            }
+            let ar = mat[row][col];
+            ar = ar.map(function (m) { return mat_item_to_ability(m); });
+            ar.forEach(function (ab) {
+                let scope = type_to_name(ab.apply_to_scope);
+                if ( col == rc.col && mat[row][col] != 0 ) {
+                    if ( scope.match(/ALWAYS_ON/) || scope.match(/ATTACK/) ) {
+                       abs.push(ab);
+                    }  
+                } else if (scope.match(/APPLY_PLAYER/)) {
+                    abs.push(ab);
+                }
+            });
+            
+        }
+    }
+    return abs;
 }
 function get_attack_cards_involved(p,src_id) {
     let rc = get_row_col_for(p,src_id);

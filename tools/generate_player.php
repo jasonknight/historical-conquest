@@ -99,7 +99,7 @@ for ( $i = 1; $i < 3; $i++ ) {
     $player->playmat = get_base_table();
     $player->playmat = populate_grid_from_board($b,$player->playmat); 
     $player->abilitymat = get_base_table();
-    for ( $row = 0; $row < count($player->playmat); $row++) {
+    for ( $row = 0; $row < count($player->playmat) - 1; $row++) {
         for ( $col = 0; $col < count($player->playmat[$row]); $col++ ) {
             $at = $player->playmat[$row][$col];
             if ( $at === 0 ) {

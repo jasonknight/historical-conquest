@@ -1,0 +1,19 @@
+# Todo List
+
+1. Need to revamp ability application for Morale, add additional test
+2. Finish off basic attack from a country
+3. Finish off basic attack from an explorer
+4. Implement Attack special abilities, like winning the first round
+5. Implement Special ability that prevents attacking.
+6. Add can_be_attacked attribute to prevent from being attacked
+7. Implement check for can_attack.
+
+
+# Two Way Server/Client
+
+1. Implement the creation of a deck
+2. Implement the creation of a game
+3. store the mats in the db and distribute to players across JSON
+4. Implement action validation for playing a card, verifying ability mat, playing an ability etc.
+5. Implement click to activate ability
+6. Implement charges decrementing

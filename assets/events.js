@@ -79,10 +79,11 @@ $(function () {
         show_attack_options(get_current_player(),e.d,e.src);
     });
     $('body').on('dialog.close', function (e) {
+        $('div.xbtn').remove();
         e.dialog.remove();
         e.sender.remove();
     });
     $('body').on('attack',function (e) {
-        handle_attack(e);
+        show_attack_dialog(e.attacking_player,e.defending_player,e.attack_source,e.attacking_land,e.defending_land);
     });
 });

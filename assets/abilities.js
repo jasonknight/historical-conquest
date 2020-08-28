@@ -31,6 +31,7 @@ function mat_item_to_html(mat) {
     bits.push( 'id:' + mat.id );
     bits.push( 'charges:' + mat.charges );
     bits.push( 'desc:' + a.description );
+    bits.push( 'attr:' + a.affects_attribute + " by " + a.affect_amount);
     bits.push( 'Criteria:' + [
         type_to_name(a.apply_to_scope),
         type_to_name(a.apply_to_type),
