@@ -202,6 +202,9 @@ div.xbtn {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     cursor: pointer;
+    position: relative;
+    left: 90%;
+    top: -30px;
 }
 table.attack-table {
     width: 100%;
@@ -224,6 +227,10 @@ div.generic-button {
     padding-left: 40px;
     padding-right: 40px;
     font-size: 120%;
+    position: relative;
+    left: 40%;
+    top: 90%;
+    width: 100px;
 }
 div.initiate-attack-button {
     font-size: 150%;
