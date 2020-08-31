@@ -102,26 +102,67 @@ function get_attacking_land_def(p,src) {
     let land_id = p.playmat[p.playmat.length -2][rc.col];
     return get_card_def(land_id);
 }
+function get_remaining_attacks(p) {
+   return p.attacks + "/" + p.max_attacks; 
+}
 function show_attack_dialog(attacker,defender,src_ext_id,attacker_land_ext_id,defender_land_ext_id) {
     let dialog = create_dialog('attack_dialog');
     dialog.attr('current-round',0);
     let attacking_land_display = get_card(attacker_land_ext_id,false);
+        attacking_land_display.unbind('click');
     let defending_land_display = get_card(defender_land_ext_id,false);
-    let attack_button = get_generic_button("Attack");
+        defending_land_display.unbind('click');
+    let attack_button = get_generic_button("Attack " + get_remaining_attacks(attacker));
         attack_button.addClass('initiate-attack-button');
-    dialog.append(attack_button);
+    attack_button.insertBefore(dialog.find('.dialog-body'));
+    let tbl = $('<table />');
+    attack_button.on('click', function () {
+        tbl.find('tr.attack-msg-row').hide();
+        if ( attacker.attacks <= 0 ) {
+            trigger_attack_message("You have no more attacks!");
+            return;
+        }
+        attacker.attacks = attacker.attacks - 1;
+        $(this).html("Attack " + get_remaining_attacks(attacker));
+        handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defender_land_ext_id);
+    });
     place_button(dialog,attack_button,'center','bottom');
+    tbl.append('<tr class="name-row"/>');
+    tbl.append('<tr class="card-row"/>');
+    tbl.find('tr.name-row').append('<td>'+attacker.name+'</td>');
+    tbl.find('tr.name-row').append('<td>&nbsp;</td>');
+    tbl.find('tr.name-row').append('<td>'+defender.name+'</td>');
+    tbl.find('tr.card-row').append('<td class="attacker" />');
+    tbl.find('tr.card-row').append('<td class="vs-col">VS</td>');
+    tbl.find('tr.card-row').append('<td class="defender" />');
+    tbl.find('.attacker').append(attacking_land_display);
+    tbl.find('.defender').append(defending_land_display);
+    $('body').on('attack.msg',function (e) {
+        let row = $('<tr class="attack-msg-row"/>');
+        let td = $('<td colspan="3" class="attack-msg" />');
+        td.html(e.msg);
+        row.append(td);
+        tbl.append(row);
+    });
+    let tbl_div = $('<div class="attacker-defender-table-holder" />');
+    tbl_div.append(tbl);
+    tbl_div.css({"margin-left": "auto", "margin-right": "auto"});
+    dialog.find('.dialog-body').append(tbl_div);
+    create_adjuster(function () {
+        tbl_div.css({"width": tbl.outerWidth() + "px"});
+    },50,100);
+
 }
-function handle_attack(e) {
-    _log("ATTACK!",e.attacking_player);
-    let src_card_def = get_card_def(e.attack_source);
-    let attacking_land_def = get_card_def(e.attacking_land);
-    let defending_land_def = get_card_def(e.defending_land);
+function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defender_land_ext_id){
+    _log("ATTACK!",attacker,defender,src_ext_id);
+    let src_card_def = get_card_def(src_ext_id);
+    let attacking_land_def = get_card_def(attacker_land_ext_id);
+    let defending_land_def = get_card_def(defender_land_ext_id);
 
     // Step 1, we need to know the attack points of p1
-    let cards_involved = get_attack_cards_involved(e.attacking_player,e.attack_source);
+    let cards_involved = get_attack_cards_involved(attacker,src_ext_id);
     if ( cards_involved.length == 0 ) {
-        alert("There are no cards involved in the attack!");
+        trigger_attack_message("There are no cards involved in the attack!");
         return;
     }
     // Calculate the Attack
@@ -135,7 +176,7 @@ function handle_attack(e) {
         // card, but attack as an attr modifier
         attack = attack + parseInt(def.strength);
     });
-    let abilities_involved = get_attack_abilities_involved(e.attacking_player,e.attack_source);
+    let abilities_involved = get_attack_abilities_involved(attacker,src_ext_id);
     _log('abilities_involved=', abilities_involved);
     abilities_involved.forEach(function (a) {
         if ( ['strength','attack'].indexOf(a.affects_attribute) != -1 ) {
@@ -144,7 +185,66 @@ function handle_attack(e) {
             attack += parseInt(a.affect_amount);
         }
     });
-    _log("Cards Involved",cards_involved,defs,"Attack: " + attack);
+    _log("Attack Cards Involved",cards_involved,defs,"Attack: " + attack);
+    trigger_attack_message(attacker.name + " attack strength is " + attack);
+
+    // Step 2, we need to know the defense points of p2
+    let d_cards_involved = get_attack_cards_involved(defender,defender_land_ext_id);
+    if ( d_cards_involved.length == 0 ) {
+        trigger_defense_message("There are no cards involved in the defense!");
+        return;
+    }
+    // Calculate the defense
+    let d_defs = d_cards_involved.map(function (id) {
+        return get_card_def(id);
+    });
+    _log("defs:",d_defs);
+    let defense = 0;
+    d_defs.forEach(function (def) {
+        // Note, we call it strength as an attr on the
+        // card, but defense as an attr modifier
+        defense = defense + parseInt(def.strength);
+    });
+    let d_abilities_involved = get_defense_abilities_involved(defender,defender_land_ext_id);
+    _log('abilities_involved=', d_abilities_involved);
+    d_abilities_involved.forEach(function (a) {
+        if ( ['strength','defense'].indexOf(a.affects_attribute) != -1 ) {
+            _log('defense','ability=' + a.id, a.affects_attribute + '=' + a.affect_amount);
+            // TODO: Some abilities only apply on the first round
+            defense += parseInt(a.affect_amount);
+        }
+    });
+    _log("Defense Cards Involved",d_cards_involved,defs,"defense: " + defense);
+    trigger_attack_message(defender.name + " defense strength is " + defense);
+    let winner = null;
+    let loser = null;
+    if ( attack > defense ) {
+        winner = attacker;
+        loser = defender;
+        loser_land_id = defender_land_ext_id;
+        trigger_attack_message(attacker.name + " wins with the stronger attack");
+    }
+    if ( defense > attack ) {
+        winner = defender;
+        loser = attacker;
+        loser_land_id = attacker_land_ext_id;
+        trigger_attack_message(defender.name + " wins with the stronger defense");
+    }
+    // Step 3 The loser has to lose 100 morale
+    let rc = get_row_col_for(loser,loser_land_id);
+    for ( let i = 0; i < window.board.players.length; i++ ) {
+        if ( window.board.players[i].id != loser.id ) {
+            continue;
+        }
+        let ar = window.board.players[i].damagemat[rc.row][rc.col];
+        if ( !Array.isArray(ar) ) {
+            ar = [];
+        }
+        ar.push(['morale',-100]);
+        window.board.players[i].damagemat[rc.row][rc.col] = ar;
+        render_players_damagemat(window.board.players);
+    }
+
 }
 
 function get_attack_abilities_involved(p,src_id) {
@@ -176,6 +276,34 @@ function get_attack_abilities_involved(p,src_id) {
     }
     return abs;
 }
+function get_defense_abilities_involved(p,src_id) {
+    let rc = get_row_col_for(p,src_id);
+    let mat = p.abilitymat;
+    let abs = [];
+    for ( let row = 0; row < mat.length - 1; row++ ) {
+        for ( let col = 0; col < mat[row].length; col++ ) {
+            // TODO: maybe implicate event cards?
+            // which is why we're doing a full pass and not
+            // just the column
+            if ( !Array.isArray(mat[row][col]) ) {
+                continue;
+            }
+            let ar = mat[row][col];
+            ar = ar.map(function (m) { return mat_item_to_ability(m); });
+            ar.forEach(function (ab) {
+                let scope = type_to_name(ab.apply_to_scope);
+                if ( col == rc.col && mat[row][col] != 0 ) {
+                    if ( scope.match(/ALWAYS_ON/) || scope.match(/DEFENSE/) ) {
+                       abs.push(ab);
+                    }  
+                } else if (scope.match(/APPLY_PLAYER/)) {
+                    abs.push(ab);
+                }
+            });
+        }
+    }
+    return abs;
+}
 function get_attack_cards_involved(p,src_id) {
     let rc = get_row_col_for(p,src_id);
     let mat = p.playmat;
@@ -191,4 +319,12 @@ function get_attack_cards_involved(p,src_id) {
         }
     }
     return cards;
+}
+function dam_item_to_html(mat) {
+    let d = _div(null,'damagemat-item');
+    let bits = [];
+    bits.push( 'attr:' + mat[0]);
+    bits.push( 'amount:' + mat[1] );
+    d.html(bits.join(',<br />'));
+    return d;
 }

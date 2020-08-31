@@ -18,8 +18,10 @@ function _tab_button(id,player) {
         $('.tab-button').removeClass('active-tab');
         $('div.tab').hide();
         $('div.abilitymat-tab').hide();
+        $('div.damagemat-tab').hide();
         $('#' + id).show();
         $('#' + id + '_abilitymat').show();
+        $('#' + id + '_damagemat').show();
         window.current_player = player;
         $(this).addClass('active-tab');
     });
@@ -194,6 +196,7 @@ function next_player() {
         next_round();
     }
     window.board.current_move = 0;
+    window.board.players[window.board.player_pointer].attacks = window.board.players[window.board.player_pointer].max_attacks;
     process_player(window.board.players[window.board.player_pointer]);
 }
 function next_round() {
@@ -466,13 +469,11 @@ function create_dialog(id) {
     d.show();
     let xbtn = $('<div class="xbtn">X</div>');
         d.append(xbtn);
-        xbtn.hide();
         xbtn.on('click',function () {
             trigger_close_dialog($(this),d);
         });
         let off = d.offset();
         create_adjuster(function () { 
-            xbtn.show();
             xbtn.css({
                "padding-left": "10px",
                "padding-top": "3px",
@@ -483,6 +484,7 @@ function create_dialog(id) {
                "top": (-1 * xbtn.outerHeight()) + 'px',
                 "z-index": window.layers.popup2,
             });
+            xbtn.show();
         },120,200);
     trigger_close_zoom_holder();
     d.append('<div class="dialog-body" />');
@@ -506,15 +508,17 @@ function place_button(on,btn,horiz,vert) {
            btn.css({"left": left + "px"}); 
         }
         if ( vert == 'bottom' ) {
-            let top = on.outerHeight() - (btn.height() + 1 );
+            console.log("on.outerHeight()",on.outerHeight(),"btn.outerHeight()",btn.outerHeight());
+            let top = on.height() - ( btn.height() - 3);
             btn.css({"top": top + "px"}); 
         }
+        btn.show();
     },120,200);
 }
 function create_adjuster(fn,delay,init_delay) {
     let adjustments = 0;
     let adjuster = function () {
-        if ( adjustments > 5 ) {
+        if ( adjustments > 15 ) {
             return;
         }
         fn();

@@ -7,6 +7,11 @@ function trigger_attack(p1,p2,src_id,card1,card2) {
     e.defending_land = card2;
     $('body').trigger(e);
 }
+function trigger_attack_message(msg) {
+    let e = $.Event('attack.msg');
+    e.msg = msg;
+    $('body').trigger(e);
+}
 function trigger_close_dialog(sender,dialog) {
     let e = $.Event('dialog.close');
     e.dialog = dialog;

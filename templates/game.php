@@ -69,6 +69,7 @@
         <div class="main container"></div> 
         <h1>Active Abilities Debug</h1>
         <div class="abilitymats container"></div> 
-        
+        <h1>Active Damage Debug</h1>
+        <div class="damagemats container"></div>
     </body>
 </html>

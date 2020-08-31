@@ -82,6 +82,56 @@ namespace HistoricalConquest;
 
 
     }
+    function render_damage_mat(player,target) {
+        let rows_cols = player.damagemat;
+        let rl = rows_cols.length;
+        let cl = rows_cols[0].length;
+        rows_cols[rl-2][cl-1] = 'LAND_PILE';
+        rows_cols[rl-2][cl-2] = 'DRAW_PILE';
+        rows_cols[rl-3][cl-1] = 'DISCARD_PILE';
+        player.damagemat = rows_cols;
+        target.html('')
+        let table = $('<table></table>');
+            table.addClass('grid');
+        let last_row = rows_cols.length - 1;
+        let last_col = rows_cols[0].length - 1;
+        for ( let row = 0; row < rows_cols.length; row++) {
+            let tr = $('<tr />');
+            tr.attr('y',row);
+            for ( let col = 0; col < rows_cols[0].length; col++ ) {
+                let td = $('<td />');
+                tr.append(td); 
+                td.attr('y',row);
+                td.attr('x',col);
+                td.attr('yx',row + ',' + col);
+                td.css({
+                    "width": get_grid_column_width(player) + 'px',
+                    "height": get_grid_column_height(player) + 'px',
+                });
+                td.addClass('playmat-column damagemat-column');
+                if ( rows_cols[row][col] !== 0 ) {
+                    let id = rows_cols[row][col];
+                    if ( id == 'LAND_PILE' ) {
+                        td.addClass('land-pile');
+                    } else if ( id == 'DRAW_PILE' ) {
+                        td.addClass('draw-pile');
+                    } else if ( id == 'DISCARD_PILE' ) {
+                        td.addClass('discard-pile');
+                    } else {
+                        // Okay we handle abilities display here
+                        let abs = rows_cols[row][col];
+                        td.html('');
+                        for ( let i = 0; i < abs.length; i++ ) {
+                            let mhtml = dam_item_to_html(abs[i]);
+                            td.append(mhtml);
+                        }
+                    }
+                } 
+            }
+            table.append(tr);
+        }
+        target.append(table);
+    }
     function render_ability_mat(player,target) {
         let rows_cols = player.abilitymat;
         let rl = rows_cols.length;
@@ -309,6 +359,7 @@ namespace HistoricalConquest;
     }
     function render_players(players) {
         render_players_abilitymat(players);
+        render_players_damagemat(players);
         panels.main.html('');
         panels.tab_panel.html('');
         _log("Rendering", "Round", window.board.round, "Move", current_move());
@@ -331,6 +382,16 @@ namespace HistoricalConquest;
             let d = _div( id, 'abilitymat-tab');
             render_ability_mat(this,d);
             panels.abilitymats.append(d);
+            d.hide();
+        });
+    }
+    function render_players_damagemat(players) {
+        panels.damagemats.html('');
+        $.each(players, function () {
+            let id = 'player_' + this.id + '_damagemat';
+            let d = _div( id, 'damagemat-tab');
+            render_damage_mat(this,d);
+            panels.damagemats.append(d);
             d.hide();
         });
     }
@@ -376,6 +437,7 @@ namespace HistoricalConquest;
     $(function () {
         panels.main = $('div.main');
         panels.abilitymats = $('div.abilitymats');
+        panels.damagemats = $('div.damagemats');
         panels.tab_panel = $('div.tab-panel');
         panels.tab_panel.css('height',$(window).height() * 0.05);
         if ( ! window.current_player ) {
