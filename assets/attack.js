@@ -155,6 +155,9 @@ function show_attack_dialog(attacker,defender,src_ext_id,attacker_land_ext_id,de
 }
 function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defender_land_ext_id){
     _log("ATTACK!",attacker,defender,src_ext_id);
+    let state = {};
+    state.attacker = {};
+    state.defender = {};
     let src_card_def = get_card_def(src_ext_id);
     let attacking_land_def = get_card_def(attacker_land_ext_id);
     let defending_land_def = get_card_def(defender_land_ext_id);
@@ -176,6 +179,9 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
         // card, but attack as an attr modifier
         attack = attack + parseInt(def.strength);
     });
+    state.attacker.armies = defs.filter(function (d) { return type_to_name(d.maintype).match(/ARMY/); });
+    state.attacker.leaders = defs.filter(function (d) { return type_to_name(d.maintype).match(/LEADER/); });
+    state.attacker.spiritual_leaders = defs.filter(function (d) { return type_to_name(d.maintype).match(/SPIRITUAL_LEADER/); });
     let abilities_involved = get_attack_abilities_involved(attacker,src_ext_id);
     _log('abilities_involved=', abilities_involved);
     abilities_involved.forEach(function (a) {
@@ -194,17 +200,41 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
         trigger_defense_message("There are no cards involved in the defense!");
         return;
     }
+    
+    
     // Calculate the defense
     let d_defs = d_cards_involved.map(function (id) {
         return get_card_def(id);
     });
+    state.defender.armies = d_defs.filter(function (d) { return type_to_name(d.maintype).match(/ARMY/); });
+    state.defender.leaders = d_defs.filter(function (d) { return type_to_name(d.maintype).match(/LEADER/); });
+    state.defender.spiritual_leaders = d_defs.filter(function (d) { return type_to_name(d.maintype).match(/SPIRITUAL_LEADER/); });
     _log("defs:",d_defs);
+    _log("State",state);
+    // Ability of CO4202 Gaius Julius Caesar assasinates a leader in the opposing camp before
+    // the attack if an army is preset.
+    if ( state.attacker.armies.length > 0 && state.defender.leaders.length > 0 ) {
+        let has_julius = cards_involved.filter(function (ext_id) { return ext_id === 'CO4202'; }).length > 0;
+        if ( has_julius ) {
+            // okay, we have an army, they have a leader, we have Gaius, so someone's gotta die
+            // we'll need to remove the assassinated card
+            let vic = state.defender.leaders.pop();
+            let army = state.attacker.armies[0];
+            d_cards_involved = d_cards_involved.filter(function ( ext_id ) { return ext_id != vic.ext_id; });
+            d_defs = d_defs.filter(function (d) { return d.ext_id != vic.ext_id; });
+            defender.discard_pile.push(vic.ext_id);
+            system_discard(defender,vic);
+            trigger_attack_message("Inspired by Caesar, " + army.name + " successfully assasinates " + vic.name);
+        }
+    }
     let defense = 0;
     d_defs.forEach(function (def) {
         // Note, we call it strength as an attr on the
         // card, but defense as an attr modifier
         defense = defense + parseInt(def.strength);
     });
+    
+
     let d_abilities_involved = get_defense_abilities_involved(defender,defender_land_ext_id);
     _log('abilities_involved=', d_abilities_involved);
     d_abilities_involved.forEach(function (a) {
@@ -216,6 +246,15 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
     });
     _log("Defense Cards Involved",d_cards_involved,defs,"defense: " + defense);
     trigger_attack_message(defender.name + " defense strength is " + defense);
+    // TODO: Abilities that win attacks should trigger here
+    // Ability of C04201 Attila the hun, doubles the attack if it's the first round
+    let attila_present = cards_involved.filter(function (ext_id) { return ext_id == 'C04201'; }).length > 0;
+    _log("Attila check", attila_present, attacker.attacks, attack.max_attacks);
+    if ( attila_present && attacker.attacks == (attacker.max_attacks - 1) ) {
+        trigger_attack_message("Attila doubles your attack strength from " + attack + " to " + (attack * 2));
+        attack = attack * 2;
+    }
+    
     let winner = null;
     let loser = null;
     if ( attack > defense ) {

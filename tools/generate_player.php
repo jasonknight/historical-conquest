@@ -42,6 +42,10 @@ $board_a = file(__DIR__ . '/boards/AttackBoard_1_player_a.csv');
 $board_a = array_map(function ($l) { return array_map('trim',explode("\t",$l)); },$board_a);
 $board_b = file(__DIR__ . '/boards/AttackBoard_1_player_b.csv');
 $board_b = array_map(function ($l) { return array_map('trim',explode("\t",$l)); },$board_b);
+$board_c = file(__DIR__ . '/boards/AttackBoard_1_player_c.csv');
+$board_c = array_map(function ($l) { return array_map('trim',explode("\t",$l)); },$board_c);
+$board_d = file(__DIR__ . '/boards/AttackBoard_1_player_d.csv');
+$board_d = array_map(function ($l) { return array_map('trim',explode("\t",$l)); },$board_d);
 function get_land_pile_from_board($b) {
     $col = 8;
     $cards = [];
@@ -82,7 +86,7 @@ function populate_grid_from_board($b,$g) {
     }
     return $g;
 }
-$boards = [$board_a,$board_b];
+$boards = [$board_b,$board_c];
 for ( $i = 1; $i < 3; $i++ ) {
     $player = new \stdClass;
     $player->name = "Player" . $i;

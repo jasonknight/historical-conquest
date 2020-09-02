@@ -309,6 +309,34 @@ namespace HistoricalConquest;
         }
         _log("Discarding failed?",player,card_def);
     }
+    function system_discard(player,card_def) {
+        if ( player.hand.indexOf(card_def.ext_id) != -1 ) {
+            let nh = [];
+            for ( let i = 0; i < 5; i++ ) {
+                 if ( player.hand[i] == card_def.ext_id ) {
+                     _log('removing',card_def.ext_id);
+                     continue;
+                 }
+                 nh.push(player.hand[i]);
+            }
+            player.hand = nh;
+            //set_current_player(player);
+            //advance_move();
+            //trigger_refresh();
+            return;
+        }
+        let loc = get_row_col_of_played_card(player,card_def.ext_id);
+        if ( loc && loc.row ) {
+            player.playmat[loc.row][loc.col] = 0;
+            // TODO: Is this always the case? Maybe not.
+            player.abilitymat[loc.row][loc.col] = 0;
+            //advance_move();
+            //set_current_player(player);
+            //trigger_refresh();
+            return;
+        }
+        _log("Discarding failed?",player,card_def);
+    }
     function play_card(player,id,y,x) {
         y = parseInt(y);
         x = parseInt(x);

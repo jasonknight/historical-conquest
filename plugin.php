@@ -49,8 +49,13 @@ function init() {
             edit_card();
        }
    }
+   add_shortcode('hcgame_card_ability_listing',__NAMESPACE__ . '\shortcode_hcgame_card_ability_listing');
    add_shortcode('hcgame_admin',__NAMESPACE__ . '\shortcode_hcgame_admin');
    add_shortcode('hcgame_admin_card_images',__NAMESPACE__ . '\shortcode_hcgame_admin_card_images');
+}
+function shortcode_hcgame_card_ability_listing($attrs) {
+    $cards = get_cards();
+    echo render_template('card-ability-listing.php', ['cards' => $cards ]);
 }
 function upload_attachment($file,$file_key) {
     //dbg_notice(__FUNCTION__ . ": file_key=$file_key");
