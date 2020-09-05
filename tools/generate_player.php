@@ -86,7 +86,7 @@ function populate_grid_from_board($b,$g) {
     }
     return $g;
 }
-$boards = [$board_b,$board_c];
+$boards = [$board_d,$board_b];
 for ( $i = 1; $i < 3; $i++ ) {
     $player = new \stdClass;
     $player->name = "Player" . $i;

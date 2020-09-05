@@ -332,10 +332,20 @@ function get_next_open_row(player,row,col) {
 
 function get_player_morale(player) {
     let mat = player.abilitymat;
+    let dmat = player.damagemat;
     let morale = 800;
     for ( let row = 0; row < mat.length; row++ ) {
         for ( let col = 0; col < mat[row].length; col++) {
             let abs = mat[row][col];
+            let dams = dmat[row][col];
+            if ( Array.isArray(dams) ) {
+                for ( let i = 0; i < dams.length; i++ ) {
+                    if ( dams[i][0] == 'morale' ) {
+                        _log("Damage to morale", dams[i]);
+                        morale = morale + parseInt(dams[i][1]);
+                    }
+                }
+            }
             if ( Array.isArray(abs) ) {
                 for ( let i = 0; i < abs.length; i++ ) {
                     if ( abs[i].charges == 0 ) {

@@ -192,7 +192,6 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
         }
     });
     _log("Attack Cards Involved",cards_involved,defs,"Attack: " + attack);
-    trigger_attack_message(attacker.name + " attack strength is " + attack);
 
     // Step 2, we need to know the defense points of p2
     let d_cards_involved = get_attack_cards_involved(defender,defender_land_ext_id);
@@ -245,7 +244,6 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
         }
     });
     _log("Defense Cards Involved",d_cards_involved,defs,"defense: " + defense);
-    trigger_attack_message(defender.name + " defense strength is " + defense);
     // TODO: Abilities that win attacks should trigger here
     // Ability of C04201 Attila the hun, doubles the attack if it's the first round
     let attila_present = cards_involved.filter(function (ext_id) { return ext_id == 'C04201'; }).length > 0;
@@ -254,18 +252,71 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
         trigger_attack_message("Attila doubles your attack strength from " + attack + " to " + (attack * 2));
         attack = attack * 2;
     }
-    
+    // Satomura Joha doubles the strength, i.e. the attack or defense
+    let satomura_joha_present = cards_involved.filter(function (ext_id) { return ext_id == 'AU4202'; }).length > 0; 
+    if ( satomura_joha_present ) {
+        let chars = defs.filter(function (d) {
+            return d.ext_id != 'AU4202' && type_to_name(d.maintype).match(/CHARACTER/);
+        });
+        if ( chars.length > 0 ) {
+            // Find the card with the highest strength
+            let max_card = null;
+            for ( let i = 0; i < chars.length; i++ ) {
+                if ( max_card == null ) {
+                    max_card = chars[i];
+                    continue;
+                }
+                if ( max_card.strength < chars[i].strength ) {
+                    max_card = chars[i];
+                }
+            }
+            if ( max_card ) {
+                attack = attack + parseInt(max_card.strength);
+                trigger_attack_message("Due to training from Satomura Joha, " + max_card.name + " adds double strength to the attack.");
+            }
+        }
+    }
+    satomura_joha_present = false;
+    satomura_joha_present = d_cards_involved.filter(function (ext_id) { return ext_id == 'AU4202'; }).length > 0; 
+    if ( satomura_joha_present ) {
+        let chars = d_defs.filter(function (d) {
+            return d.ext_id != 'AU4202' && type_to_name(d.maintype).match(/CHARACTER/);
+        });
+        if ( chars.length > 0 ) {
+            // Find the card with the highest strength
+            let max_card = null;
+            for ( let i = 0; i < chars.length; i++ ) {
+                if ( max_card == null ) {
+                    max_card = chars[i];
+                    continue;
+                }
+                if ( max_card.strength < chars[i].strength ) {
+                    max_card = chars[i];
+                }
+            }
+            if ( max_card ) {
+                defense = defense + parseInt(max_card.strength);
+                trigger_attack_message("Due to training from Satomura Joha, " + max_card.name + " adds double strength to the defense.");
+            }
+        }
+    }
     let winner = null;
     let loser = null;
+    trigger_attack_message(defender.name + " defense strength is " + defense);
+    trigger_attack_message(attacker.name + " attack strength is " + attack);
     if ( attack > defense ) {
         winner = attacker;
         loser = defender;
+        loser_defs = d_defs;
+        loser_cards = d_cards_involved;
         loser_land_id = defender_land_ext_id;
         trigger_attack_message(attacker.name + " wins with the stronger attack");
     }
     if ( defense > attack ) {
         winner = defender;
         loser = attacker;
+        loser_defs = defs;
+        loser_cards = cards_involved;
         loser_land_id = attacker_land_ext_id;
         trigger_attack_message(defender.name + " wins with the stronger defense");
     }
@@ -282,6 +333,33 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
         ar.push(['morale',-100]);
         window.board.players[i].damagemat[rc.row][rc.col] = ar;
         render_players_damagemat(window.board.players);
+    }
+    // Next, the losing player must discard something. We will look for the
+    // weakest card to discard.
+    let to_discard = null;
+    let discardables = loser_defs.filter(function (d) {
+        return !type_to_name(d.maintype).match(/LAND/);
+    });
+    for ( let i = 0; i < discardables.length; i++ ) {
+        if ( to_discard == null ) {
+            to_discard = discardables[i];
+        }
+        if ( winner == attacker ) {
+            if ( to_discard.strength > discardables[i].strength ) {
+                to_discard = loser_defs[i];
+            }
+        }
+        if ( winner == defender ) {
+            if ( to_discard.defense > discardables[i].defense ) {
+                to_discard = loser_defs[i];
+            }
+        }
+    }
+    if ( to_discard ) {
+        trigger_attack_message(loser.name + " has lost the battle and " + to_discard.name + " is mourned!");
+        system_discard(loser,to_discard.ext_id);
+    } else {
+        _log("Error", "failed to find candidate for discard", loser,loser_defs);
     }
 
 }

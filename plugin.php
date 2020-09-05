@@ -54,7 +54,7 @@ function init() {
    add_shortcode('hcgame_admin_card_images',__NAMESPACE__ . '\shortcode_hcgame_admin_card_images');
 }
 function shortcode_hcgame_card_ability_listing($attrs) {
-    $cards = get_cards();
+    $cards = get_cards_without_abilities();
     echo render_template('card-ability-listing.php', ['cards' => $cards ]);
 }
 function upload_attachment($file,$file_key) {
