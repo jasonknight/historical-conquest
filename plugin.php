@@ -52,6 +52,16 @@ function init() {
    add_shortcode('hcgame_card_ability_listing',__NAMESPACE__ . '\shortcode_hcgame_card_ability_listing');
    add_shortcode('hcgame_admin',__NAMESPACE__ . '\shortcode_hcgame_admin');
    add_shortcode('hcgame_admin_card_images',__NAMESPACE__ . '\shortcode_hcgame_admin_card_images');
+   add_shortcode('hcgame_player_cp',__NAMESPACE__ . '\shortcode_hcgame_player_cp');
+   if ( get('hcgame-rules-dl') ) {
+        header("Content-Type: application/pdf");
+        header("Content-Disposition:attachment;filename=historical-conquest-rules.pdf");
+        echo file_get_contents(__DIR__ . '/assets/historical-conquest-rule-sheet.pdf');
+        exit;
+   }
+}
+function shortcode_hcgame_player_cp($attrs) {
+    echo render_template('player-control-panel.php',[]);
 }
 function shortcode_hcgame_card_ability_listing($attrs) {
     $cards = get_cards_without_abilities();

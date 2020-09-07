@@ -338,7 +338,7 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
     // weakest card to discard.
     let to_discard = null;
     let discardables = loser_defs.filter(function (d) {
-        return !type_to_name(d.maintype).match(/LAND/);
+        return !type_to_name(d.maintype).match(/LAND/) && !is_active_area_card(d);
     });
     for ( let i = 0; i < discardables.length; i++ ) {
         if ( to_discard == null ) {
@@ -361,7 +361,22 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
     } else {
         _log("Error", "failed to find candidate for discard", loser,loser_defs);
     }
+    // At the end of an attack, if there are no people left in the losing land, the winner
+    // gets it
+    let loser_cards_left = get_attack_cards_involved(loser,loser_land_id);
+    let loser_people_left = loser_cards_left.filter(function (ext_id) {
+        let def = get_card_def(ext_id);
+        return !is_active_area_card(def) && !type_to_name(def.maintype).match(/LAND/);
+    });
+    if ( loser_people_left.length == 0 ) {
+        _log("There is no one left in this land, so the winner gets it");
+    }
+    let pos = get_open_land_position(winner);
+    if ( !pos ) {
+        _log("no position was returned for adding land to winning player");
+    } else {
 
+    }
 }
 
 function get_attack_abilities_involved(p,src_id) {
@@ -432,6 +447,15 @@ function get_attack_cards_involved(p,src_id) {
             // just the column
             if ( col == rc.col && mat[row][col] != 0 ) {
                cards.push(mat[row][col]); 
+            } else {
+                if ( mat[row][col] != 0 ) {
+                    let def = get_card_def(mat[row][col]);
+                    if ( ! def ) 
+                        continue;
+                    if ( is_active_area_card(def) ) {
+                        cards.push(mat[row][col]);
+                    }
+                }
             }
         }
     }

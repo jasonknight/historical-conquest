@@ -292,11 +292,17 @@ function expand_playmat(player) {
     if ( hexpand ) {
         for ( let y = 0; y < player.playmat.length; y++ ) {
             let nr = [0];
+            let nra = [0];
+            let nrd = [0];
             let len = player.playmat[0].length;
             for ( let x = 0; x < len; x++ ) {
                 nr.push(player.playmat[y][x]);
+                nra.push(player.abilitymat[y][x]);
+                nrd.push(player.damagemat[y][x]);
             }
             player.playmat[y] = nr;
+            player.abilitymat[y] = nra;
+            player.damagemat[y] = nrd;
         }
     }
     for ( let x = 0; x < player.playmat[0].length; x++ ) {
@@ -306,15 +312,46 @@ function expand_playmat(player) {
     }
     if ( vexpand ) {
         let nr = [];
+        let nra = [];
+        let nrd = [];
         for ( let i = 0; i < player.playmat[0].length; i++ ) {
             nr[i] = 0;
+            nra[i] = 0;
+            nrd[i] = 0;
         }
         let new_mat = [nr];
+        let new_amat = [nra];
+        let new_dmat = [nrd];
         for ( let i = 0; i < player.playmat.length; i++) {
             new_mat.push(player.playmat[i]);
+            new_amat.push(player.abilitymat[i]);
+            new_dmat.push(player.damagemat[i]);
         }
         player.playmat = new_mat;
+        player.abilitymat = new_amat;
+        player.damagemat = new_dmat;
     }
+}
+function get_open_land_position(player,rec) {
+    if ( typeof rec == 'undefined' ) {
+        rec = 1;
+    }
+    if ( rec = 5 ) {
+        _log("Recursive error detected for get_open_land_position",player,rec);
+        return null;
+    }
+    let mat = player.playmat;
+    let row = mat.length - 2;
+    for ( let col = mat[row].length - 2; col >= 0; col-- ) {
+        if ( mat[row][col] == 0 ) {
+            return {
+                row: row,
+                col: col,
+            };
+        }
+    }
+    expand_playmat(player, rec + 1);
+    return get_open_land_position(player);
 }
 function get_next_open_row(player,row,col) {
     expand_playmat(player);
@@ -412,6 +449,14 @@ function unhighlight_playable_squares() {
     $('table.grid td.highlight-square').unbind('click');
     $('table.grid td.highlight-square').removeClass('highlight-square');
 }
+function is_active_area_card(def) {
+    return ( 
+        (type_to_name(def.maintype).match(/EVENT/)) ||
+        (type_to_name(def.maintype).match(/DOCUMENT/)) ||
+        (type_to_name(def.maintype).match(/RELIC/)) ||
+        (type_to_name(def.maintype).match(/KNOWLEDGE/)) ||
+        (type_to_name(def.maintype).match(/TECHNOLOGY/)) ) != null;
+}
 function highlight_playable_squares_for(card) {
     let p = get_current_player();    
     let mat = p.playmat;
@@ -419,11 +464,22 @@ function highlight_playable_squares_for(card) {
     let last_col = mat[0].length - 1;
     // For regular cards
     let playable_squares = [];
-    for ( let y = 0; y <= last_row - 2; y++ ) {
-        for ( let x = 0; x <= last_col - 2; x++ ) {
-           if ( mat[last_row-1][x] != 0  && mat[y][x] == 0) {
-                playable_squares.push([y,x]);
-           }
+    let def = get_card_def(card.attr('card-id'));
+    if ( is_active_area_card(def) ) {
+        for ( let y = 0; y <= last_row - 2; y++ ) {
+            for ( let x = mat[y].length -  2; x <= last_col; x++ ) {
+               if ( mat[y][x] == 0) {
+                    playable_squares.push([y,x]);
+               }
+            }
+        }
+    } else {
+        for ( let y = 0; y <= last_row - 2; y++ ) {
+            for ( let x = 0; x <= last_col - 2; x++ ) {
+               if ( mat[last_row-1][x] != 0  && mat[y][x] == 0) {
+                    playable_squares.push([y,x]);
+               }
+            }
         }
     }
     if ( card.hasClass('card-type-explorer') ) {

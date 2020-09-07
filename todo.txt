@@ -1,12 +1,13 @@
 # Todo List
 
 1. Need to revamp ability application for Morale, add additional test
-2. Finish off basic attack from a country
+DONE 2. Finish off basic attack from a country
 3. Finish off basic attack from an explorer
 4. Implement Attack special abilities, like winning the first round
 5. Implement Special ability that prevents attacking.
 6. Add can_be_attacked attribute to prevent from being attacked
 7. Implement check for can_attack.
+DONE 8. Implement Active Area
 
 
 # Two Way Server/Client
@@ -17,3 +18,30 @@
 4. Implement action validation for playing a card, verifying ability mat, playing an ability etc.
 5. Implement click to activate ability
 6. Implement charges decrementing
+
+# Goal - Get to alpha stage with most gameplay elements in place
+
+# Info
+
+Here is the description of the attack process (not using an explorer):
+1) Player A declares war picking one of his Lands.
+2) Player A declares which opponent he is attacking and their Land he is attacking (the two Land's continents must match)
+3) Player B acknowledges it by accepting the war. The only way to deny an attack is to play an interrupt card whose ability will stop an attack. If no interrupt is available Player B must accept.
+4) Player A adds up their Attack points (this is the first number on the card or Attack in the digital game) for the Land that is attacking and any points found in the abilities of the card in that Land, or even instant wins from these active cards.The computer will do all these calculations but this also adds the additional strength from cards in the active area. If an active card is discarded, the Strength or extra ability is lost and not allowed to be added.
+5) Player B adds up their Defense points in the Land being attacked and any points found in the abilities of the card in that Land, or even instant wins from these active cards. They also have the opportunity to play an interrupt card that may add to their Strength or allow them to win the first battle, etc. If they play an interrupt card, there has to be space in that land to play it.
+6) The two numbers are calculated and displayed. The highest points win. If it is a tie, no adverse consequences occur. 
+7) Whomever loses, loses 100 Morale points. If the Defender loses, they also lose one person, of their choice, in the Defending Land. 
+8) The attacker, whose turn it is, may attack twice per turn, unless he plays a card like the Alamo that allows him to attack multiple times from the same Land.
+8) If no people are left in that Defending land, the attacker acquires that Land for their battlefield and places a minimum of one Character from the attacking Land into the new Land so that there is at least one Character in each Land. If there was only one person in the Attacking Land, the defender would then keep that Land and be able to fill it the next round. At the same time, any opponent with an Explorer may claim that empty Land if there is no one in that Land by the start of their turn.
+
+Here is the description of the attack process (using an explorer and not in the same continent):
+1) Player A declares war picking one of his Lands that is occupied by an Explorer.
+1b) Player A then declares what Explorer and other Character/Army from the same Land he will send to attack his opponent. Player A must have at least one other card in that Land where this explorer is residing to stay behind.
+2) Player A declares which opponent he is attacking and the Land of theirs he is attacking (the two Land's continents do not need to match)
+3) Player B acknowledges it by accepting the war. The only way to deny an attack is to play an interrupt card from his hand, whose ability will stop an attack. If no interrupt is available Player B must accept.
+4) Player A adds up their Attack points (this is the first number on the card or Attack in the digital game) for the Explorer and one other card it is bringing with it, including any points found or special ability found in the Abilities of those cards, or even instant wins from these two active cards . The computer will do all these calculations but this also adds the additional Strength from cards in the active area. If an active card is discarded, the Strength or extra ability is lost and not allowed to be added.
+5) Player B adds up their Defense points in the Land being attacked and any points found in the abilities of the card in that Land, or even instant wins from these active cards. They also have the opportunity to play an interrupt card that may add to their strength or allow them to win the first battle, etc. If they play an interrupt card, there has to be space in that land to play it.
+6) The two numbers are calculated and displayed. The highest points win. If it is a tie, no adverse consequences occur. 
+7) Whomever loses, loses 100 Morale points. If the Defender loses, they also lose one person, of their choice, in the Defending Land. 
+8) If no people are left in that Defending land, the attacker acquires that Land for their battlefield and places both the Explorer and one additional card in that Land.
+9) If Player A loses, the Explorer and that one additional card returns to the Land they came from.
