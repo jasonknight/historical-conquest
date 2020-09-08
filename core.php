@@ -517,3 +517,8 @@ function get_base_table() {
         [0,0,0,0,0,0,0,0],
     ];
 }
+function send_json($ob) {
+    header("HTTP/1.1 200 OK");
+    header("Content-Type: application/json");
+    echo json_encode($ob,JSON_PRETTY_PRINT);
+}

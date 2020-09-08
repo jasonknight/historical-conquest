@@ -69,7 +69,13 @@ function get_card(ext_id,big) {
                 if ( big ) {
                     _h = ($('td.playmat-column:first').width() * 0.80)
                 }
-                let checker = function () {
+                card.find('table').addClass('has-background');
+                card.css({
+                    "background-image": "url('"+card_def.illustration+"')",
+                    "background-position": "50% 50%",
+                    "background-size": "cover",
+                });
+                /**let checker = function () {
                     if ( !img || ! img.length > 0 )
                         return;
                     if ( img.height() > card.height() ) {
@@ -84,6 +90,7 @@ function get_card(ext_id,big) {
                     "margin-right": "auto"
                 });
                 card.find('.illustration').append(img);
+                */
             }
             if ( card_def.background_image != '0' ) {
                 //card.css({

@@ -106,6 +106,9 @@ div.card td.name-plate {
     width: 80%;
     height: 3vh;
     text-align: center;
+    color: white;
+    font-weight: bolder;
+    background-color: rgb(102, 102, 153, 0.6);
 }
 div.small-card td.name-plate {
     width: 100%;

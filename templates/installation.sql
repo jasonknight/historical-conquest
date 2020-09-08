@@ -711,3 +711,23 @@ UPDATE `hc_cards` SET ethnicity = 93 WHERE ext_id = 'SP4701';
 UPDATE `hc_cards` SET religion = 72 WHERE ext_id = 'SP4701';
 UPDATE `hc_cards` SET ethnicity = 91 WHERE ext_id = 'WA4701';
 UPDATE `hc_cards` SET religion = 68 WHERE ext_id = 'WA4701';
+CREATE TABLE `hc_player_cards` (
+	`player_id` INT(11) NULL DEFAULT NULL,
+	`card_id` INT(11) NULL DEFAULT NULL,
+	`created_at` DATETIME NULL DEFAULT NULL
+);
+CREATE TABLE `hc_player_decks` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`player_id` INT(11) NOT NULL DEFAULT '0',
+	`name` VARCHAR(50) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_general_ci',
+	`card_count` SMALLINT(6) NOT NULL DEFAULT '0',
+	`use_count` SMALLINT(6) NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id`) USING BTREE,
+	INDEX `player_id` (`player_id`) USING BTREE
+);
+CREATE TABLE `hc_player_decks_cards` (
+	`deck_id` INT(11) NULL DEFAULT NULL,
+	`card_id` INT(11) NULL DEFAULT NULL,
+	`ext_id` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	INDEX `deck_id` (`deck_id`, `card_id`) USING BTREE
+);

@@ -59,9 +59,106 @@ function init() {
         echo file_get_contents(__DIR__ . '/assets/historical-conquest-rule-sheet.pdf');
         exit;
    }
+   add_action('wp_ajax_get_decks',__NAMESPACE__ . '\ajax_get_decks');
+   add_action('wp_ajax_get_deck_cards',__NAMESPACE__ . '\ajax_get_deck_cards');
+   add_action('wp_ajax_get_player_cards',__NAMESPACE__ . '\ajax_get_player_cards');
+   add_action('wp_ajax_create_deck',__NAMESPACE__ . '\ajax_create_deck');
+}
+function ajax_get_player_cards() {
+    global $wpdb;
+    $id = \get_current_user_id();
+    $deck_name = post('deck_name');
+    $sql = $wpdb->prepare("
+        SELECT * FROM `hc_cards` as cards JOIN hc_player_cards as pcards ON pcards.card_id = cards.id WHERE pcards.player_id = %d
+    ",$id);
+    $cards = $wpdb->get_results($sql,ARRAY_A);
+    if ( empty($cards) )
+        $cards = [];
+    send_json($cards);
+    exit();
+}
+function ajax_create_deck() {
+    global $wpdb;
+    $id = \get_current_user_id();
+    $deck_name = post('deck_name');
+    $sql = $wpdb->prepare("
+        SELECT * FROM `hc_player_decks` WHERE player_id = %d
+    ",$id);
+    $decks = $wpdb->get_results($sql,ARRAY_A);
+    if ( empty($decks) ) {
+        $decks = [];
+    }
+    foreach ( $decks as $deck ) {
+        if ( $deck['name'] == $deck_name ) {
+            send_json(['status' => 'KO', 'msg' => "You already have a deck with that name"]);
+            exit();
+        }
+    }
+    $sql = $wpdb->prepare("INSERT INTO `hc_player_decks` (player_id, name) VALUES (%d,%s)",$id,$deck_name);
+    $wpdb->query($sql);
+    send_json([
+        'status' => 'OK',
+        'msg' => $wpdb->last_error, 
+    ]);
+    exit();
+}
+function ajax_get_decks() {
+    global $wpdb;
+    $id = \get_current_user_id();
+    $sql = $wpdb->prepare("
+        SELECT * FROM `hc_player_decks` WHERE player_id = %d
+    ",$id);
+    $decks = $wpdb->get_results($sql,ARRAY_A);
+    if ( empty($decks) ) {
+        $decks = [];
+    }
+    send_json($decks);
+    exit;
+}
+function ajax_get_deck_cards() {
+    global $wpdb;
+    $id = \get_current_user_id();
+    $deck_id = post('deck_id');
+    $sql = $wpdb->prepare("
+        SELECT * FROM `hc_player_decks_cards` WHERE player_id = %d AND deck_id = %d
+    ",$id,$deck_id);
+    $cards = $wpdb->get_results($sql,ARRAY_A);
+    if ( empty($cards) )
+        $cards = [];
+    send_json($cards);
+    exit;
+}
+function check_player_has_cards($id) {
+    global $wpdb;
+    $res = $wpdb->get_results(
+            $wpdb->prepare("SELECT 1 FROM `hc_player_cards` WHERE player_id = %d",$id));
+    return !empty($res);
+}
+function assign_basic_cards_to_player($id) {
+    global $wpdb;
+    $sql = $wpdb->prepare(
+        "INSERT INTO `hc_player_cards` 
+            (SELECT %d as player_id, id as card_id, ext_id FROM `hc_cards` WHERE deck IN ('B','C'))",$id);
+    $wpdb->query($sql); 
+    if ( $wpdb->last_error ) {
+        die($wpdb->last_error);
+    }
 }
 function shortcode_hcgame_player_cp($attrs) {
-    echo render_template('player-control-panel.php',[]);
+    global $wpdb;
+    // So we need to make sure the user has the base cards
+    if ( !check_player_has_cards(\get_current_user_id()) ) {
+        assign_basic_cards_to_player(\get_current_user_id());
+    }
+    $sql = "
+        SELECT cards.id,cards.ext_id,cards.name FROM `hc_player_cards` as pcards 
+        JOIN `hc_cards` as cards on cards.id = pcards.card_id
+        WHERE
+            pcards.player_id = %d
+    ";
+    $sql = $wpdb->prepare($sql,\get_current_user_id());
+    $owned_cards = $wpdb->get_results($sql,ARRAY_A);
+    echo render_template('player-control-panel.php',['owned_cards' => $owned_cards]);
 }
 function shortcode_hcgame_card_ability_listing($attrs) {
     $cards = get_cards_without_abilities();
