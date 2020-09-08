@@ -28,6 +28,9 @@ function install_game_tables() {
         }
     }
 }
+add_action('wp_enqueue_scripts',function () {
+    wp_enqueue_script( 'jquery' );
+});
 function init() {
    add_action('template_redirect',__NAMESPACE__ . '\maybe_play_game'); 
    initialize_notices();
