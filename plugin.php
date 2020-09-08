@@ -62,10 +62,40 @@ function init() {
         echo file_get_contents(__DIR__ . '/assets/historical-conquest-rule-sheet.pdf');
         exit;
    }
+   add_action('wp_ajax_save_deck',__NAMESPACE__ . '\ajax_save_deck');
    add_action('wp_ajax_get_decks',__NAMESPACE__ . '\ajax_get_decks');
    add_action('wp_ajax_get_deck_cards',__NAMESPACE__ . '\ajax_get_deck_cards');
    add_action('wp_ajax_get_player_cards',__NAMESPACE__ . '\ajax_get_player_cards');
    add_action('wp_ajax_create_deck',__NAMESPACE__ . '\ajax_create_deck');
+}
+function ajax_save_deck() {
+    global $wpdb;
+    $deck_id = post('deck_id');
+    $card_ids = array_unique(post('card_ids'));
+    $card_count = count($card_ids);
+    $uid = \get_current_user_id();
+    $decks = $wpdb->get_results(
+        $wpdb->prepare("
+            SELECT * FROM `hc_player_decks` where player_id = %d AND id = %d
+        ",$uid,$deck_id) 
+    );
+    if ( empty($decks) ) {
+        send_json(['status' => 'KO', 'msg' => "That deck does not exist"]);
+        exit;
+    }
+    $wpdb->query( 
+        $wpdb->prepare("DELETE FROM `hc_player_decks_cards` WHERE deck_id = %d",$deck_id));
+    $card_ids = join(',',array_map(function ($cid) {
+        global $wpdb;
+        return $wpdb->prepare('%s',$cid);
+    },$card_ids));
+
+    $sql = $wpdb->prepare("INSERT INTO `hc_player_decks_cards` (deck_id,card_id,ext_id) SELECT %d as deck_id,id as card_id, ext_id FROM `hc_cards` WHERE ext_id IN ($card_ids)",$deck_id);
+    $wpdb->query($sql);
+    $wpdb->query(
+        $wpdb->prepare("UPDATE `hc_player_decks` SET card_count = %d WHERE id = %d",$card_count,$deck_id));
+    send_json(['status' => 'OK', 'msg' => $wpdb->last_error, 'sql' => $sql]);
+    exit;
 }
 function ajax_get_player_cards() {
     global $wpdb;
@@ -122,9 +152,13 @@ function ajax_get_deck_cards() {
     global $wpdb;
     $id = \get_current_user_id();
     $deck_id = post('deck_id');
+    if ( empty($wpdb->get_results($wpdb->prepare("SELECT * FROM `hc_player_decks` WHERE player_id = %d AND id = %d",$id,$deck_id)))) {
+        send_json(["status" => "KO", "msg" => "That deck does not belong to you."]);
+        exit;
+    }
     $sql = $wpdb->prepare("
-        SELECT * FROM `hc_player_decks_cards` WHERE player_id = %d AND deck_id = %d
-    ",$id,$deck_id);
+        SELECT * FROM `hc_player_decks_cards` WHERE deck_id = %d
+    ",$deck_id);
     $cards = $wpdb->get_results($sql,ARRAY_A);
     if ( empty($cards) )
         $cards = [];

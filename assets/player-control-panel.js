@@ -26,25 +26,50 @@ namespace HistoricalConquest;
         });
         return form;
     }
+    function move_card(editor,card) {
+        if ( card.parent().hasClass('left-column') ) {
+            // we move from the left to the right
+            let fcard = editor.find('.right-column .card:first');
+            if ( fcard.length == 0 ) {
+                editor.find('.right-column').append(card);
+            } else {
+                card.insertBefore(fcard)
+            }
+            return;
+        } 
+        let fcard = editor.find('.left-column .card:first');
+        if ( fcard.length == 0 ) {
+            editor.find('.left-column').append(card);
+        } else {
+            card.insertBefore(fcard)
+        }
+    }
+    function save_deck(editor) {
+        let data = {};
+            data.action = 'save_deck';
+            data.deck_id = editor.attr('deck-id');
+            data.card_ids = [];
+            editor.find('.right-column .card').map(function () { data.card_ids.push($(this).attr('card-id')); });
+        console.log("Saving deck",data);
+        $.post(window.ajaxurl,data,function (resp) {
+
+        });
+    }
     function show_deck_editor(id) {
         let data = {};
         data.action = 'get_deck_cards';
         data.deck_id = id;
         $.post(window.ajaxurl,data,function (resp) {
-            console.log(data,resp);
             display.html(''); 
             let editor = $($('div.deck-editor-template').html());
             display.append(editor);
-            let cdata = {};
-            cdata.action = "get_player_cards";
-            $.post(window.ajaxurl,cdata,function (resp) {
-                if ( !Array.isArray(resp) ) {
-                    alert("Couldn't fetch your owned cards");
-                    return;
-                }
-                editor.find('.left-column').html('');
+            let seen_ext_ids = [];
+            if ( Array.isArray(resp) ) {
+                editor.find('.right-column').html('');
+                editor.attr('deck-id',id);
                 for ( let i = 0; i < resp.length; i++ ) {
                     let card = resp[i];
+                    seen_ext_ids.push(card.ext_id);
                     let cdisp = get_card(card.ext_id);
                     cdisp.unbind('click');
                     cdisp.css({
@@ -53,7 +78,36 @@ namespace HistoricalConquest;
                         "margin-bottom": "5px",
                         "min-width": "15%",
                     });
+                    cdisp.on('click',function () {
+                        move_card(editor,$(this));
+                        save_deck(editor);
+                    }); 
+                    editor.find('.right-column').append(cdisp);
+                }
 
+            }
+            let cdata = {};
+            cdata.action = "get_player_cards";
+            $.post(window.ajaxurl,cdata,function (resp) {
+                editor.find('.left-column').html('');
+                editor.attr('deck-id',id);
+                for ( let i = 0; i < resp.length; i++ ) {
+                    let card = resp[i];
+                    if ( seen_ext_ids.indexOf(card.ext_id) != -1 ) {
+                        continue;
+                    }
+                    let cdisp = get_card(card.ext_id);
+                    cdisp.unbind('click');
+                    cdisp.css({
+                        "float": "left",
+                        "margin-right": "5px",
+                        "margin-bottom": "5px",
+                        "min-width": "15%",
+                    });
+                    cdisp.on('click',function () {
+                        move_card(editor,$(this));
+                        save_deck(editor);
+                    }); 
                     editor.find('.left-column').append(cdisp);
                 }
             });
