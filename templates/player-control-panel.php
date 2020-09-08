@@ -13,19 +13,19 @@ namespace HistoricalConquest;
     <div id="player_cp_right"></div>
 </div>
 <?php $render('_card-templates.php'); ?>
-<div class="create-deck-template">
+<div class="template create-deck-template">
     <div class="form create-deck-form">
         <p class="label">Name</p>
         <p><input class="deck-name" type="text" name="deck[name]" /></p>
         <p><input class="btn btn-primary button button-primary save-button" type="submit" name="submit" value="Create" /></p>
     </div>
 </div>
-<div class="deck-display-template">
+<div class="template deck-display-template">
     <div class="deck">
         <div class="deck-name"></div>
     </div>
 </div>
-<div class="deck-editor-template">
+<div class="template deck-editor-template">
     <div class="deck-editor">
         <div class="column left-column"></div>
         <div class="column center-column"></div>
