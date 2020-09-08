@@ -138,6 +138,7 @@ namespace HistoricalConquest;
                     display.append(disp);
                 }
                 let cdeck = get_deck_display();
+                cdeck.unbind('click');
                 cdeck.find('.deck-name').html("New Deck");
                 cdeck.on('click',function () {
                     display.html('');
