@@ -116,6 +116,23 @@ function render_template($template_name, $vars_in_scope = array()) {
     }
     return $content;
 }
+function _display_name($id=null) {
+    if ( $id == null ) {
+        $id = \get_current_user_id();
+    }
+    $user = get_user_by('id',$id);
+    $name = $user->display_name;
+    if ( empty($name) ) {
+        $name = $user->user_login; 
+    }
+    return $name;
+}
+function get_possible_players() {
+    global $wpdb;
+    $id = \get_current_user_id();
+    $sql = $wpdb->prepare("SELECT ID FROM {$wpdb->users} WHERE ID != %d",$id);
+    return $wpdb->get_results($sql);
+}
 function _options_hash($lst) {
     $opts = [];
     foreach ( $lst as $n ) {
@@ -521,4 +538,15 @@ function send_json($ob) {
     header("HTTP/1.1 200 OK");
     header("Content-Type: application/json");
     echo json_encode($ob,JSON_PRETTY_PRINT);
+}
+function get_possible_decks($id=null) {
+    global $wpdb;
+    if ( !$id ) 
+       $id = \get_current_user_id(); 
+    $sql = "SELECT * FROM `hc_player_decks` WHERE player_id = %d AND card_count >= 50";
+    $sql = $wpdb->prepare($sql,$id);
+    $decks = $wpdb->get_results($sql);
+    if ( empty($decks) )
+        $decks = [];
+    return $decks;
 }

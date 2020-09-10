@@ -64,9 +64,82 @@ function init() {
    }
    add_action('wp_ajax_save_deck',__NAMESPACE__ . '\ajax_save_deck');
    add_action('wp_ajax_get_decks',__NAMESPACE__ . '\ajax_get_decks');
+   add_action('wp_ajax_get_games',__NAMESPACE__ . '\ajax_get_games');
+   add_action('wp_ajax_decline_game',__NAMESPACE__ . '\ajax_decline_game');
    add_action('wp_ajax_get_deck_cards',__NAMESPACE__ . '\ajax_get_deck_cards');
    add_action('wp_ajax_get_player_cards',__NAMESPACE__ . '\ajax_get_player_cards');
    add_action('wp_ajax_create_deck',__NAMESPACE__ . '\ajax_create_deck');
+   add_action('wp_ajax_create_challenge',__NAMESPACE__ . '\ajax_create_challenge');
+}
+function ajax_decline_game() {
+    global $wpdb;
+    $id = \get_current_user_id();
+    $game_id = post('game');
+    list($my_games,$others_games) = _get_games($id); 
+    $status = "KO";
+    $msg = "Game not found";
+    foreach ( $others_games as $g) {
+        if ( $g->id == intval($game_id) ) {
+            $wpdb->query($wpdb->prepare("UPDATE `hc_games` SET declined = 1 WHERE id = %d",$game_id));
+            $status = "OK";
+            $msg = "Game Declined";
+        }
+    }
+    send_json(['status' => $status, 'msg' => $msg]);
+    exit;
+}
+function ajax_create_challenge() {
+    global $wpdb;
+    $msgs = [];
+    $id = \get_current_user_id();
+    $opponent = post('opponent');
+    $deck_id = post('deck');
+    $create_sql = "INSERT INTO `hc_games` (created_at,active,created_by) VALUES (NOW(),0,%d)"; 
+    $create_sql = $wpdb->prepare($create_sql,$id);
+    $wpdb->query($create_sql);
+    $msgs[] = $wpdb->last_error;
+    $game_id = $wpdb->get_var("SELECT LAST_INSERT_ID();");
+    $p1_sql = "INSERT INTO `hc_players` (game_id,user_id,name,morale,age,deck_id) VALUES (%d,%d,%s,0,0,%d)";
+    $p1_sql = $wpdb->prepare($p1_sql,$game_id,$id,_display_name($id),$deck_id);
+    $wpdb->query($p1_sql);
+    $msgs[] = $wpdb->last_error;
+
+    $p2_sql = "INSERT INTO `hc_players` (game_id,user_id,name,morale,age,deck_id) VALUES (%d,%d,%s,0,0,%d)";
+    $p2_sql = $wpdb->prepare($p2_sql,$game_id,$opponent,_display_name($opponent),0);
+    $wpdb->query($p2_sql);
+    $msgs[] = $wpdb->last_error;
+
+    send_json(['status' => 'OK','msg' => $msgs]);
+    exit;
+}
+function _get_games($id) {
+    global $wpdb;
+    $sql = "SELECT * FROM `hc_games` as games WHERE games.created_by = %d AND (games.declined != 1 OR games.declined IS NULL)"; 
+    $sql = $wpdb->prepare($sql,$id);
+    $my_games = $wpdb->get_results($sql); 
+    if ( empty($my_games) ) {
+        $my_games = [];
+    }
+    foreach ( $my_games as &$mg ) {
+        $mg->players = $wpdb->get_results("SELECT * FROM `hc_players` WHERE game_id = {$mg->id}");
+    }
+    $sql = "SELECT games.* FROM `hc_games` as games JOIN `hc_players` as p ON p.game_id = games.id WHERE (games.declined != 1 OR games.declined IS NULL) AND p.user_id = %d AND games.created_by != %d"; 
+    $sql = $wpdb->prepare($sql,$id,$id);
+    $others_games = $wpdb->get_results($sql); 
+    if ( empty($others_games) ) {
+        $others_games = [];
+    }
+    foreach ( $others_games as &$mg ) {
+        $mg->players = $wpdb->get_results("SELECT * FROM `hc_players` WHERE game_id = {$mg->id}");
+    }
+    return [$my_games,$others_games];
+}
+function ajax_get_games() {
+    global $wpdb;
+    $id = \get_current_user_id();
+    list($my_games,$others_games) = _get_games($id); 
+    send_json(['status' => 'OK', 'my_games' => $my_games, 'others_games' => $others_games]);
+    exit;
 }
 function ajax_save_deck() {
     global $wpdb;

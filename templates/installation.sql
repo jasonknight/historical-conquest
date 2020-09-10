@@ -731,3 +731,18 @@ CREATE TABLE `hc_player_decks_cards` (
 	`ext_id` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
 	INDEX `deck_id` (`deck_id`, `card_id`) USING BTREE
 );
+ALTER TABLE `hc_games` ADD COLUMN created_by INT NOT NULL AFTER id;
+ALTER TABLE `hc_players`
+	ADD COLUMN `deck_id` INT NULL AFTER `last_update_at`,
+	ADD COLUMN `playmat` TEXT NULL DEFAULT NULL AFTER `deck_id`,
+	ADD COLUMN `abilitymat` TEXT NULL DEFAULT NULL AFTER `playmat`,
+	ADD COLUMN `damagemat` TEXT NULL DEFAULT NULL AFTER `abilitymat`,
+	ADD COLUMN `hand` TEXT NULL DEFAULT NULL AFTER `damagemat`,
+	ADD COLUMN `drawpile` TEXT NULL DEFAULT NULL AFTER `hand`,
+	ADD COLUMN `discardpile` TEXT NULL DEFAULT NULL AFTER `drawpile`;
+
+ALTER TABLE `hc_games`
+	DROP COLUMN `playmats`,
+	DROP COLUMN `effectmats`;
+ALTER TABLE `hc_games`
+	CHANGE COLUMN `declined` `declined` SMALLINT(6) NULL DEFAULT '0' AFTER `created_by`;

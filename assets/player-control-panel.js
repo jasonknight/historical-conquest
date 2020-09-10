@@ -7,6 +7,7 @@ namespace HistoricalConquest;
         panels.data.card_width = 0.90;
         panels.data.card_height = 0.85
     let display = $('#player_cp_right');
+    let possible_decks = <?php echo json_encode(get_possible_decks()); ?>;
     panels.main = display;
     <?php echo get_type_conversion_js(); ?> 
     <?php $asset('helper.js'); ?>
@@ -26,6 +27,11 @@ namespace HistoricalConquest;
         });
         return form;
     }
+    function update_card_count(editor) {
+        let left_side_count = editor.find('.left-column .card').length;
+        let right_side_count = editor.find('.right-column .card').length;
+        editor.find('.count-display').html( left_side_count + ' / ' + right_side_count);
+    }
     function move_card(editor,card) {
         if ( card.parent().hasClass('left-column') ) {
             // we move from the left to the right
@@ -35,6 +41,7 @@ namespace HistoricalConquest;
             } else {
                 card.insertBefore(fcard)
             }
+            update_card_count(editor);
             return;
         } 
         let fcard = editor.find('.left-column .card:first');
@@ -43,6 +50,7 @@ namespace HistoricalConquest;
         } else {
             card.insertBefore(fcard)
         }
+        update_card_count(editor);
     }
     function save_deck(editor) {
         let data = {};
@@ -84,7 +92,6 @@ namespace HistoricalConquest;
                     }); 
                     editor.find('.right-column').append(cdisp);
                 }
-
             }
             let cdata = {};
             cdata.action = "get_player_cards";
@@ -109,6 +116,7 @@ namespace HistoricalConquest;
                         save_deck(editor);
                     }); 
                     editor.find('.left-column').append(cdisp);
+                    update_card_count(editor); 
                 }
             });
         });
@@ -132,13 +140,22 @@ namespace HistoricalConquest;
                 display.html('');
                 for ( let i = 0; i < resp.length; i++ ) {
                     let deck = resp[i];
+                    if ( deck.card_count >= 50 ) {
+                        let found = false;
+                        for ( let j = 0; j < possible_decks.length; j++ ) {
+                            if ( possible_decks[j].id = deck.id ) 
+                                found = true;
+                        }
+                        if ( ! found ) {
+                            possible_decks.push(deck);
+                        }
+                    }
                     let disp = get_deck_display();
-                    disp.find('.deck-name').html(deck.name);
+                    disp.find('.deck-name').html(deck.name + '('+deck.card_count+')');
                     disp.attr('deck-id',deck.id);
                     display.append(disp);
                 }
                 let cdeck = get_deck_display();
-                cdeck.unbind('click');
                 cdeck.find('.deck-name').html("New Deck");
                 cdeck.on('click',function () {
                     display.html('');
@@ -148,12 +165,105 @@ namespace HistoricalConquest;
             }
         });
     }
+    function show_challenge_player() {
+        console.log("show_challenge_player");
+        if ( possible_decks.length == 0 ) {
+            alert("You must first create a deck with at least 50 cards");
+            return;
+        }
+       let data = {}; 
+           data.action = 'get_games';
+        let challenges = $($('div.challenges-template').html());
+            display.html('');
+            display.append(challenges);
+        let challenge_tmp = $($('div.challenge-player-template').html());
+        let create_challenge = challenge_tmp.clone();
+        let deck_select = create_challenge.find('select[name="deck"]');
+        deck_select.find('option').remove();
+        for ( let i = 0; i < possible_decks.length; i++ ) {
+            deck_select.append('<option value="'+possible_decks[i].id+'">'+possible_decks[i].name+'</option>');
+        }
+        create_challenge.find('input[type=submit]').on('click',function () {
+            console.log("Challenge!");
+            let pid = create_challenge.find('select[name="opponent"]').val();
+            let deck_id = create_challenge.find('select[name="deck"]').val();
+            let data = {};
+                data.action = "create_challenge";
+                data.opponent = pid;
+                data.deck = deck_id;
+            $.post(window.ajaxurl,data,function (resp) {
+                console.log('create_challenge',resp);
+                show_challenge_player();
+            });
+        });
+        challenges.find('.left-column').append(create_challenge);
+        $.post(window.ajaxurl,data,function (resp) {
+            console.log(data,resp);
+            if ( resp.others_games.length == 0 ) {
+                challenges.find('.right-column').append('<p class="centered">You have no open challenges</p>');
+            }
+            let cont_fn = function (game) {
+                let players = [];
+                for ( let j = 0; j < game.players.length; j++ ) {
+                    players.push(game.players[j].name);
+                }
+                players = players.join(' VS ');
+                let cont = $('<div class="challenge" />');
+                let stat = $('<div class="column status" />');
+                if ( game.active == "0") {
+                    stat.addClass('inactive');
+                } else {
+                    stat.addClass('active');
+                }
+                cont.append(stat);
+                cont.append('<div class="column players">' + players + '</div>');
+                if ( game.active == '0' ) {
+                    cont.append('<div class="column play-btn">Waiting</div>');
+                } else {
+                    cont.append('<div class="column play-btn">Play</div>');
+                }
+                return cont;
+            };
+            for ( let i = 0; i < resp.my_games.length; i++ ) {
+                let game = resp.my_games[i];
+                let cont = cont_fn(game); 
+                challenges.find('.left-column').append(cont);
+            }
+            for ( let i = 0; i < resp.others_games.length; i++ ) {
+                let game = resp.others_games[i];
+                let cont = cont_fn(game); 
+                // TODO: We need to modify the  display so that the
+                // person can accept the challenge
+                let deck_select = $('<select name="deck"></select>');
+                for ( let j = 0; j < possible_decks.length; j++ ) {
+                    deck_select.append('<option value="'+possible_decks[j].id+'">'+possible_decks[j].name+'</option>');
+                }
+                if ( game.active == '0' ) {
+                    let btn = cont.find('.play-btn');
+                        btn.html('Accept');
+                    let dbtn = btn.clone();
+                    let col = $('<div class="column" />');
+                        col.append(deck_select);
+                    col.insertBefore(btn);
+                    dbtn.html('Decline');
+                    dbtn.addClass('decline-btn');
+                    dbtn.insertAfter(btn);
+                }
+                challenges.find('.right-column').append(cont);
+            }
+        });
+    }
     function setup() {
         $('a.manage-decks').on('click',function () {
             let e = $.Event('player_cp.manage_decks');
             $('body').trigger(e);
         });
+        $('a.challenge-player').on('click',function () {
+            let e = $.Event('player_cp.challenge_player');
+            $('body').trigger(e);
+        });
     }
     $(setup);
     $('body').on('player_cp.manage_decks',show_deck_manager);
+    $('body').on('player_cp.challenge_player',show_challenge_player);
 })(jQuery);

@@ -69,24 +69,30 @@ div.card p {
 }
 div.card-type-land {
     background-color: lawngreen;
+    border: 2px solid lawngreen;
 }
 div.card-type-character {
     background-color: orange;
+    border: 2px solid orange;
 }
 div.card-type-character.card-type-explorer {
     border-color: cyan;
 }
 div.card-type-explorer {
     background-color: lightcyan;
+    border: 2px solid lightcyan;
 }
 div.card-type-army {
     background-color: darkkhaki;
+    border: 2px solid darkkhaki;
 }
 div.card-type-vessel {
     background-color: darkcyan;
+    border: 2px solid darkcyan;
 }
 div.card-type-knowledge {
     background-color: gainsboro;
+    border: 2px solid gainsboro;
 }
 div.card table {
     width: 100%;
@@ -243,4 +249,13 @@ div.initiate-attack-button {
     left: 40%;
     top: 90%;
     width: 100px;
+}
+div.challenge-player-form {
+    margin: 5px;
+    padding: 5px;
+}
+div.challenge-player-form p {
+    margin: 5px;
+    text-align: center;
+    color: black;
 }

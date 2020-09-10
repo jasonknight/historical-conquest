@@ -28,15 +28,54 @@ namespace HistoricalConquest;
 <div class="template deck-editor-template">
     <div class="deck-editor">
         <div class="column left-column"></div>
-        <div class="column center-column"></div>
+        <div class="column center-column">
+            <div class="count-display"></div> 
+        </div>
         <div class="column right-column"></div>
+    </div>
+</div>
+<div class="template challenges-template">
+    <div class="challenges">
+        <div class="column left-column">
+            <h2>My Challenges</h2>
+        </div>
+        <div class="column right-column">
+            <h2>Challenges To Me</h2>
+        </div>
+    </div>
+</div>
+<div class="template challenge-player-template">
+    <div class="challenge-player-form">
+        <p><?php echo _display_name(); ?></p>
+        <p>
+            <select name="deck">
+                <?php $decks = get_possible_decks(); ?>
+                <?php foreach ( $decks as $deck ) { ?>
+                    <option value="<?php echo $deck->id; ?>"><?php echo $deck->name; ?></option>
+                <?php } ?>
+            </select>
+        <p>
+        <p class="centered">VS</p>
+        <p>
+            <select name="opponent">
+                <?php $players = get_possible_players(); ?>
+                <?php foreach ( $players as $player ) { ?>
+                    <option value="<?php echo $player->ID; ?>"><?php echo _display_name($player->ID); ?></option>
+                <?php } ?>
+            </select>
+        </p>
+        <p><input type="submit" name="submit" value="Challenge!" /></p>
     </div>
 </div>
 <style type="text/css">
     div.deck-editor {
         width: 98%;
     }
-    div.deck-editor div.column {
+    div.column h2 {
+        color: black;
+        text-align: center;
+    }
+    div.deck-editor div.column,div.challenges div.column {
         float: left;
         margin-right: 5px;
         border: 1px solid black;
@@ -45,11 +84,36 @@ namespace HistoricalConquest;
     div.deck-editor div.center-column {
         width: 10%;
     }
-    div.deck-editor div.left-column,div.deck-editor div.right-column {
+    div.deck-editor div.count-display {
+        padding-top: 40%;
+        font-size: 150%;
+        text-align: center;
+        color: black;
+    }
+
+    div.deck-editor div.left-column,div.deck-editor div.right-column,
+    div.challenges div.left-column,div.challenges div.right-column {
         width: 44%;
         overflow-y: scroll;
         height: 400px;
         padding: 5px;
+    }
+    div.challenges div.challenge div.column {
+        height: 35px;
+        min-height: 35px;
+        min-width: 35px;
+        color: black;
+        text-align: center;
+        padding: 5px;
+    }
+    div.challenges div.challenge .play-btn {
+        cursor: pointer;
+    }
+    div.challenges div.challenge div.status {
+        background-color: green;
+    }
+    div.challenges div.challenge div.status.inactive {
+        background-color: red;
     }
     div.deck {
         color: black;
