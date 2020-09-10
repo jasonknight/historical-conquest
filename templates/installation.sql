@@ -732,6 +732,7 @@ CREATE TABLE `hc_player_decks_cards` (
 	INDEX `deck_id` (`deck_id`, `card_id`) USING BTREE
 );
 ALTER TABLE `hc_games` ADD COLUMN created_by INT NOT NULL AFTER id;
+ALTER TABLE `hc_games` ADD COLUMN declined SMALLINT(6) NULL DEFAULT '0' AFTER id;
 ALTER TABLE `hc_players`
 	ADD COLUMN `deck_id` INT NULL AFTER `last_update_at`,
 	ADD COLUMN `playmat` TEXT NULL DEFAULT NULL AFTER `deck_id`,
@@ -744,5 +745,3 @@ ALTER TABLE `hc_players`
 ALTER TABLE `hc_games`
 	DROP COLUMN `playmats`,
 	DROP COLUMN `effectmats`;
-ALTER TABLE `hc_games`
-	CHANGE COLUMN `declined` `declined` SMALLINT(6) NULL DEFAULT '0' AFTER `created_by`;
