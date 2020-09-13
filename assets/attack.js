@@ -302,6 +302,9 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
     }
     let winner = null;
     let loser = null;
+    let loser_defs = null;
+    let loser_cards = null;
+    let loser_land_id = null;
     trigger_attack_message(defender.name + " defense strength is " + defense);
     trigger_attack_message(attacker.name + " attack strength is " + attack);
     if ( attack > defense ) {
@@ -320,6 +323,11 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
         loser_land_id = attacker_land_ext_id;
         trigger_attack_message(defender.name + " wins with the stronger defense");
     }
+    if ( defense == attack ) {
+        trigger_attack_message("Neither wins because both are equal.");
+        return;
+    }
+    console.log("Loser",loser,defense,attack);
     // Step 3 The loser has to lose 100 morale
     let rc = get_row_col_for(loser,loser_land_id);
     for ( let i = 0; i < window.board.players.length; i++ ) {

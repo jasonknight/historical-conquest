@@ -12,12 +12,14 @@ DONE 8. Implement Active Area
 
 # Two Way Server/Client
 
-1. Implement the creation of a deck
-2. Implement the creation of a game
-3. store the mats in the db and distribute to players across JSON
+DONE 1. Implement the creation of a deck
+DONE 2. Implement the creation of a game
+DONE 3. store the mats in the db and distribute to players across JSON
 4. Implement action validation for playing a card, verifying ability mat, playing an ability etc.
 5. Implement click to activate ability
 6. Implement charges decrementing
+
+7. Revamp functions like play_card, and system_discard, as well as process_player on the server side.
 
 # Goal - Get to alpha stage with most gameplay elements in place
 

@@ -550,3 +550,311 @@ function get_possible_decks($id=null) {
         $decks = [];
     return $decks;
 }
+function can_play_game($gid,$uid=null) {
+    global $wpdb;
+    if ( ! $uid ) {
+        $uid = \get_current_user_id();
+    } 
+    $sql = "SELECT 1 
+            FROM `hc_games` as g 
+            JOIN `hc_players` as p ON p.game_id = g.id 
+            WHERE
+                g.id = %d AND
+                p.user_id = %d AND
+                g.active = 1 ";
+    $sql = $wpdb->prepare($sql,$gid,$uid);
+    return !empty($wpdb->get_results($sql));
+}
+function get_players($game_id,$player_ids,&$errors) {
+    global $wpdb;
+    $sql = "SELECT * FROM `hc_players` WHERE game_id = %d"; 
+    $sql = $wpdb->prepare($sql,$game_id);
+    if ( !empty($player_ids) ) {
+        $player_ids = array_map(function ($id) use ($wpdb) {
+            return $wpdb->prepare('%d',$id); 
+        },$player_ids);
+        $sql .= " AND id IN (".join(',',$player_ids).")";
+    }
+    $players = $wpdb->get_results($sql);
+    if ( empty($players) ) {
+        $errors[] = "This game has no players?";
+        $errors[] = $wpdb->last_error;
+        return [];
+    }
+    foreach ( $players as &$player ) {
+        $mats = ['playmat','abilitymat','damagemat','landpile','hand','drawpile','discardpile']; 
+        foreach ( $mats as $decodeable ) {
+            if ( !$player->{$decodeable} ) {
+                $player->{$decodeable} = '[]';
+            } 
+            $player->{$decodeable} = json_decode($player->{$decodeable},true); 
+            $error = json_last_error_msg();
+            if ( $error != 'No error' ) {
+                 $errors[] = "JSON Error($decodeable): " . $error;
+                 return [];
+            }
+        }
+        
+        $np = new \stdClass;
+        $attr_map = [
+            'name' => 'name',
+            'morale' => 'morale',
+            'hand' => 'hand',
+            'current_move' => 'current_move',
+            'max_moves' => 'max_moves',
+            'attacks' => 'attacks',
+            'max_attacks' => 'max_attacks',
+            'age' => 'age',
+            'can_attack' => 'can_attack',
+            'can_be_attacked' => 'can_be_attacked',
+            'landpile' => 'land_pile',
+            'drawpile' => 'draw_pile',
+            'discardpile' => 'discard_pile',
+            'user_id' => 'user_id', 
+            'id' => 'id', 
+            'playmat' => 'playmat',
+            'abilitymat' => 'abilitymat',
+            'damagemat' => 'damagemat',
+        ];
+        foreach ( $attr_map as $k=>$v ) {
+            $np->{$v} = $player->{$k};
+        }
+        $player = $np;
+        $player->land_count = count($player->land_pile);
+        $player->hand = array_values($player->hand);
+    }
+    return $players;
+}
+function get_game_board($game_id,$uid=null) {
+    global $wpdb;
+    if ( ! $uid )
+        $uid = \get_current_user_id();
+    // Now we need to produce the game board from the
+    // perspective of the player, which means they shouldn't see the hand, or
+    // the piles of other players
+    $board = [
+        'status' => "OK",
+        'players' => [], 
+        'errors' => [], 
+        'round' => 0,
+    ];
+
+    $sql = "SELECT * FROM `hc_games` WHERE id = %d"; 
+    $sql = $wpdb->prepare($sql,$game_id);
+    $game = $wpdb->get_row($sql);
+    if ( empty($game) ) {
+        $board['errors'][] = "Failed to find game with id of $game_id";
+        $board['errors'][] = $wpdb->last_error;
+        $board['errors'][] = $sql;
+        $board['errors'][] = $game;
+        return $board;
+    }
+    if ( !$game->round ) {
+        $game->round = 1;
+        $wpdb->query($wpdb->prepare("UPDATE `hc_games` SET round = 1 WHERE id = %d",$game_id));
+    }
+    $board['round'] = $game->round;
+    $board['current_player_id'] = $game->current_player_id;
+    // Now we have the game, let's get the players
+    $players = get_players($game_id,[],$board['errors']); 
+    if ( empty($players) ) {
+        $board['errors'][] = "There were no players";
+        return $board;
+    }
+    // Now that we have the players, let's deserialize their fields
+    foreach ( $players as &$player ) {
+        if ( $player->user_id != $uid ) {
+            // We need to hide some things from the player, like the hand
+            $player->hand = [];
+            $player->draw_pile = [];
+            $player->land_pile = [];
+            $player->discard_pile = [];
+        }
+        // Now we may need to insert a land
+        if ( $uid == $player->user_id ) {
+            $land_card_present = false;
+            $row = count($player->playmat) - 2; // i.e. land row
+            $last_col = count($player->playmat[$row]) - 3;
+            for ( $col = $last_col; $col >= 0; $col-- ) {
+                if ( $player->playmat[$row][$col] !== 0 ) {
+                    $land_card_present = true;
+                }
+            }
+            if ( ! $land_card_present ) {
+                $land_card = array_shift($player->land_pile);
+                $player = play_card($game_id,$player,$land_card,$row,$last_col,$board['errors']);
+                if ( !empty($board['errors']) ) {
+                    $board['errors'][] = "Could not play land card";
+                    return $board;
+                }
+                $sql = "UPDATE `hc_players` SET landpile = %s WHERE id = %d";
+                $sql = $wpdb->prepare($sql,json_encode($player->land_pile),$player->id);
+                $wpdb->query($sql);
+                if ( !empty($wpdb->last_error) ) {
+                    $board['errors'][] = $sql;
+                    $board['errors'][] = $wpdb->last_error;
+                    $board['errors'][] = "Failed to update landpile";
+                    return $board;
+                }
+            }
+            if ( $player->current_move == 0 && count($player->hand) < 5 ) {
+                $cap = 6;
+                $s = 0;
+                while ( count($player->hand) < 5 ) {
+                    if ( $s > $cap ) {
+                        break;
+                    }
+                    $card = array_shift($player->draw_pile);
+                    if ( !$card )
+                        break;
+                    $player->hand[] = $card;
+                    $s++;
+                }
+                $sql = "UPDATE `hc_players` SET hand = %s, drawpile = %s WHERE id = %d";
+                $sql = $wpdb->prepare($sql,json_encode($player->hand),json_encode($player->draw_pile),$player->id);
+                $wpdb->query($sql);
+                if ( !empty($wpdb->last_error) ) {
+                    $board['errors'][] = $sql;
+                    $board['errors'][] = $wpdb->last_error;
+                    $board['errors'][] = "Failed to update hand and draw pile";
+                }
+            }
+        }
+    }
+    $board['players'] = $players; 
+    return $board;
+}
+function get_card_def($ext_id) {
+    global $wpdb;
+    $sql = "SELECT * FROM `hc_cards` WHERE ext_id = %s";
+    $sql = $wpdb->prepare($sql,$ext_id);
+    return $wpdb->get_row($sql);
+}
+function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
+    global $wpdb;
+    // need to do some validation, but skipping for now
+    if ( $p->current_move == $p->max_moves ) {
+        $errors[] = "You have no more moves, you can attack, or click done to cede the turn";
+        return $p;
+    }
+    $updates = [];
+    if ( $p->playmat[$row][$col] !== 0 ) {
+        $errors[] = "That space already has a card";
+        return $p;
+    }
+    $def = get_card_def($ext_id);
+    if ( !$def ) {
+        $errors[] = "Failed to find $ext_id definition";
+        return $p;
+    }
+    $p->playmat[$row][$col] = $ext_id;
+    if ( preg_match('/EXPLORER/',type_to_name(intval($def->maintype))) ) {
+        if ( $row + 1 == (count($p->playmat) - 2) ) {
+            if ( $p->playmat[$row + 1][$col] == 0 ) {
+                // we need to play a land card!
+                $lc = array_shift($p->land_pile);
+                if ( $lc ) {
+                    $p->playmat[$row + 1][$col] = $lc;
+                    $updates[] = $wpdb->prepare("landpile = %s",json_encode($p->land_pile));
+                }
+            } 
+        }
+    }
+    $updates[] = $wpdb->prepare("playmat = %s",json_encode($p->playmat));
+    if ( in_array($ext_id,array_values($p->hand)) ) {
+        $p->hand = array_values(array_filter($p->hand,function ($id) use ($ext_id) { return $id != $ext_id; }));
+        $updates[] = $wpdb->prepare("hand = %s",json_encode($p->hand));
+        $updates[] = "current_move = current_move + 1";
+    }
+    $sql = "SELECT * FROM `hc_card_abilities` AS a JOIN `hc_cards` AS c ON a.card_id = c.id WHERE c.ext_id = %s";
+    $sql = $wpdb->prepare($sql,$ext_id);
+    $abilities = $wpdb->get_results($sql);
+    if ( !empty($abilities) ) {
+        // Okay, we have an ability, so let's inject that into the abilitymat
+        $needs_update = false;
+        foreach ( $abilities as $a) {
+            $mat_item = new \stdClass;
+            $mat_item->id = $a->id;
+            $mat_item->charges = $a->charges;
+            $p->abilitymat[$row][$col] = $mat_item;
+            $needs_update = true;
+        }
+        if ( $needs_update ) {
+            $updates[] = $wpdb->prepare("abilitymat = %s",json_encode($p->abilitymat));
+        } 
+    }
+    
+    if ( !empty($updates) ) {
+        $sql = "UPDATE `hc_players` SET " . join(',',$updates) . " WHERE user_id = %d AND game_id = %d"; 
+        $sql = $wpdb->prepare($sql,$p->user_id,$game_id);
+        $wpdb->query($sql);
+        if ( !empty($wpdb->last_error) ) {
+            $errors[] = $wpdb->last_error;
+            $errors[] = $sql;
+            return $p;
+        }
+        // Now that we've updated this player, we need to set his opponents dirty so that when they
+        // request a refresh, we know they need a full reload
+        // we likely won't use this just yet, but soon
+        $sql = "UPDATE `hc_players` as p JOIN `hc_games` as g ON g.id = p.game_id SET dirty = 1 WHERE g.id = %d and p.user_id != %d";
+        $sql = $wpdb->prepare($sql,$game_id,$p->user_id);
+        $wpdb->query($sql);
+        if ( !empty($wpdb->last_error) ) {
+            $errors[] = $wpdb->last_error;
+            $errors[] = $sql;
+            return $p;
+        }
+    }
+    return $p;
+}
+function next_player($game_id,&$errors) {
+    global $wpdb;
+    $players = get_players($game_id,[],$errors);
+    if ( empty($players) ) {
+        $errors[] = "There were no players for $game_id";
+        return;
+    }
+    $current_player_id = $wpdb->get_var($wpdb->prepare("SELECT current_player_id FROM `hc_games` WHERE id = %d",$game_id));
+    if ( !$current_player_id ) {
+        $errors[] = "Failed to select current_player_id";
+        return;
+    }
+    $ni = null;
+    for ( $i = 0; $i < count($players); $i++ ) {
+        $p = $players[$i];
+        if ( $p->id == $current_player_id ) {
+            $ni = $i + 1;
+            break;
+        }
+    }
+    if ( ! $ni ) {
+        $errors[] = "Failed to find player?";
+        return;
+    }
+    if ( $ni > count($players) - 1 ) {
+        // a full round has happened
+        $ni = 0;
+        $sql = "UPDATE `hc_games` SET round = round + 1 WHERE id = %d";
+        $sql = $wpdb->prepare($sql,$game_id);
+        $wpdb->query($sql); 
+        if ( !empty($wpdb->last_error) ) {
+            $errors[] = $sql;
+            $errors[] = $wpdb->last_error;
+        }
+    }
+    $new_player = $players[$ni];
+    $sql = "UPDATE `hc_games` SET current_player_id = %d WHERE id = %d";
+    $sql = $wpdb->prepare($sql,$new_player->id,$game_id);
+    $wpdb->query($sql); 
+    if ( !empty($wpdb->last_error) ) {
+        $errors[] = $sql;
+        $errors[] = $wpdb->last_error;
+    }
+    $sql = "UPDATE `hc_players` as p SET p.current_move = 0,p.attacks = p.max_attacks WHERE p.game_id = %d";
+    $sql = $wpdb->prepare($sql,$game_id);
+    $wpdb->query($sql); 
+    if ( !empty($wpdb->last_error) ) {
+        $errors[] = $sql;
+        $errors[] = $wpdb->last_error;
+    }
+}

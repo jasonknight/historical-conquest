@@ -197,6 +197,9 @@ function get_carray_capacity_of_col(player,col) {
 }
 
 function next_player() {
+    if ( in_server_context() ) {
+        return;
+    }
     window.board.player_pointer++;
     if ( window.board.player_pointer >= window.board.players.length ) {
         window.board.player_pointer = 0;
@@ -207,24 +210,42 @@ function next_player() {
     process_player(window.board.players[window.board.player_pointer]);
 }
 function next_round() {
+    if ( in_server_context() )
+        return;
     window.board.round++;
 }
 function advance_move() {
+    if ( in_server_context() )
+        return;
     window.board.current_move++;
     if ( window.board.current_move == 3 ) {
         next_player();
     }
 }
 function unadvance_move() {
+    if ( in_server_context() ) {
+        return;
+    }
     window.board.current_move--;
 }
 function current_move() {
+    if ( in_server_context() )
+        return get_current_player().current_move;
     return window.board.current_move;
 }
 function get_current_player() {
+    if ( in_server_context() ) {
+        for ( let i = 0; i < window.board.players.length; i++ ) {
+            if ( window.board.players[i].id == window.board.current_player_id ) {
+                return window.board.players[i];
+            }
+        }
+    }
     return window.board.players[window.board.player_pointer];
 }
 function set_current_player(p) {
+    if ( in_server_context() ) 
+        return;
    window.board.players[window.board.player_pointer] = p; 
 }
 
@@ -377,7 +398,7 @@ function get_next_open_row(player,row,col) {
 function get_player_morale(player) {
     let mat = player.abilitymat;
     let dmat = player.damagemat;
-    let morale = 800;
+    let morale = 0;
     for ( let row = 0; row < mat.length; row++ ) {
         for ( let col = 0; col < mat[row].length; col++) {
             let abs = mat[row][col];
@@ -525,6 +546,10 @@ function contains_card_type(lst,t,s1) {
 }
 
 function create_dialog(id) {
+    let existing_d = $('#'+id);
+    if ( existing_d.length > 0 ) {
+        return existing_d;
+    }
     let d = $('<div class="dialog" id=' + id + '></div>');
     $('body').append(d);
     let body = {};

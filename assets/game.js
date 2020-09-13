@@ -337,7 +337,34 @@ namespace HistoricalConquest;
         }
         _log("Discarding failed?",player,card_def);
     }
+    function in_server_context() {
+        return window.get && window.get.game_id;
+    }
+    function show_errors(r) {
+        _log("show_errors",r.errors);
+    }
     function play_card(player,id,y,x) {
+        if ( in_server_context() ) {
+            let data = {};
+            data.action = "play_card";
+            data.player_id = player.id;
+            data.card_ext_id = id;
+            data.row = y;
+            data.col = x;
+            // TODO: Need to send/recv nonces to avoid
+            // botting
+            data.game_id = window.get.game_id;
+            $.post(window.ajaxurl,data,function (resp) {
+                console.log(data,resp);
+                if ( resp.status == 'OK' ) {
+                    window.board = resp;
+                    trigger_refresh();
+                } else {
+                    show_errors(resp);
+                }
+            });
+            return;
+        }
         y = parseInt(y);
         x = parseInt(x);
         if ( current_move() > 2 )
@@ -352,7 +379,7 @@ namespace HistoricalConquest;
                 played_def.id = id;
                 played_def.y = y;
                 played_def.x = x;
-                player.played.push(played_def);
+                //player.played.push(played_def);
                 player.playmat[y][x] = id;
                 if ( is_explorer(card_def.maintype) ) {
                     if ( player.playmat[y+1][x] == 0 ) {
@@ -374,7 +401,7 @@ namespace HistoricalConquest;
                 played_def.id = id;
                 played_def.y = y;
                 played_def.x = x;
-                player.played.push(played_def);
+                //player.played.push(played_def);
                 player.playmat[y][x] = id;
                 trigger_card_played(player,card_def,played_def);
             } else {
@@ -392,38 +419,77 @@ namespace HistoricalConquest;
         panels.tab_panel.html('');
         _log("Rendering", "Round", window.board.round, "Move", current_move());
         $.each(players, function () {
+            if ( in_server_context() && this.user_id != window.user_id ) {
+                return;
+            }
             let id = 'player_' + this.id;
             let d = _div( id, 'player tab');
             render_play_mat(this,d);
             panels.main.append(d);
             let btn = _tab_button(id,this);
             panels.tab_panel.append(btn);
-            d.hide();
+            if (!in_server_context() ) {
+                d.hide();
+            }
         });
+        if ( in_server_context() ) {
+            let done_btn = _tab_button('cede_turn',{'name': 'Done'});
+            done_btn.unbind('click');
+            done_btn.on('click',function () {
+              let data = {};  
+                  data.action = "cede_turn";
+                  data.game_id = window.get.game_id;
+                $.post(window.ajaxurl,data,function (resp) {
+                    if ( resp.status == 'OK' ) {
+                        window.board = resp;
+                    } else {
+                        show_errors(resp);
+                    }
+                });
+            });
+            panels.tab_panel.append(done_btn);
+        }
 
-        $(get_current_player_tab_button_id()).trigger($.Event('click'));
+        //if ( !in_server_context() ) {
+            $(get_current_player_tab_button_id()).trigger($.Event('click'));
+        //}
     }
     function render_players_abilitymat(players) {
         panels.abilitymats.html('');
         $.each(players, function () {
+            if ( in_server_context() && this.draw_pile.length == 0 ) {
+                return;
+            }
             let id = 'player_' + this.id + '_abilitymat';
             let d = _div( id, 'abilitymat-tab');
             render_ability_mat(this,d);
             panels.abilitymats.append(d);
-            d.hide();
+            if (!in_server_context() ) {
+                d.hide();
+            }
         });
     }
     function render_players_damagemat(players) {
         panels.damagemats.html('');
         $.each(players, function () {
+            if ( in_server_context() && this.draw_pile.length == 0 ) {
+                return;
+            }
             let id = 'player_' + this.id + '_damagemat';
             let d = _div( id, 'damagemat-tab');
             render_damage_mat(this,d);
             panels.damagemats.append(d);
-            d.hide();
+            if (!in_server_context() ) {
+                d.hide();
+            }
         });
     }
     function process_player(player) {
+        if ( window.get && window.get.game_id ) {
+            // We don't process the player, we're in
+            // a server context
+            return;
+        }
         let draw_pile = [];
         let land_pile = [];
         for ( let i = 0; i < player.draw_pile.length; i++ ) {
@@ -462,15 +528,36 @@ namespace HistoricalConquest;
     function debug_playmat(player) {
         _log("Playmat", player.playmat.map(function (r) { return r.join('|'); }).join("\n"));
     }
+    function maybe_show_waiting() {
+        if ( window.user_id == get_current_player().user_id ) {
+            //_log("You are the current player.");
+            if ( $('#show-waiting').length > 0 ) {
+                $('#show-waiting').remove();
+            }
+            return;
+        }
+        let dialog = create_dialog('show-waiting');
+        let body = dialog.find('.dialog-body');
+        body.html('');
+        body.append('Waiting on your turn...');
+        let data = {};
+            data.action = "get_board";
+            data.game_id = window.get.game_id;
+        $.post(window.ajaxurl,data,function (resp) {
+            _log("get_board",resp);
+            if ( resp.status == 'OK' ) {
+                window.board = resp;
+            } else {
+                show_errors(resp);
+            }
+        });
+    }
     $(function () {
         panels.main = $('div.main');
         panels.abilitymats = $('div.abilitymats');
         panels.damagemats = $('div.damagemats');
         panels.tab_panel = $('div.tab-panel');
         panels.tab_panel.css('height',$(window).height() * 0.05);
-        if ( ! window.current_player ) {
-            window.current_player = window.board.players[0];
-        }
         $.each(window.board.players, function () {
             if ( this.playmat.length == 0 ) {
                 this.playmat = get_base_table();
@@ -484,11 +571,17 @@ namespace HistoricalConquest;
             render_players(window.board.players);
         });
         $('body').trigger($.Event('refresh_board'));
-        $('#player_1_tab_button').trigger($.Event('click'));
+        let tab_btn_id = '#player_'+get_current_player().id+'_tab_button';
+        _log("tab button",tab_btn_id);
+        $(tab_btn_id).trigger($.Event('click'));
         $('body').on('close_zoom_holder',function () {
             $('.card-zoom-holder').remove();
             $('.zoom-holder-child').remove();
             unhighlight_playable_squares();
         });
+        if ( in_server_context() ) {
+            maybe_show_waiting();
+            setInterval(maybe_show_waiting,5000); 
+        }
     });
 })(jQuery);

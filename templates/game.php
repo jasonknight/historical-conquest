@@ -10,9 +10,16 @@
   crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/wp-content/plugins/historical-conquest/assets/style.css?<?php echo time(); ?>" />
         <script type="text/javascript">
+            window.get = <?php echo json_encode($_GET); ?>;
+            window.ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
             window.notices = [];
+            window.user_id = <?php echo \get_current_user_id(); ?>;
             window.types = <?php echo json_encode(get_types_for_js()); ?>;
-            window.board = <?php echo include(dirname(__DIR__) . '/tools/generate_player.php');?>;
+            <?php if ( get('game_id') && can_play_game(get('game_id')) ) { ?>
+                window.board = <?php echo json_encode(get_game_board(get('game_id')),JSON_PRETTY_PRINT); ?>;
+            <?php } else { ?>
+                window.board = <?php echo include(dirname(__DIR__) . '/tools/generate_player.php');?>;
+            <?php } ?>
             window.carddb = <?php echo json_encode(get_carddb(),JSON_PRETTY_PRINT); ?>;
             window.layers = {
                 card: 1,

@@ -227,6 +227,10 @@ namespace HistoricalConquest;
             for ( let i = 0; i < resp.my_games.length; i++ ) {
                 let game = resp.my_games[i];
                 let cont = cont_fn(game); 
+                let btn = cont.find('.play-btn');
+                btn.on('click',function () {
+                        window.location = '/?action=historical-conquest-game&game_id=' + game.id;
+                });
                 challenges.find('.left-column').append(cont);
             }
             for ( let i = 0; i < resp.others_games.length; i++ ) {
@@ -238,9 +242,19 @@ namespace HistoricalConquest;
                 for ( let j = 0; j < possible_decks.length; j++ ) {
                     deck_select.append('<option value="'+possible_decks[j].id+'">'+possible_decks[j].name+'</option>');
                 }
+                let btn = cont.find('.play-btn');
                 if ( game.active == '0' ) {
-                    let btn = cont.find('.play-btn');
                         btn.html('Accept');
+                        btn.on('click',function (){
+                           let data = {}; 
+                               data.action = "accept_game";
+                               data.game = game.id;
+                               data.deck = deck_select.val();
+                            $.post(window.ajaxurl,data,function (resp) {
+                                console.log("accept_game",resp);
+                                show_challenge_player();
+                            });
+                        });
                     let dbtn = btn.clone();
                     let col = $('<div class="column" />');
                         col.append(deck_select);
@@ -248,6 +262,12 @@ namespace HistoricalConquest;
                     dbtn.html('Decline');
                     dbtn.addClass('decline-btn');
                     dbtn.insertAfter(btn);
+                } else {
+                    // TODO: When the game is active, we need
+                    // to let the user go to the game to play it
+                    btn.on('click',function () {
+                        window.location = '/?action=historical-conquest-game&game_id=' + game.id;
+                    });
                 }
                 challenges.find('.right-column').append(cont);
             }

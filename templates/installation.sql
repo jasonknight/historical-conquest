@@ -745,3 +745,15 @@ ALTER TABLE `hc_players`
 ALTER TABLE `hc_games`
 	DROP COLUMN `playmats`,
 	DROP COLUMN `effectmats`;
+ALTER TABLE `hc_players`
+	ADD COLUMN `landpile` TEXT NULL DEFAULT NULL AFTER `discardpile`;
+ALTER TABLE `hc_games`
+	ADD COLUMN `round` INT NULL AFTER `declined`;
+ALTER TABLE `hc_players`
+	ADD COLUMN `current_move` INT NULL DEFAULT '0' AFTER `landpile`;
+ALTER TABLE `hc_players`
+	ADD COLUMN `max_moves` INT NULL DEFAULT '3' AFTER `current_move`,
+	ADD COLUMN `attacks` INT NULL DEFAULT '0' AFTER `current_move`,
+	ADD COLUMN `max_attacks` INT NULL DEFAULT '3' AFTER `current_move`,
+	ADD COLUMN `can_be_attacked` INT NULL DEFAULT '1' AFTER `current_move`;
+

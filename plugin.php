@@ -66,10 +66,189 @@ function init() {
    add_action('wp_ajax_get_decks',__NAMESPACE__ . '\ajax_get_decks');
    add_action('wp_ajax_get_games',__NAMESPACE__ . '\ajax_get_games');
    add_action('wp_ajax_decline_game',__NAMESPACE__ . '\ajax_decline_game');
+   add_action('wp_ajax_accept_game',__NAMESPACE__ . '\ajax_accept_game');
    add_action('wp_ajax_get_deck_cards',__NAMESPACE__ . '\ajax_get_deck_cards');
    add_action('wp_ajax_get_player_cards',__NAMESPACE__ . '\ajax_get_player_cards');
    add_action('wp_ajax_create_deck',__NAMESPACE__ . '\ajax_create_deck');
    add_action('wp_ajax_create_challenge',__NAMESPACE__ . '\ajax_create_challenge');
+
+   add_action('wp_ajax_play_card',__NAMESPACE__ . '\ajax_play_card');
+   add_action('wp_ajax_get_board',__NAMESPACE__ . '\ajax_get_board');
+   add_action('wp_ajax_cede_turn',__NAMESPACE__ . '\ajax_cede_turn');
+}
+function ajax_cede_turn() {
+    $game_id = post('game_id');
+    $result = ['status' => 'KO','errors' => []];
+    next_player($game_id,$result['errors']);
+    if ( empty($result['errors']) ) {
+        $result = get_game_board($game_id); 
+    }
+    send_json($result);
+    exit;
+}
+function ajax_get_board() {
+   $game_id = post('game_id');
+   $board = get_game_board($game_id);
+   send_json($board);
+   exit;
+}
+function ajax_play_card() {
+   global $wpdb; 
+   $result = [ 'status' => 'OK', 'errors' => [] ];
+   $player_id = post('player_id');
+   $game_id = post('game_id');
+   $card_ext_id = post('card_ext_id');
+   $row = post('row');
+   $col = post('col');
+   $errors = [];
+   $players = get_players($game_id,[$player_id],$errors);
+   if ( !empty($errors) ) {
+        $result['status'] = 'KO';
+        $result['errors'] = $errors;
+        send_json($result);  
+        exit;
+   }
+   if ( empty($players) ) {
+        $errors[] = "There were no players found.";
+        $result['status'] = 'KO';
+        $result['errors'] = $errors;
+        send_json($result);  
+        exit;
+   }
+   foreach ($players as $player) {
+       if ( $player->id == $player_id && \get_current_user_id() == $player->user_id ) {
+            play_card($game_id,$player,$card_ext_id,$row,$col,$errors);
+            if ( !empty($errors) ) {
+                $result['status'] = 'KO';
+                $result['errors'] = $errors;
+                send_json($result);    
+                exit;
+            }
+            send_json(get_game_board($game_id));
+            exit;
+       }
+   }
+    $errors[] = "Never found player to play card!";
+    $result['status'] = 'KO';
+    $result['errors'] = $errors;
+    send_json($result);    
+    exit;
+}
+function ajax_accept_game() {
+    global $wpdb;
+    $id = \get_current_user_id();
+    $game_id = post('game');
+    $deck_id = post('deck');
+    // So we need to accept the challenge, and setup the game
+    // We have to setup the piles, and create the data structures
+    // necessary for generating the board when the player loads the game
+
+    // step 1, get the game from the DB
+    $sql = "SELECT g.id as gid,p.id as pid FROM `hc_games` as g JOIN `hc_players` as p ON p.game_id = g.id WHERE g.id = %d AND p.user_id = %d";
+    $sql = $wpdb->prepare($sql,$game_id,$id);
+    $game = $wpdb->get_row($sql);
+    if ( empty($game) ) {
+        send_json(['status' => 'KO', 'msg' => "That game was not found"]);
+        exit;
+    }
+    // Note: player_id is the row id, not the user id in this context
+    $player_id = $game->pid;
+    // step 2 so we have the game, and the pid, 
+    // TODO Validate the deck is playable?
+    $sql = "UPDATE `hc_players` SET deck_id = %d WHERE id = %d";
+    $sql = $wpdb->prepare($sql,$deck_id,$player_id);
+    $wpdb->query($sql);
+    if ( !empty($wpdb->last_error) ) {
+        send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
+        exit;
+    }
+    // step 3, okay, we've set the deck id now let's get the players, and their cards for the deck
+    // and create the piles and mats for this user,     
+    $setup_player = function ($player_id,$game_id,$deck_id) use ($wpdb) {
+        $sql = "
+            SELECT cards.* 
+            FROM `hc_player_decks_cards` dc 
+            JOIN `hc_cards` as cards ON cards.id = dc.card_id 
+            WHERE dc.deck_id = %d
+        ";
+        $sql = $wpdb->prepare($sql,$deck_id);
+        $cards = $wpdb->get_results($sql);
+        if ( !empty($wpdb->last_error) ) {
+            send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
+            exit;
+        }
+        
+        $draw_pile = [];
+        $land_pile = [];
+        $hand = [];
+        foreach ( $cards as $c ) {
+            if ( preg_match('/LAND/',type_to_name($c->maintype)) ) {
+                $land_pile[] = $c->ext_id;
+            } else {
+                $draw_pile[] = $c->ext_id;
+            }
+        }
+        shuffle($draw_pile);
+        shuffle($land_pile);
+        while (count($hand) < 5 ) {
+            $hand[] = array_pop($draw_pile);
+        }
+        // Now that we have the land, and the draw pile, we need to update them
+        $sql = "UPDATE `hc_players` SET drawpile = %s WHERE id = %d";
+        $sql = $wpdb->prepare($sql,json_encode($draw_pile),$player_id);
+        $wpdb->query($sql);
+        if ( !empty($wpdb->last_error) ) {
+            send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
+            exit;
+        }
+        $sql = "UPDATE `hc_players` SET landpile = %s WHERE id = %d";
+        $sql = $wpdb->prepare($sql,json_encode($land_pile),$player_id);
+        $wpdb->query($sql);
+        if ( !empty($wpdb->last_error) ) {
+            send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
+            exit;
+        }
+        $sql = "UPDATE `hc_players` SET hand = %s WHERE id = %d";
+        $sql = $wpdb->prepare($sql,json_encode($hand),$player_id);
+        $wpdb->query($sql);
+        if ( !empty($wpdb->last_error) ) {
+            send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
+            exit;
+        }
+        // So we've setup the piles, now we need to setup the mats
+        $mat = get_base_table();
+        foreach ( ['playmat','abilitymat','damagemat'] as $mname ) {
+            $sql = "UPDATE `hc_players` SET `$mname` = %s WHERE id = %d";
+            $sql = $wpdb->prepare($sql,json_encode($mat),$player_id);
+            $wpdb->query($sql);
+            if ( !empty($wpdb->last_error) ) {
+                send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
+                exit;
+            }
+        }
+    };// end of setup_player
+    $players = $wpdb->get_results($wpdb->prepare("SELECT * FROM `hc_players` WHERE game_id = %d",$game_id));
+    foreach ( $players as $player ) {
+        $setup_player($player->id,$game_id,$player->deck_id);
+    }
+    // Now that we've setup the piles, time to activate the game
+    $sql = "UPDATE `hc_games` SET active = 1 WHERE id = %d";
+    $sql = $wpdb->prepare($sql,$game_id);
+    $wpdb->query($sql);
+    if ( !empty($wpdb->last_error) ) {
+        send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
+        exit;
+    }
+    // Decide who goes first
+    $sql = "UPDATE `hc_games` SET current_player_id = (SELECT id FROM `hc_players` WHERE game_id = %d ORDER BY RAND() LIMIT 1)  WHERE id = %d";
+    $sql = $wpdb->prepare($sql,$game_id,$game_id);
+    $wpdb->query($sql);
+    if ( !empty($wpdb->last_error) ) {
+        send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
+        exit;
+    }
+    send_json(['status' => 'OK']);
+    exit;
 }
 function ajax_decline_game() {
     global $wpdb;
