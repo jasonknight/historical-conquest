@@ -437,7 +437,7 @@ function ajax_get_decks() {
     if ( empty($decks) ) {
         $decks = [];
     }
-    send_json($decks);
+    send_json(['status' => 'OK', 'decks' => $decks]);
     exit;
 }
 function ajax_get_deck_cards() {

@@ -68,12 +68,12 @@ namespace HistoricalConquest;
         data.action = 'get_deck_cards';
         data.deck_id = id;
         $.post(window.ajaxurl,data,function (resp) {
-            display.html(''); 
+            clear_element(display,'show_deck_editor in $.post');
             let editor = $($('div.deck-editor-template').html());
             display.append(editor);
             let seen_ext_ids = [];
             if ( Array.isArray(resp) ) {
-                editor.find('.right-column').html('');
+                clear_element(editor.find('.right-column'),'Array.isArray in show_deck_editor');
                 editor.attr('deck-id',id);
                 for ( let i = 0; i < resp.length; i++ ) {
                     let card = resp[i];
@@ -96,7 +96,7 @@ namespace HistoricalConquest;
             let cdata = {};
             cdata.action = "get_player_cards";
             $.post(window.ajaxurl,cdata,function (resp) {
-                editor.find('.left-column').html('');
+                clear_element(editor.find('.left-column'),'ajax get_player_cards');
                 editor.attr('deck-id',id);
                 for ( let i = 0; i < resp.length; i++ ) {
                     let card = resp[i];
@@ -128,18 +128,27 @@ namespace HistoricalConquest;
         });
         return d;
     }
+    function clear_element(d,msg) {
+        console.log("clearing ",msg,d);
+        d.html('');
+    }
     function show_deck_manager() {
         let data = {};
         data.action = 'get_decks';
         $.post(window.ajaxurl,data,function (resp) {
-            if ( resp.length == 0 ) {
+            if ( resp.status != 'OK' ) {
+                console.log("WTF on get_decks",resp);
+                return;
+            }
+            let decks = resp.decks;
+            if ( decks == 0 ) {
                 // there are no decks, show deck creation
-                display.html('');
+                clear_element(display,'show_deck_manager');
                 display.append( get_create_deck_form() );
             } else {
-                display.html('');
-                for ( let i = 0; i < resp.length; i++ ) {
-                    let deck = resp[i];
+                clear_element(display,'show_deck_manager 2');
+                for ( let i = 0; i < decks.length; i++ ) {
+                    let deck = decks[i];
                     if ( deck.card_count >= 50 ) {
                         let found = false;
                         for ( let j = 0; j < possible_decks.length; j++ ) {
@@ -157,9 +166,11 @@ namespace HistoricalConquest;
                 }
                 let cdeck = get_deck_display();
                 cdeck.find('.deck-name').html("New Deck");
+                cdeck.unbind('click');
                 cdeck.on('click',function () {
-                    display.html('');
+                    clear_element(display,'cdeck.on');
                     display.append( get_create_deck_form() );
+                    console.log("Done adding form");
                 });
                 display.append(cdeck);
             }
@@ -174,7 +185,7 @@ namespace HistoricalConquest;
        let data = {}; 
            data.action = 'get_games';
         let challenges = $($('div.challenges-template').html());
-            display.html('');
+            clear_element(display,'show_challenge_player');
             display.append(challenges);
         let challenge_tmp = $($('div.challenge-player-template').html());
         let create_challenge = challenge_tmp.clone();
