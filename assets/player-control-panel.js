@@ -68,6 +68,11 @@ namespace HistoricalConquest;
         data.action = 'get_deck_cards';
         data.deck_id = id;
         $.post(window.ajaxurl,data,function (resp) {
+            if ( resp.status != 'OK' ) {
+                console.log('get_deck_cards error',resp);
+                return;
+            }
+            resp = resp.cards;
             clear_element(display,'show_deck_editor in $.post');
             let editor = $($('div.deck-editor-template').html());
             display.append(editor);
@@ -96,6 +101,10 @@ namespace HistoricalConquest;
             let cdata = {};
             cdata.action = "get_player_cards";
             $.post(window.ajaxurl,cdata,function (resp) {
+                if ( resp.status != 'OK' ) {
+                    console.log('failed to get player cards',resp);
+                }
+                resp = resp.cards;
                 clear_element(editor.find('.left-column'),'ajax get_player_cards');
                 editor.attr('deck-id',id);
                 for ( let i = 0; i < resp.length; i++ ) {

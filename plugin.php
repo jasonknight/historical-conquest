@@ -399,7 +399,7 @@ function ajax_get_player_cards() {
     $cards = $wpdb->get_results($sql,ARRAY_A);
     if ( empty($cards) )
         $cards = [];
-    send_json($cards);
+    send_json(['status' => 'OK', 'cards' => $cards]);
     exit();
 }
 function ajax_create_deck() {
@@ -454,7 +454,7 @@ function ajax_get_deck_cards() {
     $cards = $wpdb->get_results($sql,ARRAY_A);
     if ( empty($cards) )
         $cards = [];
-    send_json($cards);
+    send_json(['status' => 'OK', 'cards' => $cards]);
     exit;
 }
 function check_player_has_cards($id) {
