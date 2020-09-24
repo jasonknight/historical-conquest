@@ -23,6 +23,11 @@ div.tab-panel .active-tab {
 div.main div.tab {
     display: block;
 }
+div.main {
+    background-image: url("/wp-content/plugins/historical-conquest/assets/img/siege_of_the_alamo.jpg"); 
+    background-position: 50% 50%;
+    background-size: cover;
+}
 table.grid {
     width: 100%;
 }
@@ -152,10 +157,10 @@ div.card-zoom-holder {
     background: gray;
 }
 td.playmat-column {
-    background-color: lightgoldenrodyellow;
 }
 td.playmat-column.highlight-square {
-    background-color: darkgoldenrod;
+    background-color: lightgoldenrodyellow;
+    opacity: 0.5;
 }
 div.tab {
     display: none;
