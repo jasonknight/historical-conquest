@@ -249,6 +249,20 @@ namespace HistoricalConquest;
         return window.carddb[id];
     }
     function draw(player) {
+        if ( in_server_context() ) {
+            let data = {};
+                data.action = 'draw_card';
+                data.game_id = window.get.game_id;
+                data.player_id = get_current_player().id;
+            $.post(window.ajaxurl,data,function (resp) {
+                _log('draw_card',resp);
+                if ( resp.status == 'OK' ) {
+                    window.board = resp;
+                    trigger_refresh();
+                }
+            });
+            return;
+        }
         if ( player.hand.length > 4 ) {
             trigger_you_cant_do_that('draw a card because ' + player.hand.length);
             _log(player.hand);
@@ -533,6 +547,7 @@ namespace HistoricalConquest;
             //_log("You are the current player.");
             if ( $('#show-waiting').length > 0 ) {
                 $('#show-waiting').remove();
+                trigger_refresh();
             }
             return;
         }

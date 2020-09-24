@@ -537,6 +537,11 @@ function get_base_table() {
 function send_json($ob) {
     header("HTTP/1.1 200 OK");
     header("Content-Type: application/json");
+    if ( is_array($ob) ) { 
+        $ob['logs'] = action_log('');
+    } else if (is_object($ob) ) {
+        $ob['logs'] = action_log(''); 
+    }
     echo json_encode($ob,JSON_PRETTY_PRINT);
 }
 function get_possible_decks($id=null) {
@@ -549,6 +554,12 @@ function get_possible_decks($id=null) {
     if ( empty($decks) )
         $decks = [];
     return $decks;
+}
+function action_log($msg='') {
+    static $action_log = [];
+    if ( empty($msg) )
+        return $action_log;
+    $action_log[] = $msg;
 }
 function can_play_game($gid,$uid=null) {
     global $wpdb;
@@ -570,10 +581,12 @@ function get_players($game_id,$player_ids,&$errors) {
     $sql = "SELECT * FROM `hc_players` WHERE game_id = %d"; 
     $sql = $wpdb->prepare($sql,$game_id);
     if ( !empty($player_ids) ) {
+        action_log("player_ids=" . join(',',$player_ids));
         $player_ids = array_map(function ($id) use ($wpdb) {
             return $wpdb->prepare('%d',$id); 
         },$player_ids);
         $sql .= " AND id IN (".join(',',$player_ids).")";
+        action_log("sql=$sql;");
     }
     $players = $wpdb->get_results($sql);
     if ( empty($players) ) {
@@ -585,6 +598,7 @@ function get_players($game_id,$player_ids,&$errors) {
         $mats = ['playmat','abilitymat','damagemat','landpile','hand','drawpile','discardpile']; 
         foreach ( $mats as $decodeable ) {
             if ( !$player->{$decodeable} ) {
+                action_log("$decodeable was null, initializing");
                 $player->{$decodeable} = '[]';
             } 
             $player->{$decodeable} = json_decode($player->{$decodeable},true); 
@@ -651,6 +665,7 @@ function get_game_board($game_id,$uid=null) {
     }
     if ( !$game->round ) {
         $game->round = 1;
+        action_log("Needed to update ther ound");
         $wpdb->query($wpdb->prepare("UPDATE `hc_games` SET round = 1 WHERE id = %d",$game_id));
     }
     $board['round'] = $game->round;
@@ -672,6 +687,7 @@ function get_game_board($game_id,$uid=null) {
         }
         // Now we may need to insert a land
         if ( $uid == $player->user_id ) {
+            action_log(__LINE__ . "uid($uid) == {$player->user_id}");
             $land_card_present = false;
             $row = count($player->playmat) - 2; // i.e. land row
             $last_col = count($player->playmat[$row]) - 3;
@@ -681,6 +697,7 @@ function get_game_board($game_id,$uid=null) {
                 }
             }
             if ( ! $land_card_present ) {
+                action_log("land card was not present");
                 $land_card = array_shift($player->land_pile);
                 $player = play_card($game_id,$player,$land_card,$row,$last_col,$board['errors']);
                 if ( !empty($board['errors']) ) {
@@ -702,11 +719,15 @@ function get_game_board($game_id,$uid=null) {
                 $s = 0;
                 while ( count($player->hand) < 5 ) {
                     if ( $s > $cap ) {
+                        action_log(__LINE__ . " s > cap reached");
                         break;
                     }
                     $card = array_shift($player->draw_pile);
-                    if ( !$card )
+                    if ( !$card ) {
+                        action_log(__LINE__ . " card was null");
                         break;
+                    }
+                    action_log("appending $card to hand");
                     $player->hand[] = $card;
                     $s++;
                 }
@@ -749,10 +770,14 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
     }
     $p->playmat[$row][$col] = $ext_id;
     if ( preg_match('/EXPLORER/',type_to_name(intval($def->maintype))) ) {
+        action_log("{$def->ext_id} has a type of EXPLORER, " . type_to_name(intval($def->maintype)));
         if ( $row + 1 == (count($p->playmat) - 2) ) {
-            if ( $p->playmat[$row + 1][$col] == 0 ) {
+            if ( $p->playmat[$row + 1][$col] === 0 ) {
                 // we need to play a land card!
+                action_log("$row + 1,$col is 0");
                 $lc = array_shift($p->land_pile);
+                $lc_def = get_card_def($lc);
+                action_log("$lc has type of " . type_to_name(intval($lc_def->maintype)));
                 if ( $lc ) {
                     $p->playmat[$row + 1][$col] = $lc;
                     $updates[] = $wpdb->prepare("landpile = %s",json_encode($p->land_pile));
@@ -762,7 +787,10 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
     }
     $updates[] = $wpdb->prepare("playmat = %s",json_encode($p->playmat));
     if ( in_array($ext_id,array_values($p->hand)) ) {
-        $p->hand = array_values(array_filter($p->hand,function ($id) use ($ext_id) { return $id != $ext_id; }));
+        action_log("$ext_id is in the players hand");
+        $nh = array_values(array_filter($p->hand,function ($id) use ($ext_id) { return $id != $ext_id; }));
+        action_log("hand=" . join(',',$p->hand) . ", nh=" . join(',',$nh));
+        $p->hand = $nh;
         $updates[] = $wpdb->prepare("hand = %s",json_encode($p->hand));
         $updates[] = "current_move = current_move + 1";
     }
@@ -776,10 +804,12 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
             $mat_item = new \stdClass;
             $mat_item->id = $a->id;
             $mat_item->charges = $a->charges;
+            action_log("Adding {$a->id} to ability mat");
             $p->abilitymat[$row][$col] = $mat_item;
             $needs_update = true;
         }
         if ( $needs_update ) {
+            action_log("needs update to abilitymat");
             $updates[] = $wpdb->prepare("abilitymat = %s",json_encode($p->abilitymat));
         } 
     }
@@ -849,6 +879,28 @@ function next_player($game_id,&$errors) {
     if ( !empty($wpdb->last_error) ) {
         $errors[] = $sql;
         $errors[] = $wpdb->last_error;
+    }
+    // Need to see that new_player has a full hand
+    $needs_update = false;
+    $cap = 5;
+    $s = 0;
+    while ( count($new_player->hand) < 5 ) {
+        $s++;
+        $needs_update = true;
+        $new_player->hand[] = array_shift($new_player->draw_pile);
+        if ( $s > $cap ) {
+            action_log("While trying to draw in " . __FUNCTION__ . ", cap was reached");
+            break;
+        }
+    }
+    if ( $needs_update ) {
+        $sql = "UPDATE `hc_players` SET hand = %s, drawpile = %s WHERE id = %d";
+        $sql = $wpdb->prepare($sql,json_encode($new_player->hand), json_encode($new_player->draw_pile), $new_player->id);
+        $wpdb->query($sql);
+        if ( !empty($wpdb->last_error) ) {
+            $errors[] = $sql;
+            $errors[] = $wpdb->last_error;
+        }
     }
     $sql = "UPDATE `hc_players` as p SET p.current_move = 0,p.attacks = p.max_attacks WHERE p.game_id = %d";
     $sql = $wpdb->prepare($sql,$game_id);

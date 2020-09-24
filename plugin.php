@@ -75,6 +75,56 @@ function init() {
    add_action('wp_ajax_play_card',__NAMESPACE__ . '\ajax_play_card');
    add_action('wp_ajax_get_board',__NAMESPACE__ . '\ajax_get_board');
    add_action('wp_ajax_cede_turn',__NAMESPACE__ . '\ajax_cede_turn');
+   add_action('wp_ajax_draw_card',__NAMESPACE__ . '\ajax_draw_card');
+}
+function ajax_draw_card() {
+    global $wpdb;
+    $result = ['status' => 'KO','errors' => []];
+    $game_id = post('game_id');
+    $player_id = post('player_id');
+    $uid = \get_current_user_id();
+    $sql = "SELECT g.* FROM `hc_games` as g JOIN `hc_players` as p ON g.id = p.game_id WHERE g.id = %d AND p.id = %d AND p.user_id = %d";
+    $sql = $wpdb->prepare($sql,$game_id,$player_id,$uid); 
+    $game = $wpdb->get_row($sql);
+    if ( !empty($wpdb->last_error) ) {
+        $result['errors'][] = $sql;
+        $result['errors'][] = $wpdb->last_error;
+        send_json($result);
+        exit;
+    }
+    // so we have the game, let's get the player
+    $players = get_players($game->id,[$player_id],$result['errors']);
+    if ( empty($players) ) {
+        $result['errors'][] = "No players found";
+        send_json($result);
+        exit;
+    }
+    $p = $players[0];
+    if ( $p->current_move + 1 > $p->max_moves ) {
+        $result['errors'][] = "You are out of moves, you have made {$p->current_move} moves, and can only make {$p->max_moves}";
+        send_json($result);
+        exit;
+    }
+    if ( count($p->hand) > 4 ) {
+        $result['errors'][] = "You can't have more than 5 cards in a hand.";
+        send_json($result);
+        exit;
+    }
+    $card = array_shift($p->draw_pile);
+    action_log("Drew $card");
+    $p->hand[] = $card;
+    action_log("hand=" . join(',',$p->hand));
+    $sql = "UPDATE `hc_players` SET hand = %s, drawpile = %s, current_move = current_move + 1 WHERE id = %d";
+    $sql = $wpdb->prepare($sql,json_encode($p->hand),json_encode($p->draw_pile),$p->id);
+    $wpdb->query($sql);
+    if ( ! empty($wpdb->last_error) ) {
+        $result['errors'][] = $sql;
+        $result['errors'][] = $wpdb->last_error;
+        send_json($result);
+        exit;
+    }
+    send_json(get_game_board($game_id));
+    exit;
 }
 function ajax_cede_turn() {
     $game_id = post('game_id');
@@ -182,9 +232,11 @@ function ajax_accept_game() {
         $land_pile = [];
         $hand = [];
         foreach ( $cards as $c ) {
-            if ( preg_match('/LAND/',type_to_name($c->maintype)) ) {
+            if ( preg_match('/CARD_LAND/',type_to_name(intval($c->maintype))) ) {
+                action_log("adding {$c->ext_id} to land pile");
                 $land_pile[] = $c->ext_id;
             } else {
+                action_log("adding {$c->ext_id} to draw pile");
                 $draw_pile[] = $c->ext_id;
             }
         }
@@ -194,22 +246,8 @@ function ajax_accept_game() {
             $hand[] = array_pop($draw_pile);
         }
         // Now that we have the land, and the draw pile, we need to update them
-        $sql = "UPDATE `hc_players` SET drawpile = %s WHERE id = %d";
-        $sql = $wpdb->prepare($sql,json_encode($draw_pile),$player_id);
-        $wpdb->query($sql);
-        if ( !empty($wpdb->last_error) ) {
-            send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
-            exit;
-        }
-        $sql = "UPDATE `hc_players` SET landpile = %s WHERE id = %d";
-        $sql = $wpdb->prepare($sql,json_encode($land_pile),$player_id);
-        $wpdb->query($sql);
-        if ( !empty($wpdb->last_error) ) {
-            send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
-            exit;
-        }
-        $sql = "UPDATE `hc_players` SET hand = %s WHERE id = %d";
-        $sql = $wpdb->prepare($sql,json_encode($hand),$player_id);
+        $sql = "UPDATE `hc_players` SET drawpile = %s, landpile = %s, hand = %s WHERE id = %d";
+        $sql = $wpdb->prepare($sql,json_encode($draw_pile),json_encode($land_pile),json_encode($hand),$player_id);
         $wpdb->query($sql);
         if ( !empty($wpdb->last_error) ) {
             send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
@@ -217,14 +255,16 @@ function ajax_accept_game() {
         }
         // So we've setup the piles, now we need to setup the mats
         $mat = get_base_table();
+        $updates = [];
         foreach ( ['playmat','abilitymat','damagemat'] as $mname ) {
-            $sql = "UPDATE `hc_players` SET `$mname` = %s WHERE id = %d";
-            $sql = $wpdb->prepare($sql,json_encode($mat),$player_id);
-            $wpdb->query($sql);
-            if ( !empty($wpdb->last_error) ) {
-                send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
-                exit;
-            }
+           $updates[] = $wpdb->prepare("`$mname` = %s",json_encode($mat));
+        }
+        $sql = "UPDATE `hc_players` SET ".join(',',$updates)." WHERE id = %d";
+        $sql = $wpdb->prepare($sql,$player_id);
+        $wpdb->query($sql);
+        if ( !empty($wpdb->last_error) ) {
+            send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
+            exit;
         }
     };// end of setup_player
     $players = $wpdb->get_results($wpdb->prepare("SELECT * FROM `hc_players` WHERE game_id = %d",$game_id));
