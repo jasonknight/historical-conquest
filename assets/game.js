@@ -356,6 +356,10 @@ namespace HistoricalConquest;
     }
     function show_errors(r) {
         _log("show_errors",r.errors);
+        let d = create_dialog('errors_dialog');
+        for ( let i = 0; i < r.errors.length; i++ ) {
+           d.find('.dialog-body').append(get_error_element(r.errors[i]));
+        }
     }
     function play_card(player,id,y,x) {
         if ( in_server_context() ) {

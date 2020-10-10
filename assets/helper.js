@@ -396,6 +396,9 @@ function get_next_open_row(player,row,col) {
 }
 
 function get_player_morale(player) {
+    if ( in_server_context() ) {
+        return player.morale;
+    }
     let mat = player.abilitymat;
     let dmat = player.damagemat;
     let morale = 0;
@@ -587,6 +590,11 @@ function create_dialog(id) {
     trigger_close_zoom_holder();
     d.append('<div class="dialog-body" />');
     return d;
+}
+function get_error_element(str) {
+    let e = $('<div class="error" />');
+    e.html(str);
+    return e;
 }
 function get_generic_button(txt) {
     let btn = $('<div class="generic-button"></div>');
