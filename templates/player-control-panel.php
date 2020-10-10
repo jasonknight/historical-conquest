@@ -1,5 +1,9 @@
 <?php
 namespace HistoricalConquest;
+if ( ! \is_user_logged_in() ) {
+    echo "<a href=\"".wp_login_url($_SERVER['REQUEST_URI'])."\">You must be logged in!</a>";
+    return;
+}
 ?>
 <div id="player_control_panel">
     <div id="player_cp_left">

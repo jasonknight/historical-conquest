@@ -598,7 +598,7 @@ function get_players($game_id,$player_ids,&$errors) {
         $mats = ['playmat','abilitymat','damagemat','landpile','hand','drawpile','discardpile']; 
         foreach ( $mats as $decodeable ) {
             if ( !$player->{$decodeable} ) {
-                action_log("$decodeable was null, initializing");
+                action_log("$decodeable for {$player->user_id} was was null, initializing");
                 $player->{$decodeable} = '[]';
             } 
             $player->{$decodeable} = json_decode($player->{$decodeable},true); 
@@ -639,6 +639,74 @@ function get_players($game_id,$player_ids,&$errors) {
     }
     return $players;
 }
+function mat_item_to_ability($def) {
+    global $wpdb;
+    $sql = "SELECT * FROM `hc_card_abilities` WHERE id = %d";
+    $sql = $wpdb->prepare($sql,$def['id']);
+    action_log(__FUNCTION__ . ": " . $sql);
+    $row = $wpdb->get_row($sql);
+    action_log(__FUNCTION__ . ": " . print_r($row,true));
+    if ( ! empty($wpdb->last_error) ) {
+        action_log("ERROR: " . $wpdb->last_error);
+        return null;
+    }
+    return $row;
+}
+function get_player_morale($p) {
+    global $wpdb;
+    action_log(__FUNCTION__ . "Calculating morale for " . $p->id);
+    $mat = $p->abilitymat;
+    $dmat = $p->damagemat;
+    $morale = 0; 
+    for ( $row = 0; $row < count($mat); $row++) {
+        for ( $col = 0; $col < count($mat[$row]); $col++) {
+            $abs = $mat[$row][$col];
+            $dams = $dmat[$row][$col];
+            if ( is_array($dams) ) {
+                for ( $i = 0; $i < count($dams); $i++ ) {
+                    if ( $dams[$i][0] === 'morale' ) {
+                        action_log(__FUNCTION__ . "Damage to morale " . $dams[$i][1]);
+                        $morale -= intval($dams[$i][1]);
+                    }
+                }
+            }
+            if ( is_array($abs) && isset($abs['id']) ) {
+                // this is just a fix during development, the code should never 
+                // actually run
+                action_log(__FUNCTION__ . "abs needs fixing: " . json_encode($abs));
+                $abs = [$abs];
+                $p->abilitymat[$row][$col] = $abs;
+                $sql = "UPDATE `hc_players` SET abilitymat = %s WHERE id = %d";
+                $sql = $wpdb->prepare($sql,json_encode($p->abilitymat),$p->id);
+                $wpdb->query($sql);
+            }
+            if ( is_array($abs) ) {
+                action_log(__FUNCTION__ . "Abilities present for $row,$col for {$p->id}");
+                for ( $i = 0; $i < count($abs); $i++ ) {
+                    if ( $abs[$i] == 0 ) {
+                        continue;
+                    }
+                    $a = mat_item_to_ability($abs[$i]);
+                    if ( !$a) {
+                        action_log(__FUNCTION__ . "!a");
+                        continue;
+                    }
+                    action_log(__FUNCTION__ . " {$a->id} has apply_to_type of " . type_to_name($a->apply_to_type));
+                    if ( !preg_match('/APPLY_PLAYER/',type_to_name($a->apply_to_type)) ) {
+                       continue; 
+                    }
+                    if ( $a->affects_attribute != 'morale' ) {
+                        action_log(__FUNCTION__ . " does not apply to morale");
+                        continue;
+                    }
+                    action_log(__FUNCTION__ . 'Adding morale from ability ' . $a->id);
+                    $morale += intval($a->affect_amount);
+                }
+            }
+        }
+    }
+    return $morale;
+}
 function get_game_board($game_id,$uid=null) {
     global $wpdb;
     if ( ! $uid )
@@ -678,6 +746,8 @@ function get_game_board($game_id,$uid=null) {
     }
     // Now that we have the players, let's deserialize their fields
     foreach ( $players as &$player ) {
+        // We need to calculate the morale
+        $player->morale = get_player_morale($player); 
         if ( $player->user_id != $uid ) {
             // We need to hide some things from the player, like the hand
             $player->hand = [];
@@ -796,7 +866,11 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
     }
     $sql = "SELECT * FROM `hc_card_abilities` AS a JOIN `hc_cards` AS c ON a.card_id = c.id WHERE c.ext_id = %s";
     $sql = $wpdb->prepare($sql,$ext_id);
+    action_log($sql);
     $abilities = $wpdb->get_results($sql);
+    if ( !empty($wpdb->last_error) ) {
+        action_log("ERROR: " . $wpdb->last_error);
+    }
     if ( !empty($abilities) ) {
         // Okay, we have an ability, so let's inject that into the abilitymat
         $needs_update = false;
@@ -805,7 +879,10 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
             $mat_item->id = $a->id;
             $mat_item->charges = $a->charges;
             action_log("Adding {$a->id} to ability mat");
-            $p->abilitymat[$row][$col] = $mat_item;
+            if ( !is_array($p->abilitymat[$row][$col]) ) {
+                $p->abilitymat[$row][$col] = [];
+            }
+            $p->abilitymat[$row][$col][] = $mat_item;
             $needs_update = true;
         }
         if ( $needs_update ) {
@@ -909,4 +986,32 @@ function next_player($game_id,&$errors) {
         $errors[] = $sql;
         $errors[] = $wpdb->last_error;
     }
+}
+function check_player_has_cards($id) {
+    global $wpdb;
+    $res = $wpdb->get_results(
+            $wpdb->prepare("SELECT 1 FROM `hc_player_cards` WHERE player_id = %d",$id));
+    return !empty($res);
+}
+function _get_games($id) {
+    global $wpdb;
+    $sql = "SELECT * FROM `hc_games` as games WHERE games.created_by = %d AND (games.declined != 1 OR games.declined IS NULL)"; 
+    $sql = $wpdb->prepare($sql,$id);
+    $my_games = $wpdb->get_results($sql); 
+    if ( empty($my_games) ) {
+        $my_games = [];
+    }
+    foreach ( $my_games as &$mg ) {
+        $mg->players = $wpdb->get_results("SELECT * FROM `hc_players` WHERE game_id = {$mg->id}");
+    }
+    $sql = "SELECT games.* FROM `hc_games` as games JOIN `hc_players` as p ON p.game_id = games.id WHERE (games.declined != 1 OR games.declined IS NULL) AND p.user_id = %d AND games.created_by != %d"; 
+    $sql = $wpdb->prepare($sql,$id,$id);
+    $others_games = $wpdb->get_results($sql); 
+    if ( empty($others_games) ) {
+        $others_games = [];
+    }
+    foreach ( $others_games as &$mg ) {
+        $mg->players = $wpdb->get_results("SELECT * FROM `hc_players` WHERE game_id = {$mg->id}");
+    }
+    return [$my_games,$others_games];
 }
