@@ -8,6 +8,7 @@ namespace HistoricalConquest;
         panels.data.card_height = 0.85
     window.board.current_move = 0;
     window.board.player_pointer = 0;
+    window.abilitydb = <?php echo json_encode(get_abilitydb()); ?>;
     <?php $asset('helper.js'); ?> 
     <?php $asset('events.js'); ?> 
     <?php $asset('card_zoom.js'); ?>

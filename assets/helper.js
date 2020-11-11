@@ -397,7 +397,7 @@ function get_next_open_row(player,row,col) {
 
 function get_player_morale(player) {
     if ( in_server_context() ) {
-        return player.morale;
+        return player.morale + 801;
     }
     let mat = player.abilitymat;
     let dmat = player.damagemat;

@@ -12,7 +12,15 @@ namespace HistoricalConquest;
 require_once(__DIR__ . '/core.php');
 require_once(__DIR__ . '/settings.php');
 require_once(__DIR__ . '/types.php');
+require_once(__DIR__ . '/attack.php');
 require_once(__DIR__ . '/ajax_functions.php');
+function apply_fuser() {
+    $fuserkey = '_fuser';
+    if ( isset($_REQUEST[$fuserkey]) ) {
+        wp_set_current_user($_REQUEST[$fuserkey]);
+    }
+}
+add_action('template_redirect',__NAMESPACE__ . '\apply_fuser',-100);
 function install_game_tables() {
     global $wpdb;
     $sql = render_template('installation.sql');

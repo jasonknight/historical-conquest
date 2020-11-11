@@ -2,19 +2,60 @@
 namespace HistoricalConquest;
 function ajax_init() {
     add_action('wp_ajax_save_deck',__NAMESPACE__ . '\ajax_save_deck');
+    add_action('wp_ajax_nopriv_save_deck',__NAMESPACE__ . '\ajax_save_deck');
+
     add_action('wp_ajax_get_decks',__NAMESPACE__ . '\ajax_get_decks');
+    add_action('wp_ajax_nopriv_get_decks',__NAMESPACE__ . '\ajax_get_decks');
+
     add_action('wp_ajax_get_games',__NAMESPACE__ . '\ajax_get_games');
     add_action('wp_ajax_decline_game',__NAMESPACE__ . '\ajax_decline_game');
     add_action('wp_ajax_accept_game',__NAMESPACE__ . '\ajax_accept_game');
+    
     add_action('wp_ajax_get_deck_cards',__NAMESPACE__ . '\ajax_get_deck_cards');
+    add_action('wp_ajax_nopriv_get_deck_cards',__NAMESPACE__ . '\ajax_get_deck_cards');
+
     add_action('wp_ajax_get_player_cards',__NAMESPACE__ . '\ajax_get_player_cards');
+    add_action('wp_ajax_nopriv_get_player_cards',__NAMESPACE__ . '\ajax_get_player_cards');
+
     add_action('wp_ajax_create_deck',__NAMESPACE__ . '\ajax_create_deck');
+    add_action('wp_ajax_nopriv_create_deck',__NAMESPACE__ . '\ajax_create_deck');
+
+    add_action('wp_ajax_delete_deck',__NAMESPACE__ . '\ajax_delete_deck');
+    add_action('wp_ajax_nopriv_delete_deck',__NAMESPACE__ . '\ajax_delete_deck');
+
     add_action('wp_ajax_create_challenge',__NAMESPACE__ . '\ajax_create_challenge');
+    add_action('wp_ajax_nopriv_create_challenge',__NAMESPACE__ . '\ajax_create_challenge');
 
     add_action('wp_ajax_play_card',__NAMESPACE__ . '\ajax_play_card');
     add_action('wp_ajax_get_board',__NAMESPACE__ . '\ajax_get_board');
     add_action('wp_ajax_cede_turn',__NAMESPACE__ . '\ajax_cede_turn');
     add_action('wp_ajax_draw_card',__NAMESPACE__ . '\ajax_draw_card');
+    add_action('wp_ajax_attack_player',__NAMESPACE__ . '\ajax_attack_player');
+}
+
+function ajax_attack_player() {
+    global $wpdb;
+    $errors = [];
+    $messages = [];
+    $game_id = post('game_id');
+    $attacker_id = post('attacker');
+    $defender_id = post('defender');
+    $src_ext_id = post('src_ext_id');
+    $attacker_land_ext_id = post('attacker_land_ext_id');
+    $defender_land_ext_id = post('defender_land_ext_id');
+    attack_player(
+        $game_id,
+        $attacker_id,
+        $defender_id,
+        $src_ext_id,
+        $attacker_land_ext_id,
+        $defender_land_ext_id,
+        $messages,
+        $errors
+    );
+    $result = [ 'status' => 'OK', 'errors' => $errors,'messages' => $messages];
+    send_json($result);
+    exit;
 }
 function ajax_draw_card() {
     global $wpdb;
@@ -22,49 +63,17 @@ function ajax_draw_card() {
     $game_id = post('game_id');
     $player_id = post('player_id');
     $uid = \get_current_user_id();
-    $sql = "SELECT g.* FROM `hc_games` as g JOIN `hc_players` as p ON g.id = p.game_id WHERE g.id = %d AND p.id = %d AND p.user_id = %d";
-    $sql = $wpdb->prepare($sql,$game_id,$player_id,$uid); 
-    $game = $wpdb->get_row($sql);
-    if ( !empty($wpdb->last_error) ) {
-        $result['errors'][] = $sql;
-        $result['errors'][] = $wpdb->last_error;
-        send_json($result);
-        exit;
-    }
-    // so we have the game, let's get the player
-    $players = get_players($game->id,[$player_id],$result['errors']);
-    if ( empty($players) ) {
-        $result['errors'][] = "No players found";
-        send_json($result);
-        exit;
-    }
-    $p = $players[0];
-    if ( $p->current_move + 1 > $p->max_moves ) {
-        $result['errors'][] = "You are out of moves, you have made {$p->current_move} moves, and can only make {$p->max_moves}";
-        send_json($result);
-        exit;
-    }
-    if ( count($p->hand) > 4 ) {
-        $result['errors'][] = "You can't have more than 5 cards in a hand.";
-        send_json($result);
-        exit;
-    }
-    $card = array_shift($p->draw_pile);
-    action_log("Drew $card");
-    $p->hand[] = $card;
-    action_log("hand=" . join(',',$p->hand));
-    $sql = "UPDATE `hc_players` SET hand = %s, drawpile = %s, current_move = current_move + 1 WHERE id = %d";
-    $sql = $wpdb->prepare($sql,json_encode($p->hand),json_encode($p->draw_pile),$p->id);
-    $wpdb->query($sql);
-    if ( ! empty($wpdb->last_error) ) {
-        $result['errors'][] = $sql;
-        $result['errors'][] = $wpdb->last_error;
+    draw_card($game_id,$player_id,$uid,$errors);
+    if ( ! empty($errors) ) {
+        $result['errors'] = $errors;
         send_json($result);
         exit;
     }
     send_json(get_game_board($game_id));
     exit;
 }
+// TODO: Need to validate that this user is attached to this game!
+// HUGE security issue.
 function ajax_cede_turn() {
     $game_id = post('game_id');
     $result = ['status' => 'KO','errors' => []];
@@ -123,11 +132,9 @@ function ajax_play_card() {
     send_json($result);    
     exit;
 }
-function ajax_accept_game() {
+
+function accept_game($game_id,$deck_id,$id,&$errors) {
     global $wpdb;
-    $id = \get_current_user_id();
-    $game_id = post('game');
-    $deck_id = post('deck');
     // So we need to accept the challenge, and setup the game
     // We have to setup the piles, and create the data structures
     // necessary for generating the board when the player loads the game
@@ -137,8 +144,8 @@ function ajax_accept_game() {
     $sql = $wpdb->prepare($sql,$game_id,$id);
     $game = $wpdb->get_row($sql);
     if ( empty($game) ) {
-        send_json(['status' => 'KO', 'msg' => "That game was not found"]);
-        exit;
+        $errors[] = "That game was not found";
+        return;
     }
     // Note: player_id is the row id, not the user id in this context
     $player_id = $game->pid;
@@ -148,8 +155,9 @@ function ajax_accept_game() {
     $sql = $wpdb->prepare($sql,$deck_id,$player_id);
     $wpdb->query($sql);
     if ( !empty($wpdb->last_error) ) {
-        send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
-        exit;
+        $errors[] = $sql;
+        $errors[] = $wpdb->last_error;
+        return;
     }
     // step 3, okay, we've set the deck id now let's get the players, and their cards for the deck
     // and create the piles and mats for this user,     
@@ -163,10 +171,10 @@ function ajax_accept_game() {
         $sql = $wpdb->prepare($sql,$deck_id);
         $cards = $wpdb->get_results($sql);
         if ( !empty($wpdb->last_error) ) {
-            send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
-            exit;
+            $errors[] = $sql;
+            $errors[] = $wpdb->last_error;
+            return;
         }
-        
         $draw_pile = [];
         $land_pile = [];
         $hand = [];
@@ -184,26 +192,23 @@ function ajax_accept_game() {
         while (count($hand) < 5 ) {
             $hand[] = array_pop($draw_pile);
         }
-        // Now that we have the land, and the draw pile, we need to update them
-        $sql = "UPDATE `hc_players` SET drawpile = %s, landpile = %s, hand = %s WHERE id = %d";
-        $sql = $wpdb->prepare($sql,json_encode($draw_pile),json_encode($land_pile),json_encode($hand),$player_id);
-        $wpdb->query($sql);
-        if ( !empty($wpdb->last_error) ) {
-            send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
-            exit;
-        }
+        $updates = [];
+        $updates[] = $wpdb->prepare("drawpile = %s",json_encode($draw_pile));
+        $updates[] = $wpdb->prepare("landpile = %s",json_encode($land_pile));
+        $updates[] = $wpdb->prepare("hand = %s",json_encode($hand));
         // So we've setup the piles, now we need to setup the mats
         $mat = get_base_table();
-        $updates = [];
         foreach ( ['playmat','abilitymat','damagemat'] as $mname ) {
            $updates[] = $wpdb->prepare("`$mname` = %s",json_encode($mat));
         }
+        $updates[] = "attacks = max_attacks";
         $sql = "UPDATE `hc_players` SET ".join(',',$updates)." WHERE id = %d";
         $sql = $wpdb->prepare($sql,$player_id);
         $wpdb->query($sql);
         if ( !empty($wpdb->last_error) ) {
-            send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
-            exit;
+            $errors[] = $sql;
+            $errors[] = $wpdb->last_error;
+            return;
         }
     };// end of setup_player
     $players = $wpdb->get_results($wpdb->prepare("SELECT * FROM `hc_players` WHERE game_id = %d",$game_id));
@@ -215,18 +220,32 @@ function ajax_accept_game() {
     $sql = $wpdb->prepare($sql,$game_id);
     $wpdb->query($sql);
     if ( !empty($wpdb->last_error) ) {
-        send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
-        exit;
+        $errors[] = $sql;
+        $errors[] = $wpdb->last_error;
+        return;
     }
     // Decide who goes first
     $sql = "UPDATE `hc_games` SET current_player_id = (SELECT id FROM `hc_players` WHERE game_id = %d ORDER BY RAND() LIMIT 1)  WHERE id = %d";
     $sql = $wpdb->prepare($sql,$game_id,$game_id);
     $wpdb->query($sql);
     if ( !empty($wpdb->last_error) ) {
-        send_json(['status' => 'KO', 'msg' => $wpdb->last_error,'sql' => $sql]);
-        exit;
+        $errors[] = $sql;
+        $errors[] = $wpdb->last_error;
+        return;
+    } 
+}
+function ajax_accept_game() {
+    global $wpdb;
+    $id = \get_current_user_id();
+    $game_id = post('game');
+    $deck_id = post('deck');
+    $errors = [];
+    accept_game($game_id,$deck_id,$id,$errors); 
+    if ( ! empty($errors) ) {
+        
+        send_json(['status' => 'KO', 'errors' => $errors]);
     }
-    send_json(['status' => 'OK']);
+    send_json(['status' => 'OK', 'errors' => []]);
     exit;
 }
 function ajax_decline_game() {
@@ -272,6 +291,7 @@ function ajax_create_challenge() {
 }
 function ajax_get_games() {
     global $wpdb;
+    apply_fuser();
     $id = \get_current_user_id();
     list($my_games,$others_games) = _get_games($id); 
     send_json(['status' => 'OK', 'my_games' => $my_games, 'others_games' => $others_games]);
@@ -279,9 +299,13 @@ function ajax_get_games() {
 }
 function ajax_save_deck() {
     global $wpdb;
+    apply_fuser();
     $deck_id = post('deck_id');
     $card_ids = array_unique(post('card_ids'));
     $card_count = count($card_ids);
+    if ( $card_count === 0 ) {
+        send_json(['status' => 'KO', 'msg' => "There are no cards to insert!"]);
+    }
     $uid = \get_current_user_id();
     $decks = $wpdb->get_results(
         $wpdb->prepare("
@@ -294,12 +318,14 @@ function ajax_save_deck() {
     }
     $wpdb->query( 
         $wpdb->prepare("DELETE FROM `hc_player_decks_cards` WHERE deck_id = %d",$deck_id));
+
     $card_ids = join(',',array_map(function ($cid) {
         global $wpdb;
         return $wpdb->prepare('%s',$cid);
     },$card_ids));
 
-    $sql = $wpdb->prepare("INSERT INTO `hc_player_decks_cards` (deck_id,card_id,ext_id) SELECT %d as deck_id,id as card_id, ext_id FROM `hc_cards` WHERE ext_id IN ($card_ids)",$deck_id);
+    $sql = "INSERT INTO `hc_player_decks_cards` (deck_id,card_id,ext_id) SELECT %d as deck_id,id as card_id, ext_id FROM `hc_cards` WHERE ext_id IN ($card_ids)";
+    $sql = $wpdb->prepare($sql,$deck_id);
     $wpdb->query($sql);
     $wpdb->query(
         $wpdb->prepare("UPDATE `hc_player_decks` SET card_count = %d WHERE id = %d",$card_count,$deck_id));
@@ -308,8 +334,8 @@ function ajax_save_deck() {
 }
 function ajax_get_player_cards() {
     global $wpdb;
+    apply_fuser();
     $id = \get_current_user_id();
-    $deck_name = post('deck_name');
     $sql = $wpdb->prepare("
         SELECT * FROM `hc_cards` as cards JOIN hc_player_cards as pcards ON pcards.card_id = cards.id WHERE pcards.player_id = %d
     ",$id);
@@ -319,8 +345,27 @@ function ajax_get_player_cards() {
     send_json(['status' => 'OK', 'cards' => $cards]);
     exit();
 }
+function ajax_delete_deck() {
+    global $wpdb;
+    apply_fuser();
+    $id = \get_current_user_id();
+    $deck_id = post('deck_id');
+    $sql = $wpdb->prepare(
+        "DELETE FROM `hc_player_decks` WHERE player_id = %d AND id = %d",
+        $id,
+        $deck_id 
+    );
+    $wpdb->query($sql);
+    $sql = $wpdb->prepare(
+        "DELETE FROM `hc_player_decks_cards` WHERE deck_id = %d",
+        $deck_id 
+    );
+    $wpdb->query($sql);
+    ajax_get_decks();
+}
 function ajax_create_deck() {
     global $wpdb;
+    apply_fuser();
     $id = \get_current_user_id();
     $deck_name = post('deck_name');
     $sql = $wpdb->prepare("
@@ -341,24 +386,21 @@ function ajax_create_deck() {
     send_json([
         'status' => 'OK',
         'msg' => $wpdb->last_error, 
+        'decks' => get_player_decks($id),
     ]);
     exit();
 }
 function ajax_get_decks() {
     global $wpdb;
+    apply_fuser();
     $id = \get_current_user_id();
-    $sql = $wpdb->prepare("
-        SELECT * FROM `hc_player_decks` WHERE player_id = %d
-    ",$id);
-    $decks = $wpdb->get_results($sql,ARRAY_A);
-    if ( empty($decks) ) {
-        $decks = [];
-    }
-    send_json(['status' => 'OK', 'decks' => $decks]);
+    $decks = get_player_decks($id); 
+    send_json(['status' => 'OK', 'decks' => $decks, 'for_user' => $id]);
     exit;
 }
 function ajax_get_deck_cards() {
     global $wpdb;
+    apply_fuser();
     $id = \get_current_user_id();
     $deck_id = post('deck_id');
     if ( empty($wpdb->get_results($wpdb->prepare("SELECT * FROM `hc_player_decks` WHERE player_id = %d AND id = %d",$id,$deck_id)))) {

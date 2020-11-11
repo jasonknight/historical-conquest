@@ -491,6 +491,16 @@ function get_carddb() {
     }
     return $fcards;
 }
+function get_abilitydb() {
+    global $wpdb;
+    $sql = "SELECT * FROM `hc_card_abilities`";
+    $res = $wpdb->get_results($sql);
+    $abs = []; 
+    foreach ( $res as $r ) {
+        $abs[$r->id] = $r;
+    }
+    return $abs;
+}
 function get_type_conversion_js() {
     $opts = options_as_array();
     ob_start();
@@ -1014,4 +1024,95 @@ function _get_games($id) {
         $mg->players = $wpdb->get_results("SELECT * FROM `hc_players` WHERE game_id = {$mg->id}");
     }
     return [$my_games,$others_games];
+}
+function system_discard($p,$ext_id) {
+    $mat = $p->playmat;
+    $dpile = $p->discard_pile;
+    for ( $row = 0; $row < count($mat); $row++) {
+        for ( $col = 0; $col < count($mat[$row]); $col++) {
+            if ( $mat[$row][$col] === $ext_id ) {
+                array_push($dpile,$ext_id);
+                $mat[$row][$col] = 0; 
+                $p->abilitymat[$row][$col] = 0;
+                $p->playmat = $mat;
+                $p->discard_pile = $dpile;
+            } 
+        }
+    }
+    return $p;
+}
+function is_active_area_card($def) {
+    return (
+        (preg_match('/EVENT/',type_to_name($def->maintype))) || 
+        (preg_match('/DOCUMENT/',type_to_name($def->maintype))) || 
+        (preg_match('/RELIC/',type_to_name($def->maintype))) || 
+        (preg_match('/KNOWLEDGE/',type_to_name($def->maintype))) || 
+        (preg_match('/TECHNOLOGY/',type_to_name($def->maintype))) 
+    );
+}
+function get_row_col_for($p,$id) {
+    $mat = $p->playmat;
+    action_log(__FUNCTION__ . ", mat=" . json_encode($mat));
+    for ( $row = 0; $row < count($mat); $row++) {
+        for ( $col = 0; $col < count($mat[$row]); $col++ ) {
+            action_log(__FUNCTION__ . " id=$id, {$mat[$row][$col]}");
+            if ( $mat[$row][$col] === $id ) {
+                $r = new \stdClass;
+                $r->row = $row;
+                $r->col = $col;
+                action_log("Returning " . json_encode($r));
+                return $r;
+            }
+        }
+    }
+    return null;
+}
+function draw_card($game_id,$player_id,$uid,&$errors) {
+    global $wpdb; 
+    $sql = "SELECT g.* FROM `hc_games` as g JOIN `hc_players` as p ON g.id = p.game_id WHERE g.id = %d AND p.id = %d AND p.user_id = %d";
+    $sql = $wpdb->prepare($sql,$game_id,$player_id,$uid); 
+    $game = $wpdb->get_row($sql);
+    if ( !empty($wpdb->last_error) ) {
+        $errors[] = $sql;
+        $errors[] = $wpdb->last_error;
+        return;
+    }
+    // so we have the game, let's get the player
+    $players = get_players($game->id,[$player_id],$result['errors']);
+    if ( empty($players) ) {
+        $errors[] = "No players found";
+        return;
+    }
+    $p = $players[0];
+    if ( $p->current_move + 1 > $p->max_moves ) {
+        $errors[] = "You are out of moves, you have made {$p->current_move} moves, and can only make {$p->max_moves}";
+        return;
+    }
+    if ( count($p->hand) > 4 ) {
+        $errors[] = "You can't have more than 5 cards in a hand.";
+        return;
+    }
+    $card = array_shift($p->draw_pile);
+    action_log("Drew $card");
+    $p->hand[] = $card;
+    action_log("hand=" . join(',',$p->hand));
+    $sql = "UPDATE `hc_players` SET hand = %s, drawpile = %s, current_move = current_move + 1 WHERE id = %d";
+    $sql = $wpdb->prepare($sql,json_encode($p->hand),json_encode($p->draw_pile),$p->id);
+    $wpdb->query($sql);
+    if ( ! empty($wpdb->last_error) ) {
+        $errors[] = $sql;
+        $errors[] = $wpdb->last_error;
+        return;
+    }
+}
+function get_player_decks($id) {
+    global $wpdb;
+    $sql = $wpdb->prepare("
+        SELECT * FROM `hc_player_decks` WHERE player_id = %d
+    ",$id);
+    $decks = $wpdb->get_results($sql,ARRAY_A);
+    if ( empty($decks) ) {
+        $decks = [];
+    }
+    return $decks;
 }

@@ -154,6 +154,20 @@ function show_attack_dialog(attacker,defender,src_ext_id,attacker_land_ext_id,de
 
 }
 function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defender_land_ext_id){
+    if ( in_server_context() ) {
+        let data = {}
+        data.action = 'attack_player';
+        data.game_id = window.get.game_id;
+        data.attacker = attacker.id;
+        data.defender = defender.id;
+        data.src_ext_id = src_ext_id;
+        data.attacker_land_ext_id = attacker_land_ext_id;
+        data.defender_land_ext_id = defender_land_ext_id;
+        $.post(window.ajaxurl,data,function (resp) {
+            console.log(resp);
+        });
+        return;
+    }
     _log("ATTACK!",attacker,defender,src_ext_id);
     let state = {};
     state.attacker = {};

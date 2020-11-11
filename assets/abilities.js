@@ -26,6 +26,7 @@ function ability_to_mat_item(ability) {
 }
 function mat_item_to_html(mat) {
     let a = mat_item_to_ability(mat);
+    _log("mat_item_to_html",a,mat);
     let d = _div(null,'abilitymat-item');
     let bits = [];
     bits.push( 'id:' + mat.id );
@@ -44,16 +45,11 @@ function mat_item_to_html(mat) {
     return d;
 }
 function mat_item_to_ability(m) {
-    for ( let key in window.carddb ) {
-        let card = window.carddb[key];
-        for ( let i = 0; i < card.abilities.length; i++ ) {
-            let a = card.abilities[i];
-            if ( a.id == m.id ) {
-                return a;
-            }
-        }
-    }
-    return {};
+    _log("mat_item_to_ability",m);
+    let a = window.abilitydb[parseInt(m.id)];
+    if ( ! a )
+        return {};
+    return a;
 }
 // Here we handle always on abilities, these are usually
 // buffs to an attribut
