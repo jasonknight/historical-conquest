@@ -74,5 +74,5 @@ function ajax_post($data) {
     curl_close($h);
     return $struct;
 }
-include __DIR__ . '/ajax_get_decks.php';
-
+//include __DIR__ . '/ajax_get_decks.php';
+include __DIR__ . '/ajax_full_game.php';

@@ -1116,3 +1116,19 @@ function get_player_decks($id) {
     }
     return $decks;
 }
+function owns_deck($uid,$did) {
+    global $wpdb;
+    $sql = "SELECT 1 FROM `hc_player_decks` WHERE player_id = %d AND id = %d";
+    $sql = $wpdb->prepare($sql,$uid,$did);
+    action_log($sql);
+    if ( empty($wpdb->get_results($sql)) )
+        return false;
+    return true;
+}
+function user_id_exists($uid) {
+    global $wpdb;
+    $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->users} WHERE ID = %d", $uid));
+    if ((int)$count > 0)
+        return true;
+    return false;
+}

@@ -547,3 +547,8 @@ function options_as_array() {
 
  return $defs;
 }
+define('MSG_BAD_OPPONENT','That opponent does not exist');
+define('MSG_BAD_DECK','That deck does not exist');
+define('MSG_BAD_DECK_OWNER','That deck is not yours');
+define('MSG_GAME_NOT_FOUND',"Game not found");
+define('MSG_GAME_DECLINED',"Game declined");
