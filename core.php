@@ -831,6 +831,81 @@ function get_card_def($ext_id) {
     $sql = $wpdb->prepare($sql,$ext_id);
     return $wpdb->get_row($sql);
 }
+/*
+ * In the case of auto_explorer and auto_abilities we want to be able
+ * to switch off auto playing of a land_card and auto inserting of abilities
+ * in some cases
+ * */
+function system_play_card($game_id,$p,$ext_id,$row,$col,$auto_explorer,$auto_abilities,&$errors) {
+    global $wpdb;
+    action_log(__FUNCTION__);
+    $updates = [];
+    if ( $p->playmat[$row][$col] !== 0 ) {
+        $errors[] = "That space already has a card";
+        return $p;
+    }
+    $def = get_card_def($ext_id);
+    if ( !$def ) {
+        $errors[] = "Failed to find $ext_id definition";
+        return $p;
+    }
+    $p->playmat[$row][$col] = $ext_id;
+    if ( $auto_explorer && preg_match('/EXPLORER/',type_to_name(intval($def->maintype))) ) {
+        action_log(__FUNCTION__ . " {$def->ext_id} has a type of EXPLORER, " . type_to_name(intval($def->maintype)));
+        if ( $row + 1 == (count($p->playmat) - 2) ) {
+            if ( $p->playmat[$row + 1][$col] === 0 ) {
+                // we need to play a land card!
+                action_log(__FUNCTION__ . " $row + 1,$col is 0");
+                $lc = array_shift($p->land_pile);
+                $lc_def = get_card_def($lc);
+                action_log(__FUNCTION__ . " $lc has type of " . type_to_name(intval($lc_def->maintype)));
+                if ( $lc ) {
+                    $p->playmat[$row + 1][$col] = $lc;
+                    $updates[] = $wpdb->prepare("landpile = %s",json_encode($p->land_pile));
+                }
+            } 
+        }
+    }
+    $updates[] = $wpdb->prepare("playmat = %s",json_encode($p->playmat));
+    $sql = "SELECT * FROM `hc_card_abilities` AS a JOIN `hc_cards` AS c ON a.card_id = c.id WHERE c.ext_id = %s";
+    $sql = $wpdb->prepare($sql,$ext_id);
+    action_log(__FUNCTION__ . " " . $sql);
+    $abilities = $wpdb->get_results($sql);
+    if ( !empty($wpdb->last_error) ) {
+        action_log(__FUNCTION__ . " ERROR: " . $wpdb->last_error);
+    }
+    if ( $auto_abilities && !empty($abilities) ) {
+        // Okay, we have an ability, so let's inject that into the abilitymat
+        $needs_update = false;
+        foreach ( $abilities as $a) {
+            $mat_item = new \stdClass;
+            $mat_item->id = $a->id;
+            $mat_item->charges = $a->charges;
+            action_log(__FUNCTION__ . " Adding {$a->id} to ability mat");
+            if ( !is_array($p->abilitymat[$row][$col]) ) {
+                $p->abilitymat[$row][$col] = [];
+            }
+            $p->abilitymat[$row][$col][] = $mat_item;
+            $needs_update = true;
+        }
+        if ( $needs_update ) {
+            action_log(__FUNCTION__ . " needs update to abilitymat");
+            $updates[] = $wpdb->prepare("abilitymat = %s",json_encode($p->abilitymat));
+        } 
+    }
+    
+    if ( !empty($updates) ) {
+        $sql = "UPDATE `hc_players` SET " . join(',',$updates) . " WHERE user_id = %d AND game_id = %d"; 
+        $sql = $wpdb->prepare($sql,$p->user_id,$game_id);
+        $wpdb->query($sql);
+        if ( !empty($wpdb->last_error) ) {
+            $errors[] = $wpdb->last_error;
+            $errors[] = $sql;
+            return $p;
+        }
+    }
+    return $p;
+}
 function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
     global $wpdb;
     // need to do some validation, but skipping for now

@@ -32,7 +32,11 @@ function ajax_init() {
     add_action('wp_ajax_nopriv_create_challenge',__NAMESPACE__ . '\ajax_create_challenge');
 
     add_action('wp_ajax_play_card',__NAMESPACE__ . '\ajax_play_card');
+    add_action('wp_ajax_nopriv_play_card',__NAMESPACE__ . '\ajax_play_card');
+
     add_action('wp_ajax_get_board',__NAMESPACE__ . '\ajax_get_board');
+    add_action('wp_ajax_nopriv_get_board',__NAMESPACE__ . '\ajax_get_board');
+
     add_action('wp_ajax_cede_turn',__NAMESPACE__ . '\ajax_cede_turn');
     add_action('wp_ajax_draw_card',__NAMESPACE__ . '\ajax_draw_card');
     add_action('wp_ajax_attack_player',__NAMESPACE__ . '\ajax_attack_player');
@@ -93,10 +97,10 @@ function ajax_cede_turn() {
 }
 function ajax_get_board() {
     apply_fuser();
-   $game_id = post('game_id');
-   $board = get_game_board($game_id);
-   send_json($board);
-   exit;
+    $game_id = post('game_id');
+    $board = get_game_board($game_id);
+    send_json($board);
+    exit;
 }
 function ajax_play_card() {
    global $wpdb; 
