@@ -184,6 +184,7 @@ namespace HistoricalConquest;
         target.append(table);
     }
     function render_play_mat(player,target) {
+        _log("render_play_mat",player,target);
         let rows_cols = player.playmat;
         let rl = rows_cols.length;
         let cl = rows_cols[0].length;
@@ -439,10 +440,12 @@ namespace HistoricalConquest;
         _log("Rendering", "Round", window.board.round, "Move", current_move());
         $.each(players, function () {
             if ( in_server_context() && this.user_id != window.user_id ) {
+                _log("Not rendering due to ");
                 return;
             }
             let id = 'player_' + this.id;
             let d = _div( id, 'player tab');
+            _log("About to render playmat",window.board,this);
             render_play_mat(this,d);
             panels.main.append(d);
             let btn = _tab_button(id,this);
@@ -566,7 +569,9 @@ namespace HistoricalConquest;
         $.post(window.ajaxurl,data,function (resp) {
             _log("get_board",resp);
             if ( resp.status == 'OK' ) {
-                window.board = resp;
+                console.log(window.board,resp);
+                //window.board = resp;
+                //trigger_refresh();
             } else {
                 show_errors(resp);
             }

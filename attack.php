@@ -11,6 +11,17 @@ function attack_player(
     &$errors
 ) {
     global $wpdb;
+    $result = [
+        'status' => 'KO', 
+        'errors' => [],
+        'messages' => [],
+        'battle_report' => [
+            'success' => false,
+            'winner' => false, 
+            'loser' => false, 
+            'lost_card' => false, 
+        ],
+    ];
     $players = get_players($game_id,[$attacker_id,$defender_id],$errors);
     $state = new \stdClass;
     $state->attacker = null;
@@ -40,15 +51,17 @@ function attack_player(
     $defending_land_def = get_card_def($defender_land_ext_id);
 
     $cards_involved = get_attack_cards_involved($state->attacker,$src_ext_id);
-    action_log("There are " . count($cards_involved) . " card involved in the attack");
+    action_log(__FUNCTION__ . " There are " . count($cards_involved) . " card involved in the attack");
+    action_log(__FUNCTION__ . "cards_involved=" . join(',',$cards_involved));
     if ( count($cards_involved) === 0 ) {
         $msg = "There are no cards involved in the attack, so it's over!";
         $messages[] = $msg;
-        return;
+        return $result;
     }
     $defs = array_map(function ($id) {
         return get_card_def($id); 
     },$cards_involved);
+    action_log(__FUNCTION__ . "defs=" . join(',',function ($d) { return $d->ext_id;},$defs));
     $attack = 0;
     foreach ( $defs as $def ) {
         $attack = $attack + intval($def->strength);
@@ -68,11 +81,11 @@ function attack_player(
             $attack += intval($a->affect_amount);
         }
     }
-    action_log("Final Calculated attack: " . $attack);
-
+    action_log(__FUNCTION__ . " Final Calculated attack: " . $attack);
+    $result['battle_report']['final_calculated_attack'] = $attack;
     // Step 2, process the defender
     $d_cards_involved = get_attack_cards_involved($state->defender,$defender_land_ext_id);
-    action_log("There are " . count($d_cards_involved) . " cards involved in the defense");
+    action_log(__FUNCTION__ . " There are " . count($d_cards_involved) . " cards involved in the defense");
     if ( count($d_cards_involved) === 0 ) {
         $msg = "There are no cards involved in the defense, so it's over!";
         $messages[] = $msg;
@@ -102,8 +115,9 @@ function attack_player(
             $defense += intval($a->affect_amount);
         }
     }
-    action_log("Final Calculated defense: " . $defense);
-
+    $result['battle_report']['final_calculated_defense'] = $defense;
+    action_log(__FUNCTION__ . " Final Calculated defense: " . $defense);
+    
     // Attila Check
     $attila_present = array_filter($cards_involved,function ($c) { return $c === 'C04201'; });
     if ( $attila_present ) {
@@ -166,6 +180,7 @@ function attack_player(
     $messages[] = $state->defender->name . " has a defensive strength of " . number_format($defense);
     $messages[] = $state->attacker->name . " has a attack strength of " . number_format($attack);
     if ( $attack > $defense ) {
+        action_log(__FUNCTION__ . " attacker={$state->attacker->id} is the winner");
         $winner = $state->attacker;
         $loser = $state->defender;
         $loser_defs = $d_defs;
@@ -173,6 +188,7 @@ function attack_player(
         $loser_land_id = $defender_land_ext_id;
         $messages[] = $winner->name . " is victorious.";
     } else if ( $defense > $attack ) {
+        action_log(__FUNCTION__ . " defender={$state->defender->id} is the winner");
         $winner = $state->defender;
         $loser = $state->attacker;
         $loser_defs = $defs;
@@ -182,38 +198,53 @@ function attack_player(
     } else {
         $messages[] = "Attack and Defense are equal, no clear victory";
     }
+    if ( $winner ) {
+        $result['battle_report']['winner'] = $winner->id;
+        $result['battle_report']['loser'] = $loser->id;
+    }
     if ( $loser ) {
         $rc = get_row_col_for($loser,$loser_land_id);
         if ( $rc ) {
-            $ar = $loser->damagemat[$rw->row][$rc->col];
+            $ar = $loser->damagemat[$rc->row][$rc->col];
             if ( ! is_array($ar) ) {
                 $ar = [];
             }
             array_push($ar,['morale',-100]);
-            $loser->damagemat[$rw->row][$rc->col] = $ar;
+            $loser->damagemat[$rc->row][$rc->col] = $ar;
             $sql = "UPDATE `hc_players` SET damagemat = %s WHERE id = %d";
             $sql = $wpdb->prepare($sql,json_encode($loser->damagemat),$loser->id);
             $wpdb->query($sql);
             if ( !empty($wpdb->last_error) ) {
-                action_log($sql);
-                action_log($wpdb->last_error);
+                action_log(__FUNCTION__ . " " .$sql);
+                action_log(__FUNCTION__ . " " . $wpdb->last_error);
                 $errors[] = "Failed to update damagemat";
-                return;
+                return $result;
             }
         } // if rc
         $to_discard = null;
+        action_log(__FUNCTION__ . " loser_defs=" . join(',',array_map(function ($d) {
+            return "{$d->ext_id}={$d->strength}"; 
+        },$loser_defs)));
         $discardables = array_filter($loser_defs,function ($ld) {
             return !preg_match('/LAND/',type_to_name($ld->maintype)) && !is_active_area_card($ld); 
         });
+        action_log(__FUNCTION__ . " discardables=" . join(',',array_map(function ($d) {
+            return "{$d->ext_id}={$d->strength}"; 
+        },$discardables)));
         foreach ( $discardables as $discardable ) {
-            if ( $to_discard === null )
+            if ( $to_discard === null ) {
                 $to_discard = $discardable;
-            if ( intval($to_discard->strength) > intval($discardable->strength) ) 
+                continue;
+            }
+            if ( intval($to_discard->strength) > intval($discardable->strength) ) {
                 $to_discard = $discardable;
+            }
         }
         if ( $to_discard ) {
+            action_log(__FUNCTION__ . " to_discard={$to_discard->ext_id}");
             $messages[] = $loser->name . " has lost the battle and " . $to_discard->name . " is mourned!";
             $loser = system_discard($loser,$to_discard->ext_id);
+            $result['battle_report']['lost_card'] = $to_discard->ext_id;
             $sql = "UPDATE `hc_players` SET discardpile = %s, playmat = %s, abilitymat = %s WHERE id = %d";
             $sql = $wpdb->prepare(
                 $sql, 
@@ -224,14 +255,16 @@ function attack_player(
             );
             $wpdb->query($sql);
             if ( !empty($wpdb->last_error) ) {
-                action_log($sql);
-                action_log($wpdb->last_error);
+                action_log(__FUNCTION__ . " " . $sql);
+                action_log(__FUNCTION__ . " " . $wpdb->last_error);
                 $errors[] = "Failed to force discard";
-                return;
+                return $result;
             }
+        } else {
+            action_log(__FUNCTION__ . " there is no to_discard!");
         }
     }
-
+    return $result;
 }
 function get_attack_abilities_involved($p,$id) {
     $rc = get_row_col_for($p,$id);
@@ -270,19 +303,21 @@ function get_attack_abilities_involved($p,$id) {
 function get_attack_cards_involved($p,$src_id) {
     action_log(__FUNCTION__ . " src_id = $src_id");
     $rc = get_row_col_for($p,$src_id);
-    action_log(__FUNCTION__ . ", " . json_encode($rc));
+    action_log(__FUNCTION__ . " rc=" . json_encode($rc));
     $mat = $p->playmat;
     $cards = [];
     for ( $row = 0; $row < count($mat); $row++) {
         for ( $col = 0; $col < count($mat[$row]); $col++ ) {
-            if ( $col === $rc->col && $mat[$row][$col] !== 0 ) {
+            if ( $col === $rc->col && (string)$mat[$row][$col] !== '0' ) {
+                action_log(__FUNCTION__ . " pushing this col mat[$row][$col]={$mat[$row][$col]}");
                 array_push($cards,$mat[$row][$col]);
-            } else if ( $mat[$row][$col] !== 0 ) {
+            } else if ( (string)$mat[$row][$col] !== '0' ) {
                 $def = get_card_def($mat[$row][$col]);
                 if ( ! $def ) 
                     continue;
                 if ( !is_active_area_card($def) )
                     continue;
+                action_log(__FUNCTION__ . " pushing mat[$row][$col]={$mat[$row][$col]}");
                 array_push($cards,$mat[$row][$col]);
             }
             

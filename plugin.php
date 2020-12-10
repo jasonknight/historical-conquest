@@ -295,6 +295,10 @@ function import_cards_table() {
     echo $wpdb->last_error;
 }
 function maybe_play_game() {
+    if ( !is_user_logged_in() ) {
+        wp_redirect( wp_login_url(),302,basename(__DIR__));
+        exit;
+    }
     if ( get('action') == 'historical-conquest-game' ) {
         if ( get('admin-editor') ) {
             echo render_template('admin_editor.php');

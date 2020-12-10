@@ -567,9 +567,30 @@ function get_possible_decks($id=null) {
 }
 function action_log($msg='') {
     static $action_log = [];
+    if ( $msg === null )
+        $action_log = [];
     if ( empty($msg) )
         return $action_log;
     $action_log[] = $msg;
+}
+function get_logs_for($search,$logs=null) {
+    if ( ! $logs ) {
+        $logs = action_log('');
+    }
+    $final_logs = [];
+    if ( is_array($search) ) {
+        foreach ( $logs as $log ) {
+            foreach ( $search as $s ) {
+                if ( is_string($log) && preg_match("/$s/",$log) ) {
+                    $final_logs[] = $log;
+                }
+            } 
+        }
+    } else {
+        $s = $search;
+        $final_logs = array_filter($logs,function ($e) use ($s) { return is_string($e) && preg_match("/$s/",$e); });
+    }
+    return $final_logs;
 }
 function can_play_game($gid,$uid=null) {
     global $wpdb;
@@ -662,9 +683,73 @@ function mat_item_to_ability($def) {
     }
     return $row;
 }
+function make_and_ors($str) {
+    $ors = explode(",",strtoupper($str));
+    foreach ( $ors as &$ands ) {
+        $ands = explode('&',$ands);
+    }
+    return $ors;
+}
+function match_and_ors($andors,$values) {
+    $results = [];
+    foreach ( $andors as $ors ) {
+        // any ors are okay
+        $good = false;
+        foreach ( $ors as $ands ) {
+            $ands = str_replace('*','.*',$ands);
+            foreach ( $values as $value ) {
+                if ( preg_match("/$ands/",$value) ) {
+                    $good = true;
+                }
+            } 
+        }
+        $results[] = $good;
+    }
+    return count(array_filter($results,function ($r) { return $r === true; })) > 0;
+}
+function can_apply_card_in_same_column($p,$a,$row,$col) {
+    // Let's get all the cards for this column
+    $mat = $p->playmat;
+    $cards = [];
+    for ( $r = 0; $r < count($mat); $r++ ) {
+        if ( $mat[$r][$col] !== 0 ) {
+            $cards[] = get_card_def($mat[$r][$col]);
+        } 
+    }
+    if ( !empty($a->apply_to_card_types) ) {
+        $ors = make_and_ors($a->apply_to_card_types);      
+        foreach ( $cards as $card ) {
+            $maintype = type_to_name($card->maintype);
+            $nationality = type_to_name($card->nationality);
+            $religion = type_to_name($card->religion);
+            $ethnicity = type_to_name($card->ethnicity);
+            $continent = type_to_name($card->continent);
+            $gender = strtoupper($card->gender);
+            
+            if ( match_and_ors($ors,[$maintype,$nationality,$religion,$ethnicity,$continent,$gender]) ) {
+                action_log(__FUNCTION__ . "p={$p->id} a={$a->id} applies");
+                return true;
+            } else {
+                action_log(__FUNCTION__ . " p={$p->id} a={$a->id} c={$card->id} $maintype,$nationality,$religion,$ethnicity,$continent,$gender {$a->id} does not apply to " . json_encode($ors));
+            }
+        }
+    }
+    return false;
+}
+function collapse_multiline($t) {
+    return str_replace(
+        "\r",
+        '',
+        str_replace(
+            "\n",
+            ' ',
+            $t 
+        ) 
+    );
+}
 function get_player_morale($p) {
     global $wpdb;
-    action_log(__FUNCTION__ . "Calculating morale for " . $p->id);
+    action_log(__FUNCTION__ . " Calculating morale for " . $p->id);
     $mat = $p->abilitymat;
     $dmat = $p->damagemat;
     $morale = 0; 
@@ -672,18 +757,19 @@ function get_player_morale($p) {
         for ( $col = 0; $col < count($mat[$row]); $col++) {
             $abs = $mat[$row][$col];
             $dams = $dmat[$row][$col];
+            action_log(__FUNCTION__ . " dams=" . collapse_multiline(print_r($dams,true)));
             if ( is_array($dams) ) {
                 for ( $i = 0; $i < count($dams); $i++ ) {
                     if ( $dams[$i][0] === 'morale' ) {
-                        action_log(__FUNCTION__ . "Damage to morale " . $dams[$i][1]);
-                        $morale -= intval($dams[$i][1]);
+                        action_log(__FUNCTION__ . " Damage to morale " . $dams[$i][1]);
+                        $morale += intval($dams[$i][1]);
                     }
                 }
             }
             if ( is_array($abs) && isset($abs['id']) ) {
                 // this is just a fix during development, the code should never 
                 // actually run
-                action_log(__FUNCTION__ . "abs needs fixing: " . json_encode($abs));
+                action_log(__FUNCTION__ . " abs needs fixing: " . json_encode($abs));
                 $abs = [$abs];
                 $p->abilitymat[$row][$col] = $abs;
                 $sql = "UPDATE `hc_players` SET abilitymat = %s WHERE id = %d";
@@ -691,25 +777,34 @@ function get_player_morale($p) {
                 $wpdb->query($sql);
             }
             if ( is_array($abs) ) {
-                action_log(__FUNCTION__ . "Abilities present for $row,$col for {$p->id}");
+                action_log(__FUNCTION__ . " Abilities present at $row,$col for {$p->id}");
                 for ( $i = 0; $i < count($abs); $i++ ) {
-                    if ( $abs[$i] == 0 ) {
+                    if ( $abs[$i] === 0 ) {
+                        action_log(__FUNCTION__ . " abs[$i] === 0 ");
                         continue;
                     }
                     $a = mat_item_to_ability($abs[$i]);
                     if ( !$a) {
-                        action_log(__FUNCTION__ . "!a");
+                        action_log(__FUNCTION__ . " !a abs[$i]");
                         continue;
-                    }
-                    action_log(__FUNCTION__ . " {$a->id} has apply_to_type of " . type_to_name($a->apply_to_type));
-                    if ( !preg_match('/APPLY_PLAYER/',type_to_name($a->apply_to_type)) ) {
-                       continue; 
                     }
                     if ( $a->affects_attribute != 'morale' ) {
-                        action_log(__FUNCTION__ . " does not apply to morale");
+                        action_log(__FUNCTION__ . " {$a->id} does not apply to morale but to {$a->affects_attribute}");
                         continue;
                     }
-                    action_log(__FUNCTION__ . 'Adding morale from ability ' . $a->id);
+                    $apply_to_type = type_to_name($a->apply_to_type);
+                    action_log(__FUNCTION__ . " {$a->id} has apply_to_type of $apply_to_type");
+                    if ( preg_match('/APPLY_CARD_IN_SAME_COLUMN/',$apply_to_type) ) {
+                        // So we need to see if this card will apply to the cards in the same
+                        // column
+                        if ( ! can_apply_card_in_same_column($p,$a,$row,$col) ) {
+                            continue;
+                        }
+                    } else if ( !preg_match('/APPLY_PLAYER/',$apply_to_type) ) {
+                       continue; 
+                    }
+                    
+                    action_log(__FUNCTION__ . " Adding {$a->affect_amount} morale from ability " . $a->id);
                     $morale += intval($a->affect_amount);
                 }
             }
@@ -831,6 +926,18 @@ function get_card_def($ext_id) {
     $sql = $wpdb->prepare($sql,$ext_id);
     return $wpdb->get_row($sql);
 }
+function has_ability($p,$ab,$row,$col) {
+    $abs = $p->abilitymat[$row][$col];
+    if ( ! is_array($abs) ) {
+        return false;
+    }
+    foreach ($abs as $a) {
+        if ( intval($ab->id) === intval($a['id']) ) {
+            return true;
+        }
+    }
+    return false;
+}
 /*
  * In the case of auto_explorer and auto_abilities we want to be able
  * to switch off auto playing of a land_card and auto inserting of abilities
@@ -838,18 +945,19 @@ function get_card_def($ext_id) {
  * */
 function system_play_card($game_id,$p,$ext_id,$row,$col,$auto_explorer,$auto_abilities,&$errors) {
     global $wpdb;
-    action_log(__FUNCTION__);
+    action_log(__FUNCTION__ . " gid=$game_id,pid={$p->id},card=$ext_id,r=$row,c=$col");
     $updates = [];
     if ( $p->playmat[$row][$col] !== 0 ) {
-        $errors[] = "That space already has a card";
-        return $p;
+        action_log(__FUNCTION__ . " space already has a card");
     }
     $def = get_card_def($ext_id);
     if ( !$def ) {
+        action_log(__FUNCTION__ . " failed to find def");
         $errors[] = "Failed to find $ext_id definition";
         return $p;
     }
     $p->playmat[$row][$col] = $ext_id;
+    action_log(__FUNCTION__ . " mat[$row][$col] = $ext_id");
     if ( $auto_explorer && preg_match('/EXPLORER/',type_to_name(intval($def->maintype))) ) {
         action_log(__FUNCTION__ . " {$def->ext_id} has a type of EXPLORER, " . type_to_name(intval($def->maintype)));
         if ( $row + 1 == (count($p->playmat) - 2) ) {
@@ -867,7 +975,7 @@ function system_play_card($game_id,$p,$ext_id,$row,$col,$auto_explorer,$auto_abi
         }
     }
     $updates[] = $wpdb->prepare("playmat = %s",json_encode($p->playmat));
-    $sql = "SELECT * FROM `hc_card_abilities` AS a JOIN `hc_cards` AS c ON a.card_id = c.id WHERE c.ext_id = %s";
+    $sql = "SELECT a.* FROM `hc_card_abilities` AS a JOIN `hc_cards` AS c ON a.card_id = c.id WHERE c.ext_id = %s";
     $sql = $wpdb->prepare($sql,$ext_id);
     action_log(__FUNCTION__ . " " . $sql);
     $abilities = $wpdb->get_results($sql);
@@ -878,13 +986,17 @@ function system_play_card($game_id,$p,$ext_id,$row,$col,$auto_explorer,$auto_abi
         // Okay, we have an ability, so let's inject that into the abilitymat
         $needs_update = false;
         foreach ( $abilities as $a) {
-            $mat_item = new \stdClass;
-            $mat_item->id = $a->id;
-            $mat_item->charges = $a->charges;
-            action_log(__FUNCTION__ . " Adding {$a->id} to ability mat");
+            if ( has_ability($p,$a,$row,$col) ) {
+                continue;
+            }
+            $mat_item = [];
+            $mat_item['id'] = $a->id;
+            $mat_item['charges'] = $a->charges;
+            action_log("Adding {$a->id} to ability mat");
             if ( !is_array($p->abilitymat[$row][$col]) ) {
                 $p->abilitymat[$row][$col] = [];
             }
+            $abs = $p->abilitymat[$row][$col];
             $p->abilitymat[$row][$col][] = $mat_item;
             $needs_update = true;
         }
@@ -899,6 +1011,7 @@ function system_play_card($game_id,$p,$ext_id,$row,$col,$auto_explorer,$auto_abi
         $sql = $wpdb->prepare($sql,$p->user_id,$game_id);
         $wpdb->query($sql);
         if ( !empty($wpdb->last_error) ) {
+            action_log(__FUNCTION__ . " ERROR: " . $wpdb->last_error);
             $errors[] = $wpdb->last_error;
             $errors[] = $sql;
             return $p;
@@ -960,13 +1073,18 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
         // Okay, we have an ability, so let's inject that into the abilitymat
         $needs_update = false;
         foreach ( $abilities as $a) {
-            $mat_item = new \stdClass;
-            $mat_item->id = $a->id;
-            $mat_item->charges = $a->charges;
+            if ( has_ability($p,$a,$row,$col) ) {
+                continue;
+            }
+            $mat_item = [];
+            $mat_item['id'] = $a->id;
+            
+            $mat_item['charges'] = $a->charges;
             action_log("Adding {$a->id} to ability mat");
             if ( !is_array($p->abilitymat[$row][$col]) ) {
                 $p->abilitymat[$row][$col] = [];
             }
+            $abs = $p->abilitymat[$row][$col];
             $p->abilitymat[$row][$col][] = $mat_item;
             $needs_update = true;
         }
@@ -998,6 +1116,21 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
         }
     }
     return $p;
+}
+function can_cede_turn($game_id,$pid,$uid) {
+    global $wpdb;
+    $sql = "SELECT 1 FROM `hc_players` as p JOIN `hc_games` as g ON p.game_id = g.id WHERE p.id = %d and g.id = %d AND p.user_id = %d AND g.current_player_id = %d";
+    $sql = $wpdb->prepare($sql,$pid,$game_id,$uid,$pid);
+    if ( $wpdb->get_var($sql) ) {
+        return true;
+    }
+    return false;
+}
+function get_card_name($ext_id) {
+    global $wpdb;
+    $sql = "SELECT name FROM `hc_cards` WHERE ext_id = %s";
+    $sql = $wpdb->prepare($sql,$ext_id);
+    return $wpdb->get_var($sql);
 }
 function next_player($game_id,&$errors) {
     global $wpdb;
@@ -1152,6 +1285,10 @@ function draw_card($game_id,$player_id,$uid,&$errors) {
         $errors[] = $wpdb->last_error;
         return;
     }
+    if ( ! $game ) {
+       $errors[] = MSG_GAME_NOT_FOUND;
+       return;
+    }
     // so we have the game, let's get the player
     $players = get_players($game->id,[$player_id],$result['errors']);
     if ( empty($players) ) {
@@ -1206,4 +1343,105 @@ function user_id_exists($uid) {
     if ((int)$count > 0)
         return true;
     return false;
+}
+function ascii_playmat($mat) {
+    $mat = array_map(function ($row) {
+        return join("\t",$row); 
+    },$mat);
+    return join("\n",$mat);
+}
+function ascii_abilitymat($mat) {
+    for ( $row = 0; $row < count($mat); $row++) {
+        for ( $col = 0; $col < count($mat[$row]); $col++ ) {
+            $abs = $mat[$row][$col];
+            if ( is_array($abs) ) {
+                $abs = array_map(function ($a) { return $a['id']; },$abs);
+            } else {
+                $abs = [0];
+            }
+            $mat[$row][$col] = join(',',$abs);
+        }
+    }
+    $mat = array_map(function ($row) {
+        return join("\t",$row); 
+    },$mat);
+    return join("\n",$mat);
+}
+function ability_table($p) {
+    $mat = $p->abilitymat;
+    $abilities = [];
+    for ( $row=0; $row<count($mat);$row++) {
+        for ( $col=0; $col<count($mat[$row]); $col++ ) {
+            $abs = $mat[$row][$col];
+            if ( is_array($abs) ) {
+                foreach ( $abs as $ab ) {
+                    $abilities[] = mat_item_to_ability($ab);
+                }
+            }
+        } 
+    }
+    ob_start();
+    echo "Abilities (" . count($abilities) . ")" . PHP_EOL;
+    echo "---------------------------------------------------------------------" . PHP_EOL;
+    foreach ($abilities as $ability) {
+        echo join(
+            "\t",
+            [
+                $ability->id,
+                $ability->card_id,
+                $ability->affects_attribute, 
+                $ability->affect_amount, 
+                type_to_name($ability->apply_to_type),
+                type_to_name($ability->apply_to_scope),
+                type_to_name($ability->ability_type),
+                $ability->description, 
+            ]
+        ) . PHP_EOL;
+    }
+    echo "---------------------------------------------------------------------" . PHP_EOL;
+    $contents = ob_get_contents();
+    ob_end_clean();
+    return $contents;
+}
+function get_played_cards_from_player($p) {
+    $cards = [];
+    $mat = $p->playmat;
+    for ( $row = 0; $row < count($mat); $row++ ) {
+        for ( $col = 0; $col < count($mat[$row]); $col++ ) {
+            $ext_id = $mat[$row][$col];
+            if ( empty(trim($ext_id) ) )
+                continue;
+            $c = new \stdClass;
+            $c->ext_id = $ext_id;
+            $c->def = get_card_def($ext_id);
+            $c->row = $row;
+            $c->col = $col;
+            $cards[] = $c;
+        }
+    }
+    return $cards;
+}
+function card_table($p) {
+    $cards = get_played_cards_from_player($p);
+    ob_start();
+    echo "Cards (" . count($cards) . ")" . PHP_EOL;
+    echo "---------------------------------------------------------------------" . PHP_EOL;
+    foreach ($cards as $card) {
+        echo join(
+            "\t", 
+            [
+                $card->ext_id,
+                $card->def->id,
+                intval(is_active_area_card($card->def)),
+                $card->def->strength,
+                "{$card->row},{$card->col}",
+                type_to_name($card->def->maintype),
+                $card->def->name
+            ]
+        ) . PHP_EOL;
+    } 
+    echo "---------------------------------------------------------------------" . PHP_EOL;
+    $content = ob_get_contents();
+    ob_end_clean();
+    return $content;
 }

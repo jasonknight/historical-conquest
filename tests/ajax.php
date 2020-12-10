@@ -9,7 +9,8 @@ function test($val,$msg) {
     global $resp;
     if ( ! $val ) {
         echo "FAILED: $msg" . PHP_EOL;
-        print_r($resp);
+        file_put_contents(__DIR__ . '/test.log',print_r($resp,true) . PHP_EOL);
+        //print_r($resp);
         exit;
     }
     echo "PASSED: $msg" . PHP_EOL;

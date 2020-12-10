@@ -16,10 +16,13 @@
             window.user_id = <?php echo \get_current_user_id(); ?>;
             window.types = <?php echo json_encode(get_types_for_js()); ?>;
             <?php if ( get('game_id') && can_play_game(get('game_id')) ) { ?>
-                <?php $board = get_game_board(get('game_id')); ?>
+                console.log("yes we can");
+                <?php $board = get_game_board(get('game_id'));?>
                 <?php $board['logs'] = action_log(); ?>
                 window.board = <?php echo json_encode($board,JSON_PRETTY_PRINT); ?>;
+                console.log("Right now",window.board);
             <?php } else { ?>
+                console.log("cannot play this game?");
                 window.board = <?php echo include(dirname(__DIR__) . '/tools/generate_player.php');?>;
             <?php } ?>
             window.carddb = <?php echo json_encode(get_carddb(),JSON_PRETTY_PRINT); ?>;

@@ -37,11 +37,41 @@ function ajax_init() {
     add_action('wp_ajax_get_board',__NAMESPACE__ . '\ajax_get_board');
     add_action('wp_ajax_nopriv_get_board',__NAMESPACE__ . '\ajax_get_board');
 
-    add_action('wp_ajax_cede_turn',__NAMESPACE__ . '\ajax_cede_turn');
-    add_action('wp_ajax_draw_card',__NAMESPACE__ . '\ajax_draw_card');
-    add_action('wp_ajax_attack_player',__NAMESPACE__ . '\ajax_attack_player');
-}
+    add_action('wp_ajax_get_current_player',__NAMESPACE__ . '\ajax_get_current_player');
+    add_action('wp_ajax_nopriv_get_current_player',__NAMESPACE__ . '\ajax_get_current_player');
 
+
+    add_action('wp_ajax_cede_turn',__NAMESPACE__ . '\ajax_cede_turn');
+    add_action('wp_ajax_nopriv_cede_turn',__NAMESPACE__ . '\ajax_cede_turn');
+
+    add_action('wp_ajax_draw_card',__NAMESPACE__ . '\ajax_draw_card');
+    add_action('wp_ajax_nopriv_draw_card',__NAMESPACE__ . '\ajax_draw_card');
+
+    add_action('wp_ajax_attack_player',__NAMESPACE__ . '\ajax_attack_player');
+    add_action('wp_ajax_nopriv_attack_player',__NAMESPACE__ . '\ajax_attack_player');
+}
+function ajax_get_current_player() {
+    global $wpdb;
+    apply_fuser();
+    $game_id = post('game_id');
+    $pid = post('player_id');
+    $errors = [];
+    $result = [
+        'status' => 'OK',
+        'player' => null,
+        'errors' => [],
+    ];
+    $players = get_players($game_id,[$pid],$errors);
+    if ( empty($players) ) {
+        $result['status'] = 'KO';
+        $result['errors'] = $errors;
+        send_json($result);
+        exit;
+    } 
+    $result['player'] = $players[0];
+    send_json($result);
+    exit;
+}
 function ajax_attack_player() {
     global $wpdb;
     $errors = [];
@@ -52,7 +82,7 @@ function ajax_attack_player() {
     $src_ext_id = post('src_ext_id');
     $attacker_land_ext_id = post('attacker_land_ext_id');
     $defender_land_ext_id = post('defender_land_ext_id');
-    attack_player(
+    $result = attack_player(
         $game_id,
         $attacker_id,
         $defender_id,
@@ -62,7 +92,10 @@ function ajax_attack_player() {
         $messages,
         $errors
     );
-    $result = [ 'status' => 'OK', 'errors' => $errors,'messages' => $messages];
+    $result['errors'] = $errors;
+    $result['messages'] = $messages;
+    $board = get_game_board($game_id);
+    $result['new_board'] = $board;
     send_json($result);
     exit;
 }
@@ -82,12 +115,17 @@ function ajax_draw_card() {
     send_json(get_game_board($game_id));
     exit;
 }
-// TODO: Need to validate that this user is attached to this game!
-// HUGE security issue.
 function ajax_cede_turn() {
     apply_fuser();
+    $uid = \get_current_user_id();
     $game_id = post('game_id');
+    $pid = post('player_id');
     $result = ['status' => 'KO','errors' => []];
+    if ( ! can_cede_turn($game_id,$pid,$uid) ) {
+        $result['errors'][] = MSG_YOU_CANT_DO_THAT; 
+        send_json($result);
+        exit;
+    }
     next_player($game_id,$result['errors']);
     if ( empty($result['errors']) ) {
         $result = get_game_board($game_id); 
@@ -288,6 +326,7 @@ function ajax_decline_game() {
 }
 function _get_deck_id() {
     global $wpdb;
+    apply_fuser();
     $id = \get_current_user_id();
     $deck_id = '';
     if ( post('deck_id') ) {
