@@ -23,6 +23,8 @@ function apply_fuser() {
 add_action('template_redirect',__NAMESPACE__ . '\apply_fuser',-100);
 function install_game_tables() {
     global $wpdb;
+    include(__DIR__ . '/tools/install.php');
+    return;
     $sql = render_template('installation.sql');
     $queries = explode(';',$sql);
     foreach ($queries as $q) {
