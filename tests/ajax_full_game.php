@@ -12,7 +12,22 @@ $u1 = \get_user_by('ID',1);
 $u2 = \get_user_by('ID',2);
 
 $users = [$u1,$u2];
-function _get_board_for($uid) {
+$getP1AndP2 = function ($game_id) {
+    global $u1,$u2;
+    $errors = [];
+    $p1 = null;
+    $p2 = null;
+    $players = get_players($game_id,[],$errors);
+    foreach ( $players as $player ) {
+        if ( $player->user_id == $u1->ID ) {
+            $p1 = $player;
+        } else {
+            $p2 = $player;
+        }
+    }
+    return [$p1,$p2];
+};
+function _get_board_for($uid,$game_id) {
     $data = ['action' => 'get_board', '_fuser' => $uid, 'game_id' => $game_id];
     $resp = ajax_post($data);
     test($resp->body['status'] === 'OK', "get game board");
@@ -70,11 +85,13 @@ function _get_played_lands_from_board($name) {
     test(file_exists($fname),"Checking to see if $fname exists");
     $lines = file($fname);
     $lines = array_map(function ($l) { return explode("\t",$l); },$lines);
-    // Hand starts at row 9
     $row = 7;
     $cards = [];
-    for ( $col = 3; $col < 6; $col++ ) {
+    for ( $col = 0; $col < 6; $col++ ) {
         $ext_id = $lines[$row][$col];
+        if ( empty(trim($ext_id)) ) {
+            continue;
+        }
         $c = new \stdClass;
         $c->ext_id = $ext_id;
         $c->row = $row - 1;
@@ -222,198 +239,7 @@ test($resp->body['status'] === 'KO', "no deck sent");
 test($resp->body['msg'] === MSG_BAD_DECK,"Received MSG_BAD_DECK");
 
 // Now let's create the challenge
-$data = ['action' => 'create_challenge', '_fuser' => $u1->ID, 'deck_name' => "U{$u1->ID}DECK", 'opponent' => $u2->ID];
-$resp = ajax_post($data);
-test($resp->body['status'] === 'OK', "create a challenge");
-
-$game_id = $resp->body['game_id'];
-
-echo "GameID=$game_id" . PHP_EOL;
-
-// Now let's decline this game
-$data = ['action' => 'decline_game', '_fuser' => $u2->ID, 'game' => $game_id];
-$resp = ajax_post($data);
-test($resp->body['status'] === 'OK', "decline first game challenge");
-test($resp->body['msg'] === MSG_GAME_DECLINED, "Received MSG_GAME_DECLINED");
-$found = false;
-foreach ( $resp->body['games']['others_games'] as $g ) {
-    if ( $g->id == $game_id) {
-        $found = true; 
-    }    
-}
-test($found === false, "game is no longer in others_games");
-$data = ['action' => 'decline_game', '_fuser' => $u2->ID, 'game' => $game_id];
-$resp = ajax_post($data);
-test($resp->body['status'] === 'KO', "retry decline first game challenge");
-test($resp->body['msg'] === MSG_GAME_NOT_FOUND, "Received MSG_GAME_NOT_FOUND");
-
-// Now let's create another challenge
-$data = ['action' => 'create_challenge', '_fuser' => $u1->ID, 'deck_name' => "U{$u1->ID}DECK", 'opponent' => $u2->ID];
-$resp = ajax_post($data);
-test($resp->body['status'] === 'OK', "create a challenge");
-
-$game_id = $resp->body['game_id'];
-
-echo "GameID=$game_id" . PHP_EOL;
-
-// This time u2 accepts the game
-$data = ['action' => 'accept_game', '_fuser' => $u2->ID, 'deck_name' => "U{$u2->ID}DECK",'game' => $game_id];
-$resp = ajax_post($data);
-test($resp->body['status'] === 'OK', "u2 accepts the challenge");
-
-// Now we need to modify the game so that it is more predictable
-// 1. We need to set u1 as the next player
-// 2. We need to update the player table to have the same setup as the .csv board
-$getP1AndP2 = function ($game_id) {
-    global $u1,$u2;
-    $errors = [];
-    $p1 = null;
-    $p2 = null;
-    $players = get_players($game_id,[],$errors);
-    foreach ( $players as $player ) {
-        if ( $player->user_id == $u1->ID ) {
-            $p1 = $player;
-        } else {
-            $p2 = $player;
-        }
-    }
-    return [$p1,$p2];
-};
-list($p1,$p2) = $getP1AndP2($game_id);
-// set p1 as the next player
-$sql = "UPDATE `hc_games` SET current_player_id = {$p1->id} WHERE id = $game_id";
-$wpdb->query($sql);
-test(empty($wpdb->last_error),"update the current player");
-
-$data = ['action' => 'get_board', '_fuser' => $u1->ID, 'game_id' => $game_id];
-$resp = ajax_post($data);
-test($resp->body['status'] === 'OK', "get game board");
-test(intval($resp->body['round']) === 1, "check that it's the first round");
-test(intval($resp->body['current_player_id']) === intval($p1->id), "check that p1({$p1->id}) == {$resp->body['current_player_id']} is the current player");
-// Now that we have this, we need to make some moves, to see if we can play cards
-$p1board = $resp->body;
-$data = ['action' => 'get_board', '_fuser' => $u2->ID, 'game_id' => $game_id];
-$resp = ajax_post($data);
-test($resp->body['status'] === 'OK', "get game board for u2");
-$p2board = $resp->body;
-
-// Find out if the opposing players hands are hidden from one another
-// first, check p1
-foreach( $p1board['players'] as $bp ) {
-    if ( intval($bp['id']) != intval($p1->id) ) {
-        test(empty($bp['hand']),"assure that {$bp['id']} hand is hidden from {$p1->id}");
-    } else {
-        $h = join(',',$bp['hand']);
-        $h2 = join(',',$p1->hand);
-        test( $h == $h2, "assure $h == $h2 for {$p1->id}");
-    }
-}
-foreach( $p2board['players'] as $bp ) {
-    if ( intval($bp['id']) != intval($p2->id) ) {
-        test(empty($bp['hand']),"assure that {$bp['id']} hand is hidden from {$p2->id}");
-    } else {
-        $h = join(',',$bp['hand']);
-        $h2 = join(',',$p2->hand);
-        test( $h == $h2, "assure $h == $h2 for {$p2->id}");
-    }
-}
-// Now we need to set the board to look like something we know
-// about, instead of empty or random
-$getExtIds = function ($ar) {
-    return array_map(function ($e) { return $e->ext_id; },$ar);
-};
-
-$sql = "UPDATE `hc_players` SET ";
-$sets = [];
-
-$hand = _get_hand_from_board('AttackBoard_1_player_a.csv');
-$hand = array_map(function ($c) { return trim($c->ext_id); },$hand);
-$sets[] = $wpdb->prepare("hand = %s",json_encode($hand));
-
-$land_pile = _get_land_pile_from_board('AttackBoard_1_player_a.csv');
-$land_pile = array_map(function ($c) { return trim($c->ext_id); },$land_pile);
-$sets[] = $wpdb->prepare("landpile = %s",json_encode($land_pile));
-
-$draw_pile = _get_draw_pile_from_board('AttackBoard_1_player_a.csv');
-$draw_pile = array_map(function ($c) { return trim($c->ext_id); },$draw_pile);
-$sets[] = $wpdb->prepare("drawpile = %s",json_encode($draw_pile));
-
-$played_lands = _get_played_lands_from_board('AttackBoard_1_player_a.csv');
-$played_active = _get_played_active_from_board('AttackBoard_1_player_a.csv');
-
-$played_cards = array_merge(_get_played_cards_from_board('AttackBoard_1_player_a.csv'),$played_lands,$played_active);
-
-$sql .= join(",",$sets);
-
-// Now we update p1 and p2
-
-$p1_sql = $sql . " WHERE id = {$p1->id}";
-
-echo $p1_sql . PHP_EOL;
-$wpdb->query($p1_sql);
-test(empty($wpdb->last_error), "update p1 hand,draw,land " . $wpdb->last_error );
-
-list($p1,$p2) = $getP1AndP2($game_id);
-// Now we have to loop over the played cards and play them into the playmat of p1
-$errors = [];
-foreach ( $played_cards as $pcs ) {
-    $ext_id = trim($pcs->ext_id);
-    echo "game_id=$game_id,pid={$p1->id},ext_id=$ext_id,row={$pcs->row},col={$pcs->col}" . PHP_EOL;
-    system_play_card($game_id,$p1,$ext_id,$pcs->row,$pcs->col,false,true,$errors);
-} 
-list($p1,$p2) = $getP1AndP2($game_id);
-
-// Now do the whole thing again for p2
-$sql = "UPDATE `hc_players` SET ";
-$sets = [];
-$hand = _get_hand_from_board('AttackBoard_1_player_b.csv');
-$hand = array_map(function ($c) { return trim($c->ext_id); },$hand);
-$sets[] = $wpdb->prepare("hand = %s",json_encode($hand));
-
-$land_pile = _get_land_pile_from_board('AttackBoard_1_player_b.csv');
-$land_pile = array_map(function ($c) { return trim($c->ext_id); },$land_pile);
-$sets[] = $wpdb->prepare("landpile = %s",json_encode($land_pile));
-
-$draw_pile = _get_draw_pile_from_board('AttackBoard_1_player_b.csv');
-$draw_pile = array_map(function ($c) { return trim($c->ext_id); },$draw_pile);
-$sets[] = $wpdb->prepare("drawpile = %s",json_encode($draw_pile));
-
-$played_lands = _get_played_lands_from_board('AttackBoard_1_player_b.csv');
-$played_active = _get_played_active_from_board('AttackBoard_1_player_b.csv');
-
-$played_cards = array_merge(_get_played_cards_from_board('AttackBoard_1_player_b.csv'),$played_lands,$played_active);
-
-$sql .= join(",",$sets);
-$p2_sql = $sql . " WHERE id = {$p2->id}";
-
-echo $p2_sql . PHP_EOL;
-$wpdb->query($p2_sql);
-test(empty($wpdb->last_error), "update p2 hand,draw,land " . $wpdb->last_error );
-$errors = [];
-foreach ( $played_cards as $pcs ) {
-    $ext_id = trim($pcs->ext_id);
-    echo "game_id=$game_id,pid={$p2->id},ext_id=$ext_id,row={$pcs->row},col={$pcs->col}" . PHP_EOL;
-    system_play_card($game_id,$p2,$ext_id,$pcs->row,$pcs->col,false,true,$errors);
-} 
-list($p1,$p2) = $getP1AndP2($game_id);
-echo "Player 1({$p1->id})\n--------------------------------" . PHP_EOL;
-echo ascii_playmat($p1->playmat).PHP_EOL;
-echo "------------------------------------------\n";
-echo ascii_abilitymat($p1->abilitymat) . PHP_EOL;
-echo card_table($p1) . PHP_EOL;
-echo ability_table($p1) . PHP_EOL;
-echo "Player 2({$p2->id})\n--------------------------------" . PHP_EOL;
-echo ascii_playmat($p2->playmat).PHP_EOL;
-echo "------------------------------------------\n";
-echo ascii_abilitymat($p2->abilitymat).PHP_EOL;
-echo card_table($p2) . PHP_EOL;
-echo ability_table($p2) . PHP_EOL;
-$p1_morale = get_player_morale($p1);
-echo "P1 Morale: " . $p1_morale . PHP_EOL;
-$p2_morale = get_player_morale($p2);
-echo "P2 Morale: " . $p2_morale . PHP_EOL;
-test(get_player_morale($p1) > 800,"test that p1 has 800+ morale");
-test(get_player_morale($p2) > 800,"test that p2 has 800+ morale");
+include (__DIR__ . '/_create_challenge.php');
 //print_r(get_logs_for(['system_play_card']));
 // Let's test some stuff, I should not be able to draw a card
 
@@ -423,6 +249,42 @@ test($resp->body['status'] === 'KO', "should not be able to draw a card");
 $data = ['action' => 'draw_card', '_fuser' => $u2->ID, 'game_id' => $game_id,'player_id' => $p1->id];
 $resp = ajax_post($data);
 test($resp->body['status'] === 'KO', "should not be able to draw a card for another player");
+
+// Now we will discard from the hand
+$to_discard_from_hand = array_pop($p1->hand);
+$data = [
+    'action' => 'discard', 
+    '_fuser' => $u1->ID, 
+    'game_id' => $game_id,
+    'player_id' => $p1->id,
+    'ext_id' => $to_discard_from_hand,
+    'hint' => 'discard_from_hand',
+];
+$resp = ajax_post($data);
+test($resp->body['status'] === 'OK', "We should be able to discard from our hand");
+print_r(get_logs_for(['discard','save_player_mats','get_game_board','get_players'],$resp->body['logs']));
+$data = ['action' => 'draw_card', '_fuser' => $u1->ID, 'game_id' => $game_id,'player_id' => $p1->id];
+$resp = ajax_post($data);
+test($resp->body['status'] === 'OK', "We should be able to draw now");
+
+$data = [
+    'action' => 'discard', 
+    '_fuser' => $u1->ID, 
+    'game_id' => $game_id,
+    'player_id' => $p1->id,
+    'ext_id' => 'IN4302',
+    'row' => 2,
+    'col' => 5,
+    'hint' => 'discard_from_playmat',
+];
+$resp = ajax_post($data);
+test($resp->body['status'] === 'OK', "We should be able to discard from our playmat");
+
+list($p1,$p2) = $getP1AndP2($game_id);
+test((string)$p1->playmat[2][4] === '0',"IN4302 should be discarded");
+test(!in_array($to_discard_from_hand,$p1->hand), "$to_discard_from_hand should not be in the hand");
+test(in_array($to_discard_from_hand,$p1->discard_pile), "$to_discard_from_hand should be in our discard_pile");
+test(in_array('IN4302',$p1->discard_pile), "$to_discard_from_hand should be in our discard_pile");
 
 // So now we need to test an attack, p1 will attack p2 from a land card
 // p1 will use CT4303 The Philipines to Attack CT4203 Japan on p2's board
@@ -443,10 +305,11 @@ $data = [
     'defender_land_ext_id' => 'CT4203',
 ];
 $resp = ajax_post($data);
+print_r($resp->body['errors']);
 print_r(get_logs_for(['attack_player','get_attack_'],$resp->body['logs']));
+print_r($resp->body['battle_report']);
 test(intval($resp->body['battle_report']['winner']) === intval($p2->id),"assume p2 won this round");
 test(intval($resp->body['battle_report']['loser']) === intval($p1->id),"assume p1 lost this round");
-print_r($resp->body['battle_report']);
 test($resp->body['battle_report']['lost_card'] === 'AC4302',"Assert p1 lost AC4302, Isabella Baumfree");
 list($p1,$p2) = $getP1AndP2($game_id);
 $new_p1_morale = get_player_morale($p1);
@@ -477,6 +340,8 @@ $data = [
 ];
 $resp = ajax_post($data);
 print_r(get_logs_for(['attack_player','get_attack_'],$resp->body['logs']));
+print_r($resp->body['battle_report']);
+print_r($resp->body['errors']);
 test(intval($resp->body['battle_report']['winner']) === intval($p2->id),"assume p2 won this round");
 test(intval($resp->body['battle_report']['loser']) === intval($p1->id),"assume p1 lost this round");
 test($resp->body['battle_report']['lost_card'] === 'MU4301',"Assert p1 lost MU4301, Isabella Baumfree");
@@ -570,7 +435,7 @@ $data = [
     'attacker_land_ext_id' => 'CT4203',
 ];
 $resp = ajax_post($data);
-print_r(get_logs_for(['attack_player','get_attack_'],$resp->body['logs']));
+print_r(get_logs_for(['attack_player','get_attack_','system_play'],$resp->body['logs']));
 test(intval($resp->body['battle_report']['winner']) === intval($p2->id),"assume p2 won this round");
 test(intval($resp->body['battle_report']['loser']) === intval($p1->id),"assume p1 lost this round");
 test($resp->body['battle_report']['lost_card'] === 'AR4303',"Assert p1 lost AR4303, " . get_card_name('AR4303'));
@@ -588,3 +453,79 @@ echo card_table($p1) . PHP_EOL;
 echo "------------------------------------------\n";
 
 echo "The Philipines is now unguarded, so attacking should add that to our played lands" . PHP_EOL;
+echo "-------------------------------------------------------------------------" . PHP_EOL;
+echo "- ATTACK 5 $game_id" . PHP_EOL;
+echo "-------------------------------------------------------------------------" . PHP_EOL;
+echo "Player 2({$p2->id})\n--------------------------------" . PHP_EOL;
+echo ascii_playmat($p2->playmat) . PHP_EOL;
+echo ability_table($p1) . PHP_EOL;
+echo card_table($p2) . PHP_EOL;
+echo "------------------------------------------\n";
+$old_p1cards = array_filter(get_played_cards_from_player($p1),function ($c) { return $c->ext_id == 'CT4303'; });
+test(!empty($old_p1cards), "Assert that CT4303 is present before the attack");
+$data = [
+    'action' => 'attack_player', 
+    '_fuser' => $u2->ID, 
+    'game_id' => $game_id,
+    'attacker' => $p2->id,
+    'defender' => $p1->id,
+    'src_ext_id' => 'CT4203',
+    'defender_land_ext_id' => 'CT4303',
+    'attacker_land_ext_id' => 'CT4203',
+];
+$resp = ajax_post($data);
+print_r($resp->body['battle_report']);
+print_r($resp->body['messages']);
+print_r(get_logs_for(['attack_player','get_attack_','system_play'],$resp->body['logs']));
+test(intval($resp->body['battle_report']['winner']) === intval($p2->id),"assume p2 won this round");
+test(intval($resp->body['battle_report']['loser']) === intval($p1->id),"assume p1 lost this round");
+test($resp->body['battle_report']['lost_card'] === 'CT4303',"Assert p1 lost CT4303, " . get_card_name('CT4303'));
+test($resp->body['battle_report']['transferred_land'] === 'CT4303',"Assert p2 received CT4303, " . get_card_name('CT4303'));
+print_r($resp->body['battle_report']);
+list($p1,$p2) = $getP1AndP2($game_id);
+$new_p1_morale = get_player_morale($p1);
+echo "New Morale: $new_p1_morale" . PHP_EOL;
+test(intval($p1_morale) > intval($new_p1_morale), "Assert p1 has less morale");
+$new_p1cards = array_filter(get_played_cards_from_player($p1),function ($c) { return $c->ext_id == 'CT4303'; });
+test(empty($new_p1cards),"Assert that AR4303 is gone from the players playmat");
+echo "Player 1({$p1->id})\n--------------------------------" . PHP_EOL;
+echo ascii_playmat($p1->playmat) . PHP_EOL;
+echo ability_table($p1) . PHP_EOL;
+echo card_table($p1) . PHP_EOL;
+echo "------------------------------------------\n";
+echo "Player 2({$p2->id})\n--------------------------------" . PHP_EOL;
+echo ascii_playmat($p2->playmat) . PHP_EOL;
+echo ability_table($p1) . PHP_EOL;
+echo card_table($p2) . PHP_EOL;
+echo "------------------------------------------\n";
+
+list($p1,$p2) = $getP1AndP2($game_id);
+$p1board = _get_board_for($u1,$game_id);
+print_r(get_logs_for(['get_game_board'],$resp->body['logs']));
+test(intval($p1board['winner_id']) === intval($p2->id), "Assert that p2 has won the game!");
+
+$data = [
+    'action' => 'play_card', 
+    '_fuser' => $u2->ID, 
+    'game_id' => $game_id,
+    'player_id' => $p2->id,
+    'card_ext_id' => array_pop($p2->hand),
+    'row' => 5,
+    'col' => 1,
+];
+$resp = ajax_post($data);
+test($resp->body['status'] == 'KO', "We should not be abled to play_card after winning");
+test(in_array(MSG_GAME_OVER,$resp->body['errors']), "MSG_GAME_OVER is in the errors array");
+$data = [
+    'action' => 'cede_turn', 
+    '_fuser' => $u2->ID, 
+    'game_id' => $game_id,
+    'player_id' => $p2->id,
+];
+$resp = ajax_post($data);
+test($resp->body['status'] === 'KO', "p2 should not be able to cede turn");
+echo "-------------------------------------------------------------------------" . PHP_EOL;
+echo "-        AUTOMATED TESTS COMPLETE, CREATING MANUAL TESTING GAME" . PHP_EOL;
+echo "-------------------------------------------------------------------------" . PHP_EOL;
+
+include (__DIR__ . '/_create_challenge.php');

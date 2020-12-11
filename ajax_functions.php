@@ -47,6 +47,10 @@ function ajax_init() {
     add_action('wp_ajax_draw_card',__NAMESPACE__ . '\ajax_draw_card');
     add_action('wp_ajax_nopriv_draw_card',__NAMESPACE__ . '\ajax_draw_card');
 
+    add_action('wp_ajax_discard',__NAMESPACE__ . '\ajax_discard');
+    add_action('wp_ajax_nopriv_discard',__NAMESPACE__ . '\ajax_discard');
+
+
     add_action('wp_ajax_attack_player',__NAMESPACE__ . '\ajax_attack_player');
     add_action('wp_ajax_nopriv_attack_player',__NAMESPACE__ . '\ajax_attack_player');
 }
@@ -77,6 +81,13 @@ function ajax_attack_player() {
     $errors = [];
     $messages = [];
     $game_id = post('game_id');
+    if ( is_over($game_id) ) {
+        $result = [];
+        $result['status'] = 'KO';
+        $result['errors'][] = MSG_GAME_OVER;
+        send_json($result);
+        exit;
+    }
     $attacker_id = post('attacker');
     $defender_id = post('defender');
     $src_ext_id = post('src_ext_id');
@@ -99,13 +110,58 @@ function ajax_attack_player() {
     send_json($result);
     exit;
 }
+function ajax_discard() {
+    global $wpdb;
+    apply_fuser();
+    $result = ['status' => 'KO','errors' => []];
+    $game_id = post('game_id');
+    if ( is_over($game_id) ) {
+        $result = [];
+        $result['status'] = 'KO';
+        $result['errors'][] = MSG_GAME_OVER;
+        send_json($result);
+        exit;
+    }
+    $player_id = post('player_id');
+    $uid = \get_current_user_id();
+    $ext_id = post('ext_id');
+    $row = post('row');
+    $col = post('col');
+    $hint = post('hint');
+    discard($game_id,$player_id,$uid,$ext_id,$row,$col,$hint,$errors);
+    if ( ! empty($errors) ) {
+        $result['errors'] = $errors;
+        send_json($result);
+        exit;
+    }
+    $players = get_players($game_id,[$player_id],$errors);
+    if ( ! empty($errors) ) {
+        $result['errors'] = $errors;
+        send_json($result);
+        exit;
+    }
+    $result['status'] = 'OK';
+    $result['player'] = $players[0];
+    send_json($result);
+    exit;
+}
 function ajax_draw_card() {
     global $wpdb;
     apply_fuser();
     $result = ['status' => 'KO','errors' => []];
     $game_id = post('game_id');
+    action_log(__FUNCTION__ . " beginning draw_card");
+    if ( is_over($game_id) ) {
+        $result = [];
+        $result['status'] = 'KO';
+        $result['errors'][] = MSG_GAME_OVER;
+        send_json($result);
+        exit;
+    }
+    
     $player_id = post('player_id');
     $uid = \get_current_user_id();
+    action_log(__FUNCTION__ . "pid=$player_id,uid=$uid");
     draw_card($game_id,$player_id,$uid,$errors);
     if ( ! empty($errors) ) {
         $result['errors'] = $errors;
@@ -119,6 +175,13 @@ function ajax_cede_turn() {
     apply_fuser();
     $uid = \get_current_user_id();
     $game_id = post('game_id');
+    if ( is_over($game_id) ) {
+        $result = [];
+        $result['status'] = 'KO';
+        $result['errors'][] = MSG_GAME_OVER;
+        send_json($result);
+        exit;
+    }
     $pid = post('player_id');
     $result = ['status' => 'KO','errors' => []];
     if ( ! can_cede_turn($game_id,$pid,$uid) ) {
@@ -146,6 +209,12 @@ function ajax_play_card() {
    $result = [ 'status' => 'OK', 'errors' => [] ];
    $player_id = post('player_id');
    $game_id = post('game_id');
+   if ( is_over($game_id) ) {
+        $result['status'] = 'KO';
+        $result['errors'][] = MSG_GAME_OVER;
+        send_json($result);
+        exit;
+   }
    $card_ext_id = post('card_ext_id');
    $row = post('row');
    $col = post('col');
@@ -253,6 +322,7 @@ function accept_game($game_id,$deck_id,$id,&$errors) {
            $updates[] = $wpdb->prepare("`$mname` = %s",json_encode($mat));
         }
         $updates[] = "attacks = max_attacks";
+        $updates[] = "can_attack = 0";
         $sql = "UPDATE `hc_players` SET ".join(',',$updates)." WHERE id = %d";
         $sql = $wpdb->prepare($sql,$player_id);
         $wpdb->query($sql);
@@ -290,6 +360,13 @@ function ajax_accept_game() {
     apply_fuser();
     $id = \get_current_user_id();
     $game_id = post('game');
+    if ( is_over($game_id) ) {
+        $result = [];
+        $result['status'] = 'KO';
+        $result['errors'][] = MSG_GAME_OVER;
+        send_json($result);
+        exit;
+    }
     $deck_id = _get_deck_id();
     if ( !owns_deck($id,$deck_id) ) {
         send_json(['status' => 'KO', 'msg' => MSG_BAD_DECK_OWNER, 'errors' => $errors]);
@@ -308,6 +385,13 @@ function ajax_decline_game() {
     apply_fuser();
     $id = \get_current_user_id();
     $game_id = post('game');
+    if ( is_over($game_id) ) {
+        $result = [];
+        $result['status'] = 'KO';
+        $result['errors'][] = MSG_GAME_OVER;
+        send_json($result);
+        exit;
+    }
     list($my_games,$others_games) = _get_games($id); 
     $status = "KO";
     $msg = MSG_GAME_NOT_FOUND;

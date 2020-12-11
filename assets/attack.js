@@ -19,7 +19,7 @@ function maybe_add_attack_controls(d,src,clone,button_row) {
     let ab = _div(null,'button attack-button');
         ab.html("Attack");
         ab.on('click',function () {
-            console.log("attack.on click");
+            _log("attack.on click");
             let e = $.Event('card_zoom.show_attack_options');
             e.def = def;
             e.d = d;
@@ -164,7 +164,17 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
         data.attacker_land_ext_id = attacker_land_ext_id;
         data.defender_land_ext_id = defender_land_ext_id;
         $.post(window.ajaxurl,data,function (resp) {
-            console.log(resp);
+            _log(resp);
+            if ( resp.status === 'OK' ) {
+                window.board = resp.new_board;
+                trigger_refresh();
+            }
+            if ( resp.messages ) {
+                for ( let i = 0; i < resp.messages.length; i++ ) {
+                   trigger_attack_message(resp.messages[i]); 
+                }
+            }
+            window.maybe_show_errors(resp);
         });
         return;
     }
@@ -341,7 +351,7 @@ function handle_attack(attacker,defender,src_ext_id,attacker_land_ext_id,defende
         trigger_attack_message("Neither wins because both are equal.");
         return;
     }
-    console.log("Loser",loser,defense,attack);
+    _log("Loser",loser,defense,attack);
     // Step 3 The loser has to lose 100 morale
     let rc = get_row_col_for(loser,loser_land_id);
     for ( let i = 0; i < window.board.players.length; i++ ) {

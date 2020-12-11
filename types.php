@@ -552,4 +552,7 @@ define('MSG_BAD_DECK','That deck does not exist');
 define('MSG_BAD_DECK_OWNER','That deck is not yours');
 define('MSG_GAME_NOT_FOUND',"Game not found");
 define('MSG_GAME_DECLINED',"Game declined");
+define('MSG_GAME_OVER',"Game is Over!");
 define('MSG_YOU_CANT_DO_THAT',"You can't do that!");
+define('MSG_OUT_OF_ATTACKS',"You have no more attacks!");
+

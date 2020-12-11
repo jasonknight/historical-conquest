@@ -612,12 +612,12 @@ function get_players($game_id,$player_ids,&$errors) {
     $sql = "SELECT * FROM `hc_players` WHERE game_id = %d"; 
     $sql = $wpdb->prepare($sql,$game_id);
     if ( !empty($player_ids) ) {
-        action_log("player_ids=" . join(',',$player_ids));
+        action_log(__FUNCTION__ . " player_ids=" . join(',',$player_ids));
         $player_ids = array_map(function ($id) use ($wpdb) {
             return $wpdb->prepare('%d',$id); 
         },$player_ids);
         $sql .= " AND id IN (".join(',',$player_ids).")";
-        action_log("sql=$sql;");
+        action_log(__FUNCTION__ . "sql=$sql;");
     }
     $players = $wpdb->get_results($sql);
     if ( empty($players) ) {
@@ -626,10 +626,11 @@ function get_players($game_id,$player_ids,&$errors) {
         return [];
     }
     foreach ( $players as &$player ) {
+        action_log(__FUNCTION__ . " {$player->id} hand=" . $player->hand);
         $mats = ['playmat','abilitymat','damagemat','landpile','hand','drawpile','discardpile']; 
         foreach ( $mats as $decodeable ) {
             if ( !$player->{$decodeable} ) {
-                action_log("$decodeable for {$player->user_id} was was null, initializing");
+                action_log(__FUNCTION__ . " $decodeable for {$player->user_id} was was null, initializing");
                 $player->{$decodeable} = '[]';
             } 
             $player->{$decodeable} = json_decode($player->{$decodeable},true); 
@@ -667,6 +668,7 @@ function get_players($game_id,$player_ids,&$errors) {
         $player = $np;
         $player->land_count = count($player->land_pile);
         $player->hand = array_values($player->hand);
+        action_log(__FUNCTION__ . " now hand=" . join(',',$player->hand)); 
     }
     return $players;
 }
@@ -814,6 +816,7 @@ function get_player_morale($p) {
 }
 function get_game_board($game_id,$uid=null) {
     global $wpdb;
+    action_log(__FUNCTION__ . " gid=$game_id,uid=$uid");
     if ( ! $uid )
         $uid = \get_current_user_id();
     // Now we need to produce the game board from the
@@ -821,6 +824,7 @@ function get_game_board($game_id,$uid=null) {
     // the piles of other players
     $board = [
         'status' => "OK",
+        'winner_id' => 0,
         'players' => [], 
         'errors' => [], 
         'round' => 0,
@@ -838,21 +842,42 @@ function get_game_board($game_id,$uid=null) {
     }
     if ( !$game->round ) {
         $game->round = 1;
-        action_log("Needed to update ther ound");
+        action_log(__FUNCTION__ . " Needed to update ther ound");
         $wpdb->query($wpdb->prepare("UPDATE `hc_games` SET round = 1 WHERE id = %d",$game_id));
     }
     $board['round'] = $game->round;
+    $board['winner_id'] = $game->winner_id;
     $board['current_player_id'] = $game->current_player_id;
     // Now we have the game, let's get the players
+    action_log(__FUNCTION__ . " getting all players");
     $players = get_players($game_id,[],$board['errors']); 
     if ( empty($players) ) {
         $board['errors'][] = "There were no players";
         return $board;
     }
     // Now that we have the players, let's deserialize their fields
+    $min_p = null;
+    $max_p = null;
     foreach ( $players as &$player ) {
         // We need to calculate the morale
         $player->morale = get_player_morale($player); 
+        if ( (string)$player->can_attack === '0' && $player->morale >= 800 ) {
+            $wpdb->query("UPDATE `hc_players` SET can_attack = 1 WHERE id = {$player->id}");
+            $player->can_attack = 1;
+        }
+        if ( $min_p === null ) {
+            $min_p = $player;
+        }
+        if ( $max_p === null ) {
+            $max_p = $player;
+        }
+
+        if ( $player->morale < $min_p->morale ) {
+            $min_p = $player;
+        }
+        if ( $player->morale > $max_p->morale ) {
+            $max_p = $player;
+        }
         if ( $player->user_id != $uid ) {
             // We need to hide some things from the player, like the hand
             $player->hand = [];
@@ -894,27 +919,40 @@ function get_game_board($game_id,$uid=null) {
                 $s = 0;
                 while ( count($player->hand) < 5 ) {
                     if ( $s > $cap ) {
-                        action_log(__LINE__ . " s > cap reached");
+                        action_log(__FUNCTION__ . " s > cap reached");
                         break;
                     }
                     $card = array_shift($player->draw_pile);
                     if ( !$card ) {
-                        action_log(__LINE__ . " card was null");
+                        action_log(__FUNCTION__ . " card was null");
                         break;
                     }
-                    action_log("appending $card to hand");
+                    action_log(__FUNCTION__ . "appending $card to hand");
                     $player->hand[] = $card;
                     $s++;
                 }
                 $sql = "UPDATE `hc_players` SET hand = %s, drawpile = %s WHERE id = %d";
                 $sql = $wpdb->prepare($sql,json_encode($player->hand),json_encode($player->draw_pile),$player->id);
                 $wpdb->query($sql);
+                action_log(__FUNCTION__ . " sql=$sql");
                 if ( !empty($wpdb->last_error) ) {
                     $board['errors'][] = $sql;
                     $board['errors'][] = $wpdb->last_error;
                     $board['errors'][] = "Failed to update hand and draw pile";
                 }
             }
+        }
+    }
+    action_log(__FUNCTION__ . " can={$min_p->can_attack} min_p={$min_p->morale},can={$max_p->can_attack} max_p={$max_p->morale}");
+    if ( 
+        ((string)$min_p->can_attack === '1' && $min_p->morale <= 0) || 
+        ((string)$max_p->can_attack === '1' && $max_p->morale >= 3000 ) 
+    ) {
+        // This game is over!
+        action_log(__FUNCTION__ . "The game is over!");
+        $board['winner_id'] = $max_p->id;
+        if ( intval($game->winner_id) != intval($max_p->id) ) {
+            $wpdb->query("UPDATE `hc_games` SET winner_id = {$max_p->id} WHERE id = {$game->id}");
         }
     }
     $board['players'] = $players; 
@@ -1007,8 +1045,9 @@ function system_play_card($game_id,$p,$ext_id,$row,$col,$auto_explorer,$auto_abi
     }
     
     if ( !empty($updates) ) {
-        $sql = "UPDATE `hc_players` SET " . join(',',$updates) . " WHERE user_id = %d AND game_id = %d"; 
-        $sql = $wpdb->prepare($sql,$p->user_id,$game_id);
+        $sql = "UPDATE `hc_players` SET " . join(',',$updates) . " WHERE id = %d"; 
+        $sql = $wpdb->prepare($sql,$p->id);
+        action_log(__FUNCTION__ . " $sql");
         $wpdb->query($sql);
         if ( !empty($wpdb->last_error) ) {
             action_log(__FUNCTION__ . " ERROR: " . $wpdb->last_error);
@@ -1018,6 +1057,71 @@ function system_play_card($game_id,$p,$ext_id,$row,$col,$auto_explorer,$auto_abi
         }
     }
     return $p;
+}
+function get_played_land_cards_from_playmat($mat) {
+    $cards = [];
+    for ( $row = 0; $row < count($mat); $row++ ) {
+        for ( $col = 0; $col < count($mat[$row]); $col++ ) {
+            $val = (string)$mat[$row][$col];
+            if ( $val !== '0' ) {
+                $def = get_card_def($val);
+                if ( intval($def->maintype) === CARD_LAND ) {
+                    $card = new \stdClass;
+                    $card->ext_id = $val;
+                    $card->def = $def;
+                    $card->row = $row;
+                    $card->col = $col;
+                    array_push($cards,$card);
+                }
+            }
+        }
+    }
+    return $cards;
+}
+function system_play_land_card($game_id,$p,$ext_id,&$errors) {
+    // All land cards have to fall in the same row, so
+    // playing a land card finds the next available column
+    // in the land row
+    $mat = $p->playmat;
+    $land_cards = get_played_land_cards_from_playmat($p->playmat);
+    $row = 0;
+    if ( empty($land_cards) ) {
+        action_log(__FUNCTION__ . " there were no land cards found?");
+        $x = new \stdClass;
+        $x->ext_id = 'NONE';
+        $x->row = count($mat) - 2;
+        $x->col = count($mat[$x->row]) - 3; 
+        $land_cards = [$x];
+    } 
+    // find the min column
+    $min = null;
+    foreach ( $land_cards as $l ) {
+        if ( $min === null ) {
+            $min = $l;
+        }
+        if ( $l->col < $min->col ) {
+            $min = $l;
+        }
+    }
+    $row = $min->row;
+    $col = $min->col - 1;
+    action_log(__FUNCTION__ . "$min->ext_id r=$row,c=$col");
+    if ( $col === 0 ) {
+        // add a new column
+        action_log(__FUNCTION__ . " col is zero, expanding");
+        $mat = array_map(function ($row) {
+            return array_merge([0],$row); 
+        },$mat); 
+    }
+    if ( $col < 0 ) {
+        // add a new column
+        action_log(__FUNCTION__ . " col < zero, expanding");
+        $mat = array_map(function ($row) {
+            return array_merge([0,0],$row); 
+        },$mat);
+    }
+    action_log(__FUNCTION__ . " calling system_play_card($game_id,{$p->id},$ext_id,$row,$col)");
+    return system_play_card($game_id,$p,$ext_id,$row,$col,false,true,$errors);
 }
 function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
     global $wpdb;
@@ -1117,13 +1221,50 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
     }
     return $p;
 }
+function save_player_mats($p,&$errors) {
+    global $wpdb;
+    action_log(__FUNCTION__ . " saving {$p->id}");
+    $sql = "UPDATE `hc_players` SET hand = %s, discardpile = %s, drawpile = %s, landpile = %s, playmat = %s, abilitymat = %s, damagemat = %s WHERE id = %d";
+    $sql = $wpdb->prepare(
+        $sql, 
+        json_encode($p->hand),
+        json_encode($p->discard_pile),
+        json_encode($p->draw_pile),
+        json_encode($p->land_pile),
+        json_encode($p->playmat), 
+        json_encode($p->abilitymat),
+        json_encode($p->damagemat),
+        $p->id
+    );
+    action_log(__FUNCTION__ . " " . $sql);
+    $wpdb->query($sql);
+    action_log(__FUNCTION__ . " affected=" . $wpdb->get_var("SELECT ROW_COUNT();"));
+    if ( !empty($wpdb->last_error) ) {
+        action_log(__FUNCTION__ . " " . $wpdb->last_error);
+        $errors[] = "Failed to force discard";
+        return $p;
+    }
+    $sql = $wpdb->prepare(
+        "SELECT hand FROM `hc_players` WHERE id = %d",
+        $p->id 
+    );
+    action_log(__FUNCTION__ . " $sql returns " . json_encode($wpdb->get_results($sql)));
+    return $p;
+}
 function can_cede_turn($game_id,$pid,$uid) {
     global $wpdb;
+    action_log(__FUNCTION__ . " gid=$game_id,pid=$pid,uid=$uid");
+    if ( is_over($game_id) ) {
+        action_log(__FUNCTION__ . " can't cede a turn for a finished game");
+        return false;
+    }
     $sql = "SELECT 1 FROM `hc_players` as p JOIN `hc_games` as g ON p.game_id = g.id WHERE p.id = %d and g.id = %d AND p.user_id = %d AND g.current_player_id = %d";
     $sql = $wpdb->prepare($sql,$pid,$game_id,$uid,$pid);
+    action_log(__FUNCTION__ . " sql=$sql");
     if ( $wpdb->get_var($sql) ) {
         return true;
     }
+    action_log(__FUNCTION__ . " got to end, so false");
     return false;
 }
 function get_card_name($ext_id) {
@@ -1233,9 +1374,54 @@ function _get_games($id) {
     }
     return [$my_games,$others_games];
 }
+function discard($game_id,$player_id,$uid,$ext_id,$row,$col,$hint,&$errors) {
+    $players = get_players($game_id,[$player_id],$errors);
+    if ( !empty($errors) || empty($players) ) {
+        action_log(__FUNCTION__ . " failed to get players");
+        return;
+    } 
+    
+    $p = $players[0];
+    if ( (string)$p->user_id !== (string)$uid ) {
+        action_log(__FUNCTION__ . " user_id is wrong, no perms");
+        $errors[] = MSG_YOU_CANT_DO_THAT;
+        return;
+    } 
+    //if ( $p->current_move + 1 > $p->max_moves ) {
+    //    $errors[] = get_out_of_moves_message($p);
+    //    return;
+    //}
+    if ( $hint === 'discard_from_playmat' ) {
+        if ( $p->playmat[$row][$col] === $ext_id ) {
+            array_push($p->discard_pile,$p->playmat[$row][$col]);
+            $p->playmat[$row][$col] = 0;
+            save_player_mats($p,$errors);
+        } 
+    }
+    if ( $hint === 'discard_from_hand' ) {
+        $nh = [];
+        foreach ( $p->hand as $id ) {
+            if ( $id === $ext_id ) {
+                array_push($p->discard_pile,$ext_id);
+                continue;
+            }
+            $nh[] = $id;
+        }
+        $p->hand = $nh;
+        action_log(__FUNCTION__ . " nh=" . join(',',$p->hand));
+        save_player_mats($p,$errors);
+    }
+    //$sql = "UPDATE `hc_players` SET current_move = current_move + 1 WHERE id = %d";
+    //$sql = $wpdb->prepare($sql,$p->id);
+    //$wpdb->query($sql);
+    //if ( !empty($wpdb->last_error) ) {
+    //    $errors[] = $wpdb->last_error;
+    //}
+}
 function system_discard($p,$ext_id) {
     $mat = $p->playmat;
     $dpile = $p->discard_pile;
+    $needs_update = false;
     for ( $row = 0; $row < count($mat); $row++) {
         for ( $col = 0; $col < count($mat[$row]); $col++) {
             if ( $mat[$row][$col] === $ext_id ) {
@@ -1244,6 +1430,7 @@ function system_discard($p,$ext_id) {
                 $p->abilitymat[$row][$col] = 0;
                 $p->playmat = $mat;
                 $p->discard_pile = $dpile;
+                $needs_update = false;
             } 
         }
     }
@@ -1275,10 +1462,15 @@ function get_row_col_for($p,$id) {
     }
     return null;
 }
+function get_out_of_moves_message($p) {
+    return "You are out of moves, you have made {$p->current_move} moves, and can only make {$p->max_moves}. Click Done to cede your turn, or launch up to {$p->max_attacks} attacks before ceding.";
+}
 function draw_card($game_id,$player_id,$uid,&$errors) {
     global $wpdb; 
+    action_log(__FUNCTION__ . " gid=$game_id,pid=$player_id");
     $sql = "SELECT g.* FROM `hc_games` as g JOIN `hc_players` as p ON g.id = p.game_id WHERE g.id = %d AND p.id = %d AND p.user_id = %d";
     $sql = $wpdb->prepare($sql,$game_id,$player_id,$uid); 
+    action_log(__FUNCTION__ . " sql=$sql");
     $game = $wpdb->get_row($sql);
     if ( !empty($wpdb->last_error) ) {
         $errors[] = $sql;
@@ -1290,6 +1482,7 @@ function draw_card($game_id,$player_id,$uid,&$errors) {
        return;
     }
     // so we have the game, let's get the player
+    action_log(__FUNCTION__ . " hand=" . $wpdb->get_var($wpdb->prepare("SELECT hand FROM hc_players WHERE id = %d",$player_id)));
     $players = get_players($game->id,[$player_id],$result['errors']);
     if ( empty($players) ) {
         $errors[] = "No players found";
@@ -1297,9 +1490,10 @@ function draw_card($game_id,$player_id,$uid,&$errors) {
     }
     $p = $players[0];
     if ( $p->current_move + 1 > $p->max_moves ) {
-        $errors[] = "You are out of moves, you have made {$p->current_move} moves, and can only make {$p->max_moves}";
+        $errors[] = get_out_of_moves_message($p); 
         return;
     }
+    action_log(__FUNCTION__ . " p->hand=" . join(',',$p->hand));
     if ( count($p->hand) > 4 ) {
         $errors[] = "You can't have more than 5 cards in a hand.";
         return;
@@ -1444,4 +1638,13 @@ function card_table($p) {
     $content = ob_get_contents();
     ob_end_clean();
     return $content;
+}
+function is_over($game_id) {
+    global $wpdb;
+    action_log(__FUNCTION__ . " gid=$game_id");
+    $winner_id = $wpdb->get_var($wpdb->prepare("SELECT winner_id FROM `hc_games` WHERE id = %d",$game_id));
+    if ( (string)$winner_id !== '0' ) {
+        return true;
+    }
+    return false;
 }

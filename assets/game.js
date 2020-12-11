@@ -10,6 +10,7 @@ namespace HistoricalConquest;
     window.board.player_pointer = 0;
     window.abilitydb = <?php echo json_encode(get_abilitydb()); ?>;
     <?php $asset('helper.js'); ?> 
+    <?php $asset('errors.js'); ?> 
     <?php $asset('events.js'); ?> 
     <?php $asset('card_zoom.js'); ?>
     <?php $asset('explorer.js'); ?>
@@ -262,6 +263,7 @@ namespace HistoricalConquest;
                     window.board = resp;
                     trigger_refresh();
                 }
+                window.maybe_show_errors(resp);
             });
             return;
         }
@@ -299,6 +301,23 @@ namespace HistoricalConquest;
     }
     function discard(player,card_def) {
         if ( player.hand.indexOf(card_def.ext_id) != -1 ) {
+            if ( in_server_context() ) {
+                let data = {}; 
+                data.action = 'discard';
+                data.game_id = window.get.game_id;
+                data.player_id = player.id;
+                data.ext_id = card_def.ext_id;
+                data.hint = 'discard_from_hand';
+                $.post(window.ajaxurl,data,function (resp) {
+                    if ( resp.status === 'OK' ) {
+                        update_player(resp.player);
+                        trigger_close_zoom_holder();
+                        trigger_refresh();
+                    }
+                });
+                window.maybe_show_errors(resp);
+                return;
+            }
             let nh = [];
             for ( let i = 0; i < 5; i++ ) {
                  if ( player.hand[i] == card_def.ext_id ) {
@@ -315,6 +334,25 @@ namespace HistoricalConquest;
         }
         let loc = get_row_col_of_played_card(player,card_def.ext_id);
         if ( loc && loc.row ) {
+            if ( in_server_context() ) {
+                let data = {}; 
+                data.action = 'discard';
+                data.game_id = window.get.game_id;
+                data.player_id = player.id;
+                data.ext_id = card_def.ext_id;
+                data.row = loc.row;
+                data.col = loc.col;
+                data.hint = 'discard_from_playmat';
+                $.post(window.ajaxurl,data,function (resp) {
+                    if ( resp.status === 'OK' ) {
+                        update_player(resp.player);
+                        trigger_close_zoom_holder();
+                        trigger_refresh();
+                    }
+                });
+                window.maybe_show_errors(resp);
+                return;
+            }
             player.playmat[loc.row][loc.col] = 0;
             // TODO: Is this always the case? Maybe not.
             player.abilitymat[loc.row][loc.col] = 0;
@@ -357,6 +395,8 @@ namespace HistoricalConquest;
         return window.get && window.get.game_id;
     }
     function show_errors(r) {
+        window.maybe_show_errors(r);
+        return;
         _log("show_errors",r.errors);
         let d = create_dialog('errors_dialog');
         for ( let i = 0; i < r.errors.length; i++ ) {
@@ -375,7 +415,7 @@ namespace HistoricalConquest;
             // botting
             data.game_id = window.get.game_id;
             $.post(window.ajaxurl,data,function (resp) {
-                console.log(data,resp);
+                _log(data,resp);
                 if ( resp.status == 'OK' ) {
                     window.board = resp;
                     trigger_refresh();
@@ -461,6 +501,7 @@ namespace HistoricalConquest;
               let data = {};  
                   data.action = "cede_turn";
                   data.game_id = window.get.game_id;
+                  data.player_id = get_current_player().id;
                 $.post(window.ajaxurl,data,function (resp) {
                     if ( resp.status == 'OK' ) {
                         window.board = resp;
@@ -569,8 +610,8 @@ namespace HistoricalConquest;
         $.post(window.ajaxurl,data,function (resp) {
             _log("get_board",resp);
             if ( resp.status == 'OK' ) {
-                console.log(window.board,resp);
-                //window.board = resp;
+                _log(window.board,resp);
+                window.board = resp;
                 //trigger_refresh();
             } else {
                 show_errors(resp);

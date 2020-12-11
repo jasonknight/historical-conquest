@@ -1,5 +1,26 @@
+
 function _log() {
     console.log.apply(null,arguments);
+}
+window.get_error_dialog = function () {
+    let dialog = $('.dialog');
+    if ( dialog.length === 0 ) {
+        dialog = create_dialog('error_dialog');
+    }
+    return dialog;
+}
+window.maybe_show_errors = function (r) {
+    if ( r.errors && r.errors.length > 0 ) {
+        let dialog = window.get_error_dialog(); 
+        let target = dialog.find('.error-panel');
+        if ( target.length === 0 ) {
+            target = dialog.find('.dialog-body');
+        }
+        target.find('p.error').remove();
+        for ( let i = 0; i < r.errors.length; i++ ) {
+            trigger_error_message(r.errors[i]);
+        }
+    }
 }
 function _div(id,kls) {
     let d = null;
@@ -228,6 +249,7 @@ function unadvance_move() {
     }
     window.board.current_move--;
 }
+
 function current_move() {
     if ( in_server_context() )
         return get_current_player().current_move;
@@ -243,6 +265,14 @@ function get_current_player() {
     }
     return window.board.players[window.board.player_pointer];
 }
+function update_player(p) {
+    for ( let i = 0; i < window.board.players.length; i++ ) {
+        if ( window.board.players[i].id == p.id ) {
+            window.board.players[i] = p;
+        }
+    }
+}
+window.get_current_player = get_current_player;
 function set_current_player(p) {
     if ( in_server_context() ) 
         return;

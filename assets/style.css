@@ -264,3 +264,9 @@ div.challenge-player-form p {
     text-align: center;
     color: black;
 }
+p.error {
+    margin: 5px;
+    color: red;
+    font-weight: bolder;
+    text-align: center;
+}

@@ -40,6 +40,12 @@ function attack_player(
         send_json($result);
         exit;
     }
+    if ( (string)$state->attacker->attacks === '0' ) {
+        $errors[] = MSG_OUT_OF_ATTACKS;
+        $result['errors'] = $errors; 
+        send_json($result);
+        exit;
+    }
     if ( is_null($state->defender) ) {
         $errors[] = "Defender is null";
         $result['errors'] = $errors; 
@@ -245,27 +251,56 @@ function attack_player(
             $messages[] = $loser->name . " has lost the battle and " . $to_discard->name . " is mourned!";
             $loser = system_discard($loser,$to_discard->ext_id);
             $result['battle_report']['lost_card'] = $to_discard->ext_id;
-            $sql = "UPDATE `hc_players` SET discardpile = %s, playmat = %s, abilitymat = %s WHERE id = %d";
-            $sql = $wpdb->prepare(
-                $sql, 
-                json_encode($loser->discard_pile),
-                json_encode($loser->playmat), 
-                json_encode($loser->abilitymat),
-                $loser->id
-            );
-            $wpdb->query($sql);
-            if ( !empty($wpdb->last_error) ) {
-                action_log(__FUNCTION__ . " " . $sql);
-                action_log(__FUNCTION__ . " " . $wpdb->last_error);
-                $errors[] = "Failed to force discard";
-                return $result;
+            $loser = save_player_mats($loser,$errors); 
+            if ( !empty($errors) ) {
+                $result['errors'] = $errors;
+                return $result; 
             }
         } else {
             action_log(__FUNCTION__ . " there is no to_discard!");
+            // if there is no discard, we need to transfer this card
+            // to the attacker
+            $mat = $loser->playmat;
+            $amat = $loser->abilitymat;
+            $needs_update = false;
+            for ( $_r = 0; $_r < count($mat); $_r++ ) {
+                for ( $_c = 0; $_c < count($mat[$_r]); $_c++ ) {
+                    $val = (string)$mat[$_r][$_c];
+                    if ( $val === $loser_land_id ) {
+                        $mat[$_r][$_c] = 0;
+                        $amat[$_r][$_c] = 0;
+                        $needs_update = true;
+                    }
+                }
+            }
+            if ( $needs_update ) {
+                $loser->playmat = $mat;
+                $loser->abilitymat = $mat;
+                $loser = save_player_mats($loser,$errors);
+                if ( !empty($errors) ) {
+                    $result['errors'] = $errors;
+                    return $result; 
+                }
+            }
+            $winner = system_play_land_card($game_id,$winner,$loser_land_id,$errors);
+            $result['battle_report']['lost_card'] = $loser_land_id;
+            $result['battle_report']['transferred_land'] = $loser_land_id;
+            $lldef = get_card_def($loser_land_id);
+            if ( $lldef ) {
+                $messages[] = "You have conquered " . $lldef->name;
+            }
         }
     }
+    $wpdb->query(
+        $wpdb->prepare(
+            "UPDATE `hc_players` SET attacks = attacks - 1 WHERE id = %d ",
+            $state->attacker->id
+        ) 
+    );
+    $result['status'] = 'OK';
     return $result;
 }
+
 function get_attack_abilities_involved($p,$id) {
     $rc = get_row_col_for($p,$id);
     $mat = $p->abilitymat;

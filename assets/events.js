@@ -12,6 +12,11 @@ function trigger_attack_message(msg) {
     e.msg = msg;
     $('body').trigger(e);
 }
+function trigger_error_message(msg) {
+    let e = $.Event('error.msg');
+    e.msg = msg;
+    $('body').trigger(e);
+}
 function trigger_close_dialog(sender,dialog) {
     let e = $.Event('dialog.close');
     e.dialog = dialog;
@@ -90,5 +95,8 @@ $(function () {
     });
     $('body').on('attack',function (e) {
         show_attack_dialog(e.attacking_player,e.defending_player,e.attack_source,e.attacking_land,e.defending_land);
+    });
+    $('body').on('error.msg',function (e) {
+        show_error_message(e.msg);
     });
 });
