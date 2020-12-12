@@ -102,6 +102,10 @@ if ( ! \is_user_logged_in() ) {
         height: 400px;
         padding: 5px;
     }
+    div.challenges div.challenge {
+        width: 100%;
+        display: inline-block;
+    }
     div.challenges div.challenge div.column {
         height: 35px;
         min-height: 35px;
