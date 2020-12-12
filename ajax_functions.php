@@ -427,7 +427,7 @@ function _get_deck_id() {
             $sql
         );
         action_log(__FUNCTION__ . " deck_id=$deck_id");
-    } else {
+    } else if ( empty($deck_id) ) {
         action_log(__FUNCTION__ . " deck_id is empty?");
         send_json(['status' => 'KO', 'msg' => MSG_BAD_DECK]);
         exit;
