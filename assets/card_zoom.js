@@ -97,7 +97,7 @@ function maybe_add_abilities_button(d,src,clone,button_row) {
     let ab = _div(null,'button abilities-button');
         ab.html("Abilities");
         ab.on('click',function () {
-            console.log("ab.on click");
+            _log("ab.on click");
             let e = $.Event('card_zoom_show_abilities');
             e.def = def;
             e.d = d;
