@@ -418,6 +418,7 @@ function _get_deck_id() {
     } else {
         $deck_id = post('deck');
     }
+    action_log(__FUNCTION__ . " so far deck_id=$deck_id");
     if ( empty($deck_id) && !empty(post('deck_name')) ) {
         $sql = $wpdb->prepare(
                 "SELECT id FROM `hc_player_decks` WHERE player_id = $id AND name = %s", post('deck_name'));
@@ -425,8 +426,9 @@ function _get_deck_id() {
         $deck_id = $wpdb->get_var(
             $sql
         );
-        action_log("deck_id=$deck_id");
+        action_log(__FUNCTION__ . " deck_id=$deck_id");
     } else {
+        action_log(__FUNCTION__ . " deck_id is empty?");
         send_json(['status' => 'KO', 'msg' => MSG_BAD_DECK]);
         exit;
     }
