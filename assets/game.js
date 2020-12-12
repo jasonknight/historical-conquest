@@ -591,7 +591,25 @@ namespace HistoricalConquest;
     function debug_playmat(player) {
         _log("Playmat", player.playmat.map(function (r) { return r.join('|'); }).join("\n"));
     }
+    function maybe_show_winner() {
+        for ( let i = 0; i < window.board.players.length; i++ ) {
+            if ( window.board.players[i].id == window.board.winner_id ) {
+                let winner = window.board.players[i];
+                let dialog = create_dialog('show-winner');
+                let body = dialog.find('.dialog-body');
+                body.html('');
+                body.append(
+                    '<p class="winner-message">'+ winner.name +' has won this game!</p>'
+                );
+                return true;
+            }
+        }
+        return false;
+    }
     function maybe_show_waiting() {
+        if ( maybe_show_winner() ) {
+            return;
+        }
         if ( window.user_id == get_current_player().user_id ) {
             //_log("You are the current player.");
             if ( $('#show-waiting').length > 0 ) {
