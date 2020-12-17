@@ -95,6 +95,17 @@ function sync_users() {
             exit;
         }
         $log($r);
+	if ( !is_array($r->body) ) {
+		$dst_url = $src_url . '?' . http_build_query($data);
+		$contents = file_get_contents($dst_url);
+		$log("Contents[$contents]");
+		$r->body = json_decode($contents,TRUE);
+		if ( !is_array($r->body) ) {
+			$log("Still not an array...giving up");
+            		send_json(['status' => 'KO', 'msg' => 'sync failed, r->body is not an array']);
+			exit;
+		}
+	}
         $user_sql = "INSERT INTO {$wpdb->users} (
                 user_login,
                 user_pass,
@@ -163,7 +174,9 @@ function sync_users() {
                 $value_template = "(%d,%s,%s)";
                 $values = [];
                 foreach ( $user->user_metas as $m ) {
-                    $values[] = $wpdb->prepare($value_template,$user_id,$m[0],$m[1]); 
+                    $v = $wpdb->prepare($value_template,$user_id,$m[0],$m[1]); 
+		    $v = str_replace($r->body['wpdb_prefix'],$wpdb->prefix,$v);
+		    $values[] = $v;
                 }
                 $sql .= join(',',$values);
                 $report[] = $sql;

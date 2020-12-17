@@ -7603,65 +7603,109 @@ Content-Type: multipart/form-data; boundary=------------------------c1f979aa144a
 2020-12-17 21:16:32 - posting to http://localhost
 2020-12-17 21:16:32 - HistoricalConquest\sync_users
 2020-12-17 21:16:32 - action=hc-user-sync-verify
-     (
-                    [0] => 2020-12-17 16:24:52 - user_count=7
-                    [1] => 2020-12-17 16:24:52 - sql=SELECT * FROM wp_usermeta WHERE user_id IN (2,3,4,5,7)
-                    [2] => 2020-12-17 16:24:52 - user_metas_count=103
-                    [3] => 2020-12-17 16:24:52 - server_name=,token=f5a1d81c6877998e202e382a5574edce, return=http://localhost, from=2020-03-08 22:15:05
-                    [4] => 2020-12-17 16:24:52 - allowed_urls=localhost
-,hcgame.lycanthropenoir.com
-,historicalconquest.com
-,huntthepast.com
-
-                    [5] => 2020-12-17 16:24:52 - data={"action":"hc-user-sync-verify","hc-user-sync-token":"f5a1d81c6877998e202e382a5574edce","hc-return-url":"http:\/\/localhost"}
-                    [6] => 2020-12-17 16:24:52 - ajax-verify body={"status":"KO","logs":[]}
-                    [7] => 2020-12-17 16:24:52 - sql=SELECT * FROM wp_users WHERE user_registered > '2020-03-08 22:15:05' LIMIT 50
-                    [8] => 2020-12-17 16:24:52 - user_count=2
-                    [9] => 2020-12-17 16:24:52 - sql=SELECT * FROM wp_usermeta WHERE user_id IN (7)
-                    [10] => 2020-12-17 16:24:52 - user_metas_count=15
-                    [11] => 2020-12-17 21:16:32 - server_name=,token=f5a1d81c6877998e202e382a5574edce, return=http://localhost, from=all
-                    [12] => 2020-12-17 21:16:32 - allowed_urls=localhost
-,hcgame.lycanthropenoir.com
-,historicalconquest.com
-,huntthepast.com
-
-                    [13] => 2020-12-17 21:16:32 - data={"action":"hc-user-sync-verify","hc-user-sync-token":"f5a1d81c6877998e202e382a5574edce","hc-return-url":"http:\/\/localhost"}
-                    [14] => 2020-12-17 21:16:32 - ajax-verify body={"status":"OK","logs":[]}
-                    [15] => 2020-12-17 21:16:32 - sql=SELECT * FROM wp_users LIMIT 50
-                    [16] => 2020-12-17 21:16:32 - user_count=7
-                    [17] => 2020-12-17 21:16:32 - sql=SELECT * FROM wp_usermeta WHERE user_id IN (2,3,4,5,7)
-                    [18] => 2020-12-17 21:16:32 - user_metas_count=103
-                )
-
+2020-12-17 21:16:32 - stdClass Object
+(
+    [data] => Array
+        (
+            [action] => hc-request-sync
+            [hc-user-sync-token] => f5a1d81c6877998e202e382a5574edce
+            [hc-return-url] => http://localhost
+            [hc-sync-from] => all
         )
 
-    [log] => * Rebuilt URL to: http://localhost/
-* Hostname in DNS cache was stale, zapped
-*   Trying ::1...
-* TCP_NODELAY set
-* connect to ::1 port 80 failed: Connection refused
-*   Trying 127.0.0.1...
-* TCP_NODELAY set
-* Connected to localhost (127.0.0.1) port 80 (#0)
-> POST / HTTP/1.1
-Host: localhost
-Accept: */*
-Accept-Encoding: deflate, gzip
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0
-Referer: http://localtest
-Content-Length: 517
-Expect: 100-continue
-Content-Type: multipart/form-data; boundary=------------------------ecd689cae8c26ae2
+    [post_data] => Array
+        (
+            [action] => hc-request-sync
+            [hc-user-sync-token] => f5a1d81c6877998e202e382a5574edce
+            [hc-return-url] => http://localhost
+            [hc-sync-from] => all
+        )
 
-< HTTP/1.1 100 Continue
-< HTTP/1.1 200 OK
-< Server: nginx/1.10.3
-< Date: Thu, 17 Dec 2020 21:16:32 GMT
-< Content-Type: application/json
-< Transfer-Encoding: chunked
-< Connection: keep-alive
-< 
-* Curl_http_done: called prematuNT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/86.0.4240.111 Safari\/537.36\";s:5:\"login\";i:1604548467;}s:64:\"30cf8ebb713e05b2645409b94231bbfda84635428a1e937496747f33d82cd3ff\";a:4:{s:10:\"expiration\";i:1604804180;s:2:\"ip\";s:8:\"10.0.2.2\";s:2:\"ua\";s:115:\"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/86.0.4240.111 Safari\/537.36\";s:5:\"login\";i:1604631380;}}"
+    [error] => 
+    [errorno] => 0
+    [response] => HTTP/1.1 100 Continue
+
+HTTP/1.1 200 OK
+Server: nginx/1.10.3
+Date: Thu, 17 Dec 2020 21:16:32 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+{
+    "status": "OK",
+    "users": {
+        "id_2": {
+            "ID": "2",
+            "user_login": "bobboyd72",
+            "user_pass": "$P$B2XlFaX6d9XUAaFaa8zUJkIL6Zaw5M1",
+            "user_nicename": "bobboyd72",
+            "user_email": "bobboyd72@aol.com",
+            "user_url": "",
+            "user_registered": "2020-03-08 22:12:15",
+            "user_activation_key": "",
+            "user_status": "0",
+            "display_name": "Bob Boyd",
+            "user_metas": [
+                [
+                    "nickname",
+                    "bobboyd72"
+                ],
+                [
+                    "first_name",
+                    "Bob"
+                ],
+                [
+                    "last_name",
+                    "Boyd"
+                ],
+                [
+                    "description",
+                    ""
+                ],
+                [
+                    "rich_editing",
+                    "true"
+                ],
+                [
+                    "syntax_highlighting",
+                    "true"
+                ],
+                [
+                    "comment_shortcuts",
+                    "false"
+                ],
+                [
+                    "admin_color",
+                    "fresh"
+                ],
+                [
+                    "use_ssl",
+                    "0"
+                ],
+                [
+                    "show_admin_bar_front",
+                    "true"
+                ],
+                [
+                    "locale",
+                    ""
+                ],
+                [
+                    "wp_capabilities",
+                    "a:1:{s:6:\"editor\";b:1;}"
+                ],
+                [
+                    "wp_user_level",
+                    "7"
+                ],
+                [
+                    "dismissed_wp_pointers",
+                    ""
+                ],
+                [
+                    "session_tokens",
+                    "a:2:{s:64:\"1f9acf586b3a648c345bcab82447524026a32b156d67b4991b491886df2e4bbf\";a:4:{s:10:\"expiration\";i:1604721267;s:2:\"ip\";s:8:\"10.0.2.2\";s:2:\"ua\";s:115:\"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/86.0.4240.111 Safari\/537.36\";s:5:\"login\";i:1604548467;}s:64:\"30cf8ebb713e05b2645409b94231bbfda84635428a1e937496747f33d82cd3ff\";a:4:{s:10:\"expiration\";i:1604804180;s:2:\"ip\";s:8:\"10.0.2.2\";s:2:\"ua\";s:115:\"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/86.0.4240.111 Safari\/537.36\";s:5:\"login\";i:1604631380;}}"
                 ],
                 [
                     "wp_dashboard_quick_press_last_post_id",
