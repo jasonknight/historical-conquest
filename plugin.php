@@ -175,8 +175,8 @@ function sync_users() {
                 $values = [];
                 foreach ( $user->user_metas as $m ) {
                     $v = $wpdb->prepare($value_template,$user_id,$m[0],$m[1]); 
-		    $v = str_replace($r->body['wpdb_prefix'],$wpdb->prefix,$v);
-		    $values[] = $v;
+		            $v = str_replace("'". $r->body['wpdb_prefix'],"'".$wpdb->prefix,$v);
+		            $values[] = $v;
                 }
                 $sql .= join(',',$values);
                 $report[] = $sql;
