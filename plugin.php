@@ -16,8 +16,11 @@ require_once(__DIR__ . '/attack.php');
 require_once(__DIR__ . '/ajax_functions.php');
 function write_sync_report($r) {
     $fname = date("Y-m-d") . "-user-sync.log";
-    $r = join("\n",$r);
-    $r = "\n^^ Begin Report At: " . date("Y-m-d H:i:s") . "\n$r\n^^ End\n";
+    $lines = "";
+    foreach ( $r as $l ) {
+        $lines .= "--\n$l\n--\n";
+    }
+    $r = "\n^^ Begin Report At: " . date("Y-m-d H:i:s") . "\n$lines^^ End\n";
     file_put_contents(__DIR__ . "/$fname",$r,FILE_APPEND);
 }
 function sync_users() {
@@ -26,6 +29,21 @@ function sync_users() {
         file_put_contents(__DIR__ . '/sync.log',date("Y-m-d H:i:s - ") . print_r($msg,true) . PHP_EOL,FILE_APPEND);    
     };
     $log(__FUNCTION__);
+    if ( \is_user_logged_in() && \current_user_can('administrator') && req('action') === 'hc-user-sync-seed' ) {
+        $src_url = 'https://' . req('hc-return-url');
+        $last_sync_date = \get_option('hc_last_user_sync_datetime');
+        if ( !$last_sync_date ) {
+            $last_sync_date = 'all';
+        }
+        $data = [
+            'action' => 'hc-user-registered',
+            'hc-return-url' => $src_url, 
+            'hc-sync-from' => $last_sync_date,
+        ];
+        $r = ajax_post($data,\site_url());
+        print_r($r);
+        exit;
+    }
     if ( req('action') === 'hc-user-sync-verify' ) {
         $log("action=" . req('action'));
         $return_url = \site_url();
@@ -54,7 +72,9 @@ function sync_users() {
                 $found = true;
             }
         }
+        $report = []; 
         if ( !$found ) {
+            $report[] = "$src_url Not in whitelist";
             send_json(['status' => 'KO', 'msg' => 'Not in whitelist']);
             exit;
         }
@@ -70,6 +90,7 @@ function sync_users() {
         $r = ajax_post($data,req('hc-return-url'));
         if ( !is_object($r) ) {
             action_log(__FUNCTION__ . " r is not an object for hc-user-sync");
+            $report[] = "r is not an object";
             send_json(['status' => 'KO', 'msg' => 'sync failed, r is not an object']);
             exit;
         }
@@ -100,7 +121,6 @@ function sync_users() {
         $existing_user_emails = array_map(function ($r) {
             return $r->user_email;
         }, $wpdb->get_results("SELECT user_email FROM {$wpdb->users} WHERE user_email IN (".join(',',$user_emails).")"));
-        $report = []; 
         foreach ( $r->body['users'] as $user ) {
             if ( in_array($user['user_email'],$existing_user_emails) ) {
                $report[] = "{$user['user_email']} already exists."; 
@@ -119,6 +139,8 @@ function sync_users() {
                 $user->user_status,
                 $user->display_name,
             );  
+            $new_last = $user->user_registered;
+            $report[] = $sql;
             $wpdb->query($sql);
             if ( ! empty($wpdb->last_error) ) {
                 action_log(__FUNCTION__ . ' error=' . $wpdb->last_error);
@@ -144,6 +166,7 @@ function sync_users() {
                     $values[] = $wpdb->prepare($value_template,$user_id,$m[0],$m[1]); 
                 }
                 $sql .= join(',',$values);
+                $report[] = $sql;
                 $wpdb->query($sql);
                 if ( !empty($wpdb->last_error) ) {
                     $report[] = $wpdb->last_error;
@@ -153,6 +176,7 @@ function sync_users() {
                 }
             }
         }
+        \update_option('hc_last_user_sync_datetime',$new_last);
         write_sync_report($report);
         send_json(['status' => 'OK','report' => $report]);
         exit;
