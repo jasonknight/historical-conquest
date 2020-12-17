@@ -247,6 +247,7 @@ namespace HistoricalConquest;
             for ( let i = 0; i < resp.my_games.length; i++ ) {
                 let game = resp.my_games[i];
                 let cont = cont_fn(game); 
+                console.log("cont",cont);
                 let btn = cont.find('.play-btn');
                 btn.on('click',function () {
                         window.location = '/?action=historical-conquest-game&game_id=' + game.id;

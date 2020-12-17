@@ -472,6 +472,8 @@ function ajax_get_games() {
     apply_fuser();
     $id = \get_current_user_id();
     list($my_games,$others_games) = _get_games($id); 
+    $my_games = array_values(array_filter($my_games,function ($g) { return intval($g->winner_id) === 0; }));
+    $others_games = array_values(array_filter($others_games,function ($g) { return intval($g->winner_id) === 0; }));
     send_json(['status' => 'OK', 'my_games' => $my_games, 'others_games' => $others_games]);
     exit;
 }

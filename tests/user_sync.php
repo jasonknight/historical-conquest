@@ -15,8 +15,9 @@ function test($val,$msg) {
     }
     echo "PASSED: $msg" . PHP_EOL;
 }
-$u1 = \get_user_by('ID',1);
-$u2 = \get_user_by('ID',2);
-
-//include __DIR__ . '/ajax_get_decks.php';
-include __DIR__ . '/ajax_full_game.php';
+$data = [
+    'action' => 'hc-user-registered',
+    'hc-return-url' => 'http://localhost',
+];
+$r = ajax_post($data,'http://localhost');
+var_dump($r);

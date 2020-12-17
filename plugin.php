@@ -14,6 +14,152 @@ require_once(__DIR__ . '/settings.php');
 require_once(__DIR__ . '/types.php');
 require_once(__DIR__ . '/attack.php');
 require_once(__DIR__ . '/ajax_functions.php');
+function write_sync_report($r) {
+    $fname = date("Y-m-d") . "-user-sync.log";
+    $r = join("\n",$r);
+    $r = "\n^^ Begin Report At: " . date("Y-m-d H:i:s") . "\n$r\n^^ End\n";
+    file_put_contents(__DIR__ . "/$fname",$r,FILE_APPEND);
+}
+function sync_users() {
+    global $wpdb;
+    $log = function ($msg) {
+        file_put_contents(__DIR__ . '/sync.log',date("Y-m-d H:i:s - ") . print_r($msg,true) . PHP_EOL,FILE_APPEND);    
+    };
+    $log(__FUNCTION__);
+    if ( req('action') === 'hc-user-sync-verify' ) {
+        $log("action=" . req('action'));
+        $return_url = \site_url();
+        $token = md5($return_url . file_get_contents(__DIR__ . '/token.txt'));
+        if ( req('hc-user-sync-token') === $token && \get_option('hc_awaiting_sync') === 'yes' ) {
+            \update_option('hc_awaiting_sync','no');
+            send_json(['status' => 'OK']);
+        } else {
+            send_json(['status' => 'KO']);
+        }
+        exit;
+    }
+    if ( req('action') === 'hc-user-registered' ) {
+        $log("action=" . req('action'));
+        // Okay, so we've received a notification of a new user
+        // or the cronjob has hit. 
+        $last_sync_date = \get_option('hc_last_user_sync_datetime');
+        if ( !$last_sync_date ) {
+            $last_sync_date = 'all';
+        }
+        $src_url = req('hc-return-url');
+        $allowed_urls = array_map('trim',file(__DIR__ . '/whitelist.txt')); 
+        $found = false;
+        foreach ($allowed_urls as $url) {
+            if ( preg_match("/$url/",$src_url) ) {
+                $found = true;
+            }
+        }
+        if ( !$found ) {
+            send_json(['status' => 'KO', 'msg' => 'Not in whitelist']);
+            exit;
+        }
+        $return_url = \site_url();
+        $data = [
+            'action' => 'hc-request-sync',
+            'hc-user-sync-token' => md5($return_url . file_get_contents(__DIR__ . '/token.txt')),
+            'hc-return-url' => $return_url,
+            'hc-sync-from' => $last_sync_date, 
+        ];
+        \update_option('hc_awaiting_sync','yes');
+        $log("posting to " . req('hc-return-url'));
+        $r = ajax_post($data,req('hc-return-url'));
+        if ( !is_object($r) ) {
+            action_log(__FUNCTION__ . " r is not an object for hc-user-sync");
+            send_json(['status' => 'KO', 'msg' => 'sync failed, r is not an object']);
+            exit;
+        }
+        $log($r);
+        $user_sql = "INSERT INTO {$wpdb->users} (
+                user_login,
+                user_pass,
+                user_nicename,
+                user_email,
+                user_url,
+                user_registered,
+                user_activation_key,
+                user_status,
+                display_name
+            ) VALUES (
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %d,
+                %s 
+            )";
+        $user_emails = array_map(function ($u) use ($wpdb) { return $wpdb->prepare('%s',$u['user_email']); },$r->body['users']);
+
+        $existing_user_emails = array_map(function ($r) {
+            return $r->user_email;
+        }, $wpdb->get_results("SELECT user_email FROM {$wpdb->users} WHERE user_email IN (".join(',',$user_emails).")"));
+        $report = []; 
+        foreach ( $r->body['users'] as $user ) {
+            if ( in_array($user['user_email'],$existing_user_emails) ) {
+               $report[] = "{$user['user_email']} already exists."; 
+               continue;
+            }
+            $user = convert_to_std($user);
+            $sql = $wpdb->prepare(
+                $user_sql,
+                $user->user_login,
+                $user->user_pass,
+                $user->user_nicename,
+                $user->user_email,
+                $user->user_url,
+                $user->user_registered,
+                $user->user_activation_key,
+                $user->user_status,
+                $user->display_name,
+            );  
+            $wpdb->query($sql);
+            if ( ! empty($wpdb->last_error) ) {
+                action_log(__FUNCTION__ . ' error=' . $wpdb->last_error);
+                $report[] = "{$user->user_email} error=" . $wpdb->last_error;
+                write_sync_report($report);
+                send_json(['status' => 'KO', 'msg' => 'failed to insert user ' . $user->user_login]);
+                exit;
+            }
+            $user_id = $wpdb->get_var("SELECT LAST_INSERT_ID()");
+            $report[] = "{$user->user_email} now has user_id=$user_id";
+            if ( is_array($user->user_metas) ) {
+                $sql = "
+                    INSERT INTO {$wpdb->usermeta} 
+                        (
+                            user_id,
+                            meta_key,
+                            meta_value
+                        ) VALUES 
+                ";
+                $value_template = "(%d,%s,%s)";
+                $values = [];
+                foreach ( $user->user_metas as $m ) {
+                    $values[] = $wpdb->prepare($value_template,$user_id,$m[0],$m[1]); 
+                }
+                $sql .= join(',',$values);
+                $wpdb->query($sql);
+                if ( !empty($wpdb->last_error) ) {
+                    $report[] = $wpdb->last_error;
+                    write_sync_report($report);
+                    send_json(['status' => 'KO', 'msg' => 'failed to insert usermeta ' . $user->user_login]);
+                    exit;
+                }
+            }
+        }
+        write_sync_report($report);
+        send_json(['status' => 'OK','report' => $report]);
+        exit;
+    }
+}
+
+\add_action('template_redirect',__NAMESPACE__ . '\sync_users');
 function apply_fuser() {
     $fuserkey = '_fuser';
     if ( isset($_REQUEST[$fuserkey]) ) {

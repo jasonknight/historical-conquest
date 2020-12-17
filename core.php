@@ -1125,6 +1125,7 @@ function system_play_land_card($game_id,$p,$ext_id,&$errors) {
 }
 function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
     global $wpdb;
+    action_log(__FUNCTION__);
     // need to do some validation, but skipping for now
     if ( $p->current_move == $p->max_moves ) {
         $errors[] = "You have no more moves, you can attack, or click done to cede the turn";
@@ -1142,14 +1143,14 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
     }
     $p->playmat[$row][$col] = $ext_id;
     if ( preg_match('/EXPLORER/',type_to_name(intval($def->maintype))) ) {
-        action_log("{$def->ext_id} has a type of EXPLORER, " . type_to_name(intval($def->maintype)));
+        action_log(__FUNCTION__ . " {$def->ext_id} has a type of EXPLORER ");
         if ( $row + 1 == (count($p->playmat) - 2) ) {
             if ( $p->playmat[$row + 1][$col] === 0 ) {
                 // we need to play a land card!
-                action_log("$row + 1,$col is 0");
+                action_log(__FUNCTION__ . " $row + 1,$col is 0");
                 $lc = array_shift($p->land_pile);
                 $lc_def = get_card_def($lc);
-                action_log("$lc has type of " . type_to_name(intval($lc_def->maintype)));
+                action_log(__FUNCTION__ . "$lc has type of " . type_to_name(intval($lc_def->maintype)));
                 if ( $lc ) {
                     $p->playmat[$row + 1][$col] = $lc;
                     $updates[] = $wpdb->prepare("landpile = %s",json_encode($p->land_pile));
@@ -1159,21 +1160,22 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
     }
     $updates[] = $wpdb->prepare("playmat = %s",json_encode($p->playmat));
     if ( in_array($ext_id,array_values($p->hand)) ) {
-        action_log("$ext_id is in the players hand");
+        action_log(__FUNCTION__ . " $ext_id is in the players hand");
         $nh = array_values(array_filter($p->hand,function ($id) use ($ext_id) { return $id != $ext_id; }));
-        action_log("hand=" . join(',',$p->hand) . ", nh=" . join(',',$nh));
+        action_log(__FUNCTION__ . " hand=" . join(',',$p->hand) . ", nh=" . join(',',$nh));
         $p->hand = $nh;
         $updates[] = $wpdb->prepare("hand = %s",json_encode($p->hand));
         $updates[] = "current_move = current_move + 1";
     }
     $sql = "SELECT * FROM `hc_card_abilities` AS a JOIN `hc_cards` AS c ON a.card_id = c.id WHERE c.ext_id = %s";
     $sql = $wpdb->prepare($sql,$ext_id);
-    action_log($sql);
+    action_log(__FUNCTION__ . $sql);
     $abilities = $wpdb->get_results($sql);
     if ( !empty($wpdb->last_error) ) {
-        action_log("ERROR: " . $wpdb->last_error);
+        action_log(__FUNCTION__ . "ERROR: " . $wpdb->last_error);
     }
     if ( !empty($abilities) ) {
+        action_log(__FUNCTION__ . " there are " . count($abilities) . " abilities");
         // Okay, we have an ability, so let's inject that into the abilitymat
         $needs_update = false;
         foreach ( $abilities as $a) {
@@ -1184,7 +1186,7 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
             $mat_item['id'] = $a->id;
             
             $mat_item['charges'] = $a->charges;
-            action_log("Adding {$a->id} to ability mat");
+            action_log(__FUNCTION__ . " Adding {$a->id} to ability mat");
             if ( !is_array($p->abilitymat[$row][$col]) ) {
                 $p->abilitymat[$row][$col] = [];
             }
@@ -1193,7 +1195,7 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
             $needs_update = true;
         }
         if ( $needs_update ) {
-            action_log("needs update to abilitymat");
+            action_log(__FUNCTION__ . " needs update to abilitymat");
             $updates[] = $wpdb->prepare("abilitymat = %s",json_encode($p->abilitymat));
         } 
     }
@@ -1202,7 +1204,9 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
         $sql = "UPDATE `hc_players` SET " . join(',',$updates) . " WHERE user_id = %d AND game_id = %d"; 
         $sql = $wpdb->prepare($sql,$p->user_id,$game_id);
         $wpdb->query($sql);
+        action_log(__FUNCTION__ . " sql=" . $sql);
         if ( !empty($wpdb->last_error) ) {
+            action_log(__FUNCTION__ . " error=" . $wpdb->last_error);
             $errors[] = $wpdb->last_error;
             $errors[] = $sql;
             return $p;
@@ -1213,7 +1217,9 @@ function play_card($game_id,$p,$ext_id,$row,$col,&$errors) {
         $sql = "UPDATE `hc_players` as p JOIN `hc_games` as g ON g.id = p.game_id SET dirty = 1 WHERE g.id = %d and p.user_id != %d";
         $sql = $wpdb->prepare($sql,$game_id,$p->user_id);
         $wpdb->query($sql);
+        action_log(__FUNCTION__ . " sql=" . $sql);
         if ( !empty($wpdb->last_error) ) {
+            action_log(__FUNCTION__ . " error=" . $wpdb->last_error);
             $errors[] = $wpdb->last_error;
             $errors[] = $sql;
             return $p;
@@ -1354,7 +1360,7 @@ function check_player_has_cards($id) {
 }
 function _get_games($id) {
     global $wpdb;
-    $sql = "SELECT * FROM `hc_games` as games WHERE games.created_by = %d AND (games.declined != 1 OR games.declined IS NULL)"; 
+    $sql = "SELECT * FROM `hc_games` as games WHERE games.created_by = %d AND (games.declined != 1 OR games.declined IS NULL) ORDER BY created_at DESC"; 
     $sql = $wpdb->prepare($sql,$id);
     $my_games = $wpdb->get_results($sql); 
     if ( empty($my_games) ) {
@@ -1647,4 +1653,66 @@ function is_over($game_id) {
         return true;
     }
     return false;
+}
+function http_build_query_for_curl( $arrays, &$new = array(), $prefix = null ) {
+
+    if ( is_object( $arrays ) ) {
+        $arrays = get_object_vars( $arrays );
+    }
+
+    foreach ( $arrays AS $key => $value ) {
+        $k = isset( $prefix ) ? $prefix . '[' . $key . ']' : $key;
+        if ( is_array( $value ) OR is_object( $value )  ) {
+            http_build_query_for_curl( $value, $new, $k );
+        } else {
+            $new[$k] = $value;
+        }
+    }
+}
+function ajax_post($data,$to_url=null) {
+    $old_data = $data;
+    $h = curl_init();
+    $header = [
+        'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0',
+        'Referer: http://localtest',
+    ];
+    if ( $to_url === null ) {
+        $url = "http://localhost/wp-admin/admin-ajax.php";
+    } else {
+        $url = $to_url;
+    }
+    curl_setopt($h, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($h, CURLOPT_HEADER, true);
+    curl_setopt($h, CURLOPT_URL, $url);
+    curl_setopt($h, CURLOPT_POST, 1);
+    curl_setopt($h, CURLOPT_CUSTOMREQUEST, 'POST');
+    curl_setopt($h, CURLOPT_ENCODING, "");
+    curl_setopt($h, CURLOPT_MAXREDIRS, 10);
+    curl_setopt($h, CURLOPT_TIMEOUT, 30);
+    curl_setopt($h, CURLOPT_VERBOSE,true);
+    $verbose = fopen('php://temp','w+');
+    curl_setopt($h, CURLOPT_STDERR,$verbose);
+    curl_setopt($h, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($h, CURLOPT_SSL_VERIFYHOST,false);     
+    curl_setopt($h, CURLOPT_SSL_VERIFYPEER,false);
+    curl_setopt($h, CURLOPT_RETURNTRANSFER,true);
+    http_build_query_for_curl($data,$post_data);
+    curl_setopt($h, CURLOPT_POSTFIELDS,$post_data);
+    $response = curl_exec($h);
+    $struct = new \stdClass; 
+    $header_size = curl_getinfo($h, CURLINFO_HEADER_SIZE);
+    $header = substr($response, 0, $header_size);
+    $content = substr($response, $header_size);
+    $struct->data = $data;
+    $struct->post_data = $post_data;
+    $struct->error = \curl_error($h);
+    $struct->errorno = \curl_errno($h);
+    $struct->response = $response;
+    $struct->head = $header;
+    $struct->body = json_decode($content,true);
+    rewind($verbose);
+    $struct->log = stream_get_contents($verbose);
+    fclose($verbose);
+    curl_close($h);
+    return $struct;
 }

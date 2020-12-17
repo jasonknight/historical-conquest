@@ -27,6 +27,14 @@ $getP1AndP2 = function ($game_id) {
     }
     return [$p1,$p2];
 };
+function _show_board_debug($p) {
+    echo "Player 1({$p->id})\n-------------------------------------------------------" . PHP_EOL;
+    echo ascii_playmat($p->playmat) . PHP_EOL;
+    echo "Ability Mat\n-------------------------------------------------------" . PHP_EOL;
+    echo ascii_abilitymat($p->abilitymat) . PHP_EOL;
+    echo ability_table($p) . PHP_EOL;
+    echo card_table($p) . PHP_EOL;
+}
 function _get_board_for($uid,$game_id) {
     $data = ['action' => 'get_board', '_fuser' => $uid, 'game_id' => $game_id];
     $resp = ajax_post($data);
@@ -488,17 +496,8 @@ echo "New Morale: $new_p1_morale" . PHP_EOL;
 test(intval($p1_morale) > intval($new_p1_morale), "Assert p1 has less morale");
 $new_p1cards = array_filter(get_played_cards_from_player($p1),function ($c) { return $c->ext_id == 'CT4303'; });
 test(empty($new_p1cards),"Assert that AR4303 is gone from the players playmat");
-echo "Player 1({$p1->id})\n--------------------------------" . PHP_EOL;
-echo ascii_playmat($p1->playmat) . PHP_EOL;
-echo ability_table($p1) . PHP_EOL;
-echo card_table($p1) . PHP_EOL;
-echo "------------------------------------------\n";
-echo "Player 2({$p2->id})\n--------------------------------" . PHP_EOL;
-echo ascii_playmat($p2->playmat) . PHP_EOL;
-echo ability_table($p1) . PHP_EOL;
-echo card_table($p2) . PHP_EOL;
-echo "------------------------------------------\n";
-
+_show_board_debug($p1);
+_show_board_debug($p2);
 list($p1,$p2) = $getP1AndP2($game_id);
 $p1board = _get_board_for($u1,$game_id);
 print_r(get_logs_for(['get_game_board'],$resp->body['logs']));
@@ -524,6 +523,71 @@ $data = [
 ];
 $resp = ajax_post($data);
 test($resp->body['status'] === 'KO', "p2 should not be able to cede turn");
+
+echo "-------------------------------------------------------------------------" . PHP_EOL;
+echo "-                 Testing Explorer Functionality               " . PHP_EOL;
+echo "-------------------------------------------------------------------------" . PHP_EOL;
+
+include (__DIR__ . '/_create_challenge.php');
+
+list($p1,$p2) = $getP1AndP2($game_id);
+
+_show_board_debug($p1);
+// First let's put an explorer into p1's hand
+array_pop($p1->hand);
+$p1->hand = array_values(array_filter($p1->hand,function ($id) { return $id !== 'EX4205'; }));
+$p1->hand[] = 'EX4205';
+$errors = [];
+save_player_mats($p1,$errors);
+print_r(get_logs_for(['save_player'],action_log('')));
+test(empty($errors), ' saving p1s mat should gen no errors');
+list($p1,$p2) = $getP1AndP2($game_id);
+test( !empty(array_filter($p1->hand,function ($id) { return $id === 'EX4205'; })), "Mansa should be in the hand");
+_show_board_debug($p1);
+$data = [
+    'action' => 'play_card', 
+    '_fuser' => $u1->ID, 
+    'game_id' => $game_id,
+    'player_id' => $p1->id,
+    'card_ext_id' => 'EX4205',
+    'row' => 5,
+    'col' => 2,
+];
+
+$resp = ajax_post($data);
+test($resp->body['status'] == 'OK', "Assert we were able to play Mansa");
+list($p1,$p2) = $getP1AndP2($game_id);
+test($p1->playmat[5][2] === 'EX4205', "Mansa has been played");
+test(type_to_name(get_card_def($p1->playmat[5][1])->maintype) === 'CARD_LAND', "a land has been played");
+
+array_pop($p1->hand);
+array_pop($p1->hand);
+$p1->hand = array_values(array_filter($p1->hand,function ($id) { return $id !== 'WA4301'; }));
+$p1->hand[] = 'WA4301';
+$p1->hand = array_values(array_filter($p1->hand,function ($id) { return $id !== 'CO4303'; }));
+$p1->hand[] = 'CO4303';
+$errors = [];
+save_player_mats($p1,$errors);
+$i = 0;
+foreach (['WA4301','CO4303'] as $ext_id ) {
+    $data = [
+        'action' => 'play_card', 
+        '_fuser' => $u1->ID, 
+        'game_id' => $game_id,
+        'player_id' => $p1->id,
+        'card_ext_id' => $ext_id,
+        'row' => 4 - $i,
+        'col' => 2,
+    ];
+    $i++;
+    $resp = ajax_post($data);
+    test($resp->body['status'] == 'OK', "Assert we played $ext_id");
+}
+list($p1,$p2) = $getP1AndP2($game_id);
+_show_board_debug($p1);
+
+exit;
+
 echo "-------------------------------------------------------------------------" . PHP_EOL;
 echo "-        AUTOMATED TESTS COMPLETE, CREATING MANUAL TESTING GAME" . PHP_EOL;
 echo "-------------------------------------------------------------------------" . PHP_EOL;
